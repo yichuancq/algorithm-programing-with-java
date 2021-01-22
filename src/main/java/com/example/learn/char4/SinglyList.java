@@ -21,9 +21,11 @@ public class SinglyList<T> {
      */
     public SinglyList(T... vale) {
         this();
+        //指向头结点
         Node<T> rear = this.head;
         for (int i = 0; i < vale.length; i++) {
             rear.next = new Node<T>(vale[i], null);
+            //移动到下一个结点
             rear = rear.next;
         }
     }
@@ -46,7 +48,9 @@ public class SinglyList<T> {
         //头节点不算长度
         Node<T> p = head.next;
         while (p != null) {
+            //size 累计
             size++;
+            //指向下一个元素
             p = p.next;
         }
         return size;
@@ -88,20 +92,155 @@ public class SinglyList<T> {
     }
 
     /**
+     * 清空链表
+     */
+    private void clear() {
+        this.head.next = null;
+    }
+
+    /**
      * 遍历链表
      */
     private void showNodes() {
         Node<T> p = head;
         while (p != null) {
+            //当数据不为空
             if (p.data != null) {
                 System.out.println(p.toString());
             }
+            //指向下一个元素
             p = p.next;
         }
     }
 
+    /**
+     * 递归显示所有元素
+     *
+     * @param p
+     */
+    private void getChildNode(Node<T> p) {
+        if (p == null) {
+            return;
+        }
+        //当数据不为空
+        if (p.data != null) {
+            System.out.println(p.toString());
+        }
+        p = p.next;
+        //递归调用
+        this.getChildNode(p);
+    }
+
+    /**
+     * 中间插入元素
+     *
+     * @param index
+     * @param data
+     * @return
+     */
+    private Node<T> insert(int index, T data) {
+        //front 指向头结点
+        Node<T> front = this.head;
+        //如果为空直接返回
+        if (data == null) {
+            return this.head;
+        }
+        for (int j = 0; front.next != null && j <= index; j++) {
+            front = front.next;
+        }
+        //在front 后插入新的结点
+        front.next = new Node<>(data, front.next);
+        return front;
+    }
+
+    /**
+     * 头部插入元素
+     *
+     * @param data
+     * @return
+     */
+    private Node<T> insertHead(T data) {
+        int i = Integer.MIN_VALUE;
+        //front 指向头结点
+        Node<T> front = this.head;
+        //如果为空直接返回
+        if (data == null) {
+            return this.head;
+        }
+        for (int j = 0; front.next != null && j < i; j++) {
+            front = front.next;
+        }
+        //在front 后插入新的结点
+        front.next = new Node<>(data, front.next);
+        return front;
+    }
+
+    /**
+     * 插入到链表尾部
+     *
+     * @param data
+     * @return
+     */
+    private Node<T> insertTail(T data) {
+        Node<T> front = null;
+        //如果插入元素为空
+        if (data == null) {
+            return this.head;
+        }
+        //遍历所有元素
+        for (front = this.head; front != null; front = front.next) {
+            //最后一个结点
+            if (front.next == null) {
+                //在front 后插入新的结点
+                front.next = new Node<>(data, front.next);
+                //返回
+                break;
+            }
+        }
+        return front;
+    }
+
+
+    /**
+     * 打印元素
+     *
+     * @return
+     */
+    private String listToString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        Node<T> p = head;
+        stringBuffer.append("[");
+        while (p != null) {
+            if (p.data != null) {
+                stringBuffer.append("," + p);
+            }
+            p = p.next;
+        }
+        stringBuffer.append("]");
+        return stringBuffer.toString().replaceFirst(",", "");
+    }
+
+    /**
+     * 打印元素
+     *
+     * @return
+     */
+    private String listToString2() {
+        String string = "[";
+        Node<T> p = head.next;
+        for (; p != null; p = p.next) {
+            string += p.data;
+            //不是最后一个结点时
+            if (p.next != null) {
+                string += ',';
+            }
+        }
+        string += ']';
+        return string;
+    }
+
     public static void main(String[] args) {
-        String[] strings = {"a", "b", "c", "d", "e", "f"};
+        String[] strings = {"a", "b", "c", "d", "e", "f", "g"};
         SinglyList singlyList = new SinglyList(strings);
         boolean isEmpty = singlyList.isEmpty();
         Object data = singlyList.getElement(1);
@@ -115,5 +254,29 @@ public class SinglyList<T> {
         singlyList.replaceElement(2, "cc");
         System.out.println("遍历显示结点");
         singlyList.showNodes();
+        System.out.println("递归显示结点");
+        singlyList.getChildNode(singlyList.head);
+        System.out.println("遍历打印元素方式1");
+        System.out.println(singlyList.listToString());
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+        System.out.println("插入结点元素");
+        //插入结点元素
+        singlyList.insertHead("ss");
+        System.out.println("遍历显示结点");
+        singlyList.showNodes();
+        System.out.println("遍历打印元素方式2");
+        //尾部插入
+        singlyList.insertTail("z");
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+        listSize = singlyList.singleListSize();
+        System.out.println("listSize:" + listSize);
+        //
+        singlyList.insert(2, "new");
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+        //清空链表
+        singlyList.clear();
     }
 }
