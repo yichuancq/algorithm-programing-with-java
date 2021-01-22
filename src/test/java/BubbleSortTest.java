@@ -65,12 +65,14 @@ public class BubbleSortTest {
         bubbleSortTest.showData(arrays);
         //排序
         System.out.println("开始排序");
+        //升序
         Integer result[] = bubbleSortTest.sort(arrays, true);
         for (Integer integer : result) {
             System.out.print(" " + integer);
         }
         System.out.println();
         System.out.println("开始排序");
+        //降序
         Integer result2[] = bubbleSortTest.sort(arrays, false);
         for (Integer integer : result2) {
             System.out.print(" " + integer);

@@ -134,12 +134,17 @@ public class Lottery {
     public static void main(String[] args) {
         try {
             //假定中奖的红色球组
-            List<Integer> targetBalls = Arrays.asList(6, 8, 22, 24, 25, 26);
+            List<Integer> targetBalls = Arrays.asList(2, 4, 7, 24, 25, 32);
             //假定中奖的蓝色球
-            int targetBlueBall = 1;
+            int targetBlueBall = 13;
             Lottery lottery = new Lottery();
             //匹配
             lottery.match(targetBalls, targetBlueBall);
+            //计数器：5753681
+            //计数器：6184761
+            //计数器：1036464
+            //计数器：3367956
+            //计数器：18647151
         } catch (Exception exception) {
             exception.printStackTrace();
         }

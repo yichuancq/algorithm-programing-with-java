@@ -14,7 +14,7 @@ public class MySorting {
      * @param keys
      */
     public static void insertSort(int[] keys) {
-        System.out.println("直接插入排序（升序）");
+          System.out.println("直接插入排序（升序）");
         //n-1趟扫描，依次向前插入n-1个数
         for (int i = 1; i < keys.length; i++) {
             //每趟将keys[i]插入到前面排序子序列中
