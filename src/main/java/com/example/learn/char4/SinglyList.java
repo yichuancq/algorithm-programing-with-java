@@ -4,8 +4,10 @@ package com.example.learn.char4;
  * 单链表
  */
 public class SinglyList<T> {
-
+    //链表的头结点
     public Node<T> head;
+    //链表长度
+    public int len = 0;
 
     /**
      *
@@ -53,26 +55,10 @@ public class SinglyList<T> {
             //指向下一个元素
             p = p.next;
         }
+        this.len = size;
         return size;
     }
 
-    /***
-     * 替换元素
-     * @param index
-     * @param data
-     */
-    private void replaceElement(int index, T data) {
-        Node<T> p = head.next;
-        for (int j = 0; p != null && j <= index; j++) {
-            //当索引匹配则替换元素
-            if (j == index) {
-                p.data = data;
-            }
-            //引用指向后一个元素
-            p = p.next;
-        }
-
-    }
 
     /**
      * 获取元素
@@ -239,6 +225,111 @@ public class SinglyList<T> {
         return string;
     }
 
+    /**
+     * 获取指定元素的索引
+     *
+     * @param data
+     * @return
+     */
+    private int getElementIndex(T data) {
+        int elementIndex = 0;
+        Node<T> front = this.head;
+        for (int index = 0; front != null; front = front.next) {
+            if (front.data != null) {
+                //元素匹配
+                if (front.data.equals(data)) {
+                    //获取相同元素的索引下标
+                    elementIndex = index;
+                    break;
+                }
+            }
+            index += 1;
+        }
+        return elementIndex;
+    }
+
+    /**
+     * @param data
+     */
+    private Node<T> removeElement(T data) {
+        Node<T> front = this.head;
+        for (; front != null; front = front.next) {
+            if (front.data != null && front.next != null) {
+                //元素匹配
+                if (front.data.equals(data)) {
+                    //移除front的后继
+                    front = front.next;
+                    break;
+                }
+            }
+        }
+        return front;
+    }
+
+
+    /**
+     * 移除指定索引的元素，方式2
+     *
+     * @param index
+     */
+    private Node<T> removeElement2(int index) {
+        Node<T> front = this.head;
+        //遍历元素，且不为最后一个结点。且小于当前索引
+        for (int j = 0; front != null && j <= index; front = front.next) {
+            //当索引匹配则删除
+            j++;
+            if (j == index && front.next != null) {
+                //移除front的后继
+                front.next = front.next.next;
+                break;
+            }
+        }
+        return front;
+
+    }
+
+
+    /**
+     * 移除指定索引的元素，方式1
+     *
+     * @param index
+     */
+    private Node<T> removeElement(int index) {
+        Node<T> front = this.head;
+        int j = 0;
+        //遍历元素，且不为最后一个结点。且小于当前索引
+        for (; front != null && j <= index; j++) {
+            //当索引匹配则删除
+            if (j == index && front.next != null) {
+                //移除front的后继
+                front.next = front.next.next;
+                break;
+            }
+            //引用指向后一个元素
+            front = front.next;
+        }
+        return front;
+
+    }
+
+    /***
+     * 替换元素
+     * @param index
+     * @param data
+     */
+    private void replaceElement(int index, T data) {
+        Node<T> p = head.next;
+        for (int j = 0; p != null && j <= index; j++) {
+            //当索引匹配则替换元素
+            if (j == index) {
+                p.data = data;
+            }
+            //引用指向后一个元素
+            p = p.next;
+        }
+
+    }
+
     public static void main(String[] args) {
         String[] strings = {"a", "b", "c", "d", "e", "f", "g"};
         SinglyList singlyList = new SinglyList(strings);
@@ -274,6 +365,24 @@ public class SinglyList<T> {
         System.out.println("listSize:" + listSize);
         //
         singlyList.insert(2, "new");
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+        //移除指定索引的元素
+        System.out.println("删除结点元素");
+        singlyList.removeElement(3);
+//        singlyList.removeElement2(3);
+        //
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+        //删除元素
+        System.out.println("删除匹配值相同的结点元素");
+        singlyList.removeElement("cc");
+        System.out.println("遍历打印元素方式2");
+        System.out.println(singlyList.listToString2());
+
+        int index = singlyList.getElementIndex("ss");
+        System.out.println("index" + index);
+        singlyList.removeElement2(index);
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
         //清空链表
