@@ -1,7 +1,17 @@
 package com.example.learn.char3;
 
+/**
+ * Person类
+ */
 public class Person {
+    /**
+     * 年龄
+     */
     private int age;
+    /**
+     * 姓名
+     */
+    private String name;
 
     public int getAge() {
         return age;
@@ -19,7 +29,6 @@ public class Person {
         this.name = name;
     }
 
-    private String name;
 
     Person() {
     }

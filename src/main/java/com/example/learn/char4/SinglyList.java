@@ -330,59 +330,114 @@ public class SinglyList<T> {
 
     }
 
+    /**
+     * 链表反转
+     * 1、把头结点指向最后一个元素。
+     * 2、中间结点p.next=front
+     *
+     * @return
+     */
+    private Node<T> reverse2() {
+        //p指向第0个结点
+        Node<T> p = this.head;
+        Node<T> front = null;
+        for (; p != null; p = p.next) {
+            Node<T> q = p.next;
+            //front 指向p的前驱
+            p.next = front;
+            front = q;
+            //如果是最后一个结点
+            if (p.next == null) {
+                //设置头结点的地址域指向原单链表的最后一个结点
+                this.head.next = front;
+                break;
+            }
+        }
+        return this.head;
+    }
+
+    /**
+     * 链表反转
+     *
+     * @return
+     */
+    private Node<T> reverse() {
+        Node<T> p = this.head.next;
+        Node<T> front = null;
+        while (p != null) {
+            Node<T> q = p.next;
+            p.next = front;
+            front = p;
+            p = q;
+        }
+        //设置头结点的地址域指向原单链表的最后一个结点
+        this.head.next = front;
+        return this.head;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"a", "b", "c", "d", "e", "f", "g"};
         SinglyList singlyList = new SinglyList(strings);
         boolean isEmpty = singlyList.isEmpty();
-        Object data = singlyList.getElement(1);
-        System.out.println("data:" + data);
-        System.out.println("isEmpty:" + isEmpty);
-        int listSize = singlyList.singleListSize();
-        System.out.println("listSize:" + listSize);
-        System.out.println("遍历显示结点");
-        singlyList.showNodes();
-        System.out.println("替换元素");
-        singlyList.replaceElement(2, "cc");
-        System.out.println("遍历显示结点");
-        singlyList.showNodes();
-        System.out.println("递归显示结点");
-        singlyList.getChildNode(singlyList.head);
-        System.out.println("遍历打印元素方式1");
-        System.out.println(singlyList.listToString());
+//        Object data = singlyList.getElement(1);
+//        System.out.println("data:" + data);
+//        System.out.println("isEmpty:" + isEmpty);
+//        int listSize = singlyList.singleListSize();
+//        System.out.println("listSize:" + listSize);
+//        System.out.println("遍历显示结点");
+//        singlyList.showNodes();
+//        System.out.println("替换元素");
+//        singlyList.replaceElement(2, "cc");
+//        System.out.println("遍历显示结点");
+//        singlyList.showNodes();
+//        System.out.println("递归显示结点");
+//        singlyList.getChildNode(singlyList.head);
+//        System.out.println("遍历打印元素方式1");
+//        System.out.println(singlyList.listToString());
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
+//        System.out.println("插入结点元素");
+//        //插入结点元素
+//        singlyList.insertHead("ss");
+//        System.out.println("遍历显示结点");
+//        singlyList.showNodes();
+//        System.out.println("遍历打印元素方式2");
+//        //尾部插入
+//        singlyList.insertTail("z");
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
+//        listSize = singlyList.singleListSize();
+//        System.out.println("listSize:" + listSize);
+//        //
+//        singlyList.insert(2, "new");
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
+//        //移除指定索引的元素
+//        System.out.println("删除结点元素");
+//        singlyList.removeElement(3);
+////        singlyList.removeElement2(3);
+//        //
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
+//        //删除元素
+//        System.out.println("删除匹配值相同的结点元素");
+//        singlyList.removeElement("cc");
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
+//        //获取某个元素
+//        int index = singlyList.getElementIndex("ss");
+//        System.out.println("index" + index);
+//        singlyList.removeElement2(index);
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
-        System.out.println("插入结点元素");
-        //插入结点元素
-        singlyList.insertHead("ss");
-        System.out.println("遍历显示结点");
-        singlyList.showNodes();
-        System.out.println("遍历打印元素方式2");
-        //尾部插入
-        singlyList.insertTail("z");
+        //反转链表
+        System.out.println("反转链表");
+        singlyList.reverse();
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
-        listSize = singlyList.singleListSize();
-        System.out.println("listSize:" + listSize);
-        //
-        singlyList.insert(2, "new");
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-        //移除指定索引的元素
-        System.out.println("删除结点元素");
-        singlyList.removeElement(3);
-//        singlyList.removeElement2(3);
-        //
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-        //删除元素
-        System.out.println("删除匹配值相同的结点元素");
-        singlyList.removeElement("cc");
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-
-        int index = singlyList.getElementIndex("ss");
-        System.out.println("index" + index);
-        singlyList.removeElement2(index);
+        ////
+        System.out.println("反转链表");
+        singlyList.reverse2();
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
         //清空链表
