@@ -100,6 +100,51 @@ public class Tree<T extends Node<T>> {
     }
 
     /**
+     * 清空树
+     */
+    void clearTree() {
+        System.out.println("清空树");
+        this.root = null;
+    }
+
+    /**
+     * 是否包含某个元素的
+     *
+     * @param key
+     * @return
+     */
+    private boolean contains(String key) {
+        //遍历树
+        return this.findKey(this.root, key);
+
+    }
+
+    /**
+     * 查找关键字匹配的结点
+     *
+     * @param tNode
+     * @param key
+     * @return
+     */
+    public boolean findKey(Node<T> tNode, String key) {
+        boolean flag;
+        if (tNode == null) {
+            return false;
+        }
+        flag = findKey(tNode.getLeftChild(), key);
+        int len = key.compareTo(tNode.toString());
+        //显示结点值
+        if (len == 0 && !flag) {
+            flag = true;
+        } else {
+            if (!flag) {
+                flag = findKey(tNode.getRightChild(), key);
+            }
+        }
+        return flag;
+    }
+
+    /**
      * @param args
      */
     public static void main(String[] args) {
@@ -123,12 +168,19 @@ public class Tree<T extends Node<T>> {
         root.setRightChild(node2);
 
         Tree tree = new Tree(root);
-        tree.printRootNode();
+//        tree.printRootNode();
         tree.inorderTransversal();
-        //前序遍历
-        tree.preOderTransversal();
-        //后续遍历
-        tree.tailTransversal();
-
+//        //前序遍历
+//        tree.preOderTransversal();
+//        //后续遍历
+//        tree.tailTransversal();
+        //
+        boolean hasElement = tree.contains("B");
+        System.out.println("是否找到结点:" + hasElement);
+        hasElement = tree.contains("E");
+        System.out.println("是否找到结点:" + hasElement);
+        hasElement = tree.contains("S");
+        System.out.println("是否找到结点:" + hasElement);
+        tree.clearTree();
     }
 }

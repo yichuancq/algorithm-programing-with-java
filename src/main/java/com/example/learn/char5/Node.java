@@ -32,7 +32,6 @@ public class Node<T> {
         this.data = data;
     }
 
-
     public Node getRightChild() {
         return rightChild;
     }
@@ -51,10 +50,7 @@ public class Node<T> {
 
     @Override
     public String toString() {
-        return "Node{" +
-                "data=" + data +
-                '}';
+        return String.valueOf(data);
     }
-
 }
 
