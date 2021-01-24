@@ -342,8 +342,8 @@ public class SinglyList<T> {
         Node<T> p = this.head;
         Node<T> front = null;
         for (; p != null; p = p.next) {
-            Node<T> q = p.next;
             //front 指向p的前驱
+            Node<T> q = p.next;
             p.next = front;
             front = q;
             //如果是最后一个结点
