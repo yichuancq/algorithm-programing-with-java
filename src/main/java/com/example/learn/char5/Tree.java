@@ -4,9 +4,12 @@ package com.example.learn.char5;
  * @param <T>
  */
 public class Tree<T extends Node<T>> {
-
     //根节点
     private Node<T> root;
+    //结点数目
+    private int rootCount = 0;
+    //树的高度
+    private int treeHeight = 0;
 
     /**
      * @param node
@@ -20,11 +23,12 @@ public class Tree<T extends Node<T>> {
     }
 
     /**
+     * 先序遍历
      * 访问顺序：左中右
      * 中序遍历（LDR）是二叉树遍历的一种，也叫做中根遍历、中序周游。
      * 在二叉树中，中序遍历首先遍历左子树，然后访问根结点，最后遍历右子树。
      */
-    private void inorderTransversal() {
+    public void inorderTransversal() {
         System.out.println("中序遍历");
         if (this.root == null) {
             System.out.println("根结点为空");
@@ -37,7 +41,7 @@ public class Tree<T extends Node<T>> {
      * 前序遍历
      * 访问顺序：根左右
      */
-    private void preOderTransversal() {
+    public void preOderTransversal() {
         System.out.println("前序遍历");
         if (this.root == null) {
             System.out.println("根结点为空");
@@ -47,21 +51,22 @@ public class Tree<T extends Node<T>> {
     }
 
     /**
+     * 后序遍历
      * 访问顺序：左右根
      */
-    private void tailTransversal() {
+    public void postTransversal() {
         System.out.println("后序遍历");
         if (this.root == null) {
             System.out.println("根结点为空");
             return;
         }
-        this.rightOrder(this.root);
+        this.postOrder(this.root);
     }
 
     /**
      * @param tNode
      */
-    public void inorder(Node<T> tNode) {
+    private void inorder(Node<T> tNode) {
         if (tNode == null) {
             return;
         }
@@ -72,13 +77,26 @@ public class Tree<T extends Node<T>> {
     }
 
     /**
+     * 统计结点
+     *
+     * @param tNode
+     */
+    private void calcTreeCount(Node<T> tNode) {
+        if (tNode == null) {
+            return;
+        }
+        this.rootCount++;
+        calcTreeCount(tNode.getLeftChild());
+        calcTreeCount(tNode.getRightChild());
+    }
+
+    /**
      * @param tNode
      */
     public void preOrder(Node<T> tNode) {
         if (tNode == null) {
             return;
         }
-
         //显示结点值
         System.out.println("" + tNode.toString());
         preOrder(tNode.getLeftChild());
@@ -89,13 +107,13 @@ public class Tree<T extends Node<T>> {
     /**
      * @param tNode
      */
-    public void rightOrder(Node<T> tNode) {
+    private void postOrder(Node<T> tNode) {
         if (tNode == null) {
             return;
         }
         //显示结点值
-        rightOrder(tNode.getLeftChild());
-        rightOrder(tNode.getRightChild());
+        postOrder(tNode.getLeftChild());
+        postOrder(tNode.getRightChild());
         System.out.println("" + tNode.toString());
     }
 
@@ -105,6 +123,29 @@ public class Tree<T extends Node<T>> {
     void clearTree() {
         System.out.println("清空树");
         this.root = null;
+    }
+
+    /**
+     * 是否为空
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        if (this.rootCount == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 树结点树
+     *
+     * @return
+     */
+    public int size() {
+        //计数结点
+        this.calcTreeCount(this.root);
+        return this.rootCount;
     }
 
     /**
@@ -126,7 +167,7 @@ public class Tree<T extends Node<T>> {
      * @param key
      * @return
      */
-    public boolean findKey(Node<T> tNode, String key) {
+    private boolean findKey(Node<T> tNode, String key) {
         boolean flag;
         if (tNode == null) {
             return false;
@@ -144,6 +185,48 @@ public class Tree<T extends Node<T>> {
         return flag;
     }
 
+    /**
+     * 删除关键字的结点
+     *
+     * @param
+     * @param key
+     */
+    private void removeByKey(T key) {
+
+    }
+
+    /**
+     * 获取树的高度
+     *
+     * @return
+     */
+    private int treeHeight() {
+        //
+        return this.treeHeight;
+    }
+    public Node<T> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<T> root) {
+        this.root = root;
+    }
+
+    public int getRootCount() {
+        return rootCount;
+    }
+
+    public void setRootCount(int rootCount) {
+        this.rootCount = rootCount;
+    }
+
+    public int getTreeHeight() {
+        return treeHeight;
+    }
+
+    public void setTreeHeight(int treeHeight) {
+        this.treeHeight = treeHeight;
+    }
     /**
      * @param args
      */
@@ -181,6 +264,18 @@ public class Tree<T extends Node<T>> {
         System.out.println("是否找到结点:" + hasElement);
         hasElement = tree.contains("S");
         System.out.println("是否找到结点:" + hasElement);
+        //移除结点
+        int size = tree.size();
+        System.out.println("树结点数目:" + size);
+        // tree.removeByKey(new Node("G"));
+        boolean isEmpty = tree.isEmpty();
+        System.out.println("tree is empty:" + isEmpty);
+
+        //树的高度
+        int height = tree.treeHeight();
+        System.out.println("树的高度:" + height);
         tree.clearTree();
     }
+
+
 }

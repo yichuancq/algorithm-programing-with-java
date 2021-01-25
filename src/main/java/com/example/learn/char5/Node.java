@@ -5,7 +5,7 @@ package com.example.learn.char5;
  *
  * @param <T>
  */
-public class Node<T> {
+public class Node<T> extends Object {
     /**
      * 结点的值
      */
