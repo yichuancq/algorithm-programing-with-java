@@ -3,13 +3,15 @@ package com.example.learn.char5;
 /**
  * @param <T>
  */
-public class Tree<T extends Node<T>> {
+public class Tree<T> {
     //根节点
     private Node<T> root;
     //结点数目
     private int rootCount = 0;
     //树的高度
     private int treeHeight = 0;
+    //
+    private int i = 0;
 
     /**
      * @param node
@@ -18,8 +20,59 @@ public class Tree<T extends Node<T>> {
         this.root = (Node<T>) node;
     }
 
-    public void printRootNode() {
-        System.out.println(this.root.toString());
+    /**
+     * 构造方法
+     */
+    public Tree(T[] values) {
+        this.root = this.createTree(values);
+    }
+
+    /**
+     * 创建树
+     *
+     * @param preList
+     * @return
+     */
+    public Node<T> createTree(T... preList) {
+        Node<T> p = null;
+        if (i < preList.length) {
+            T element = preList[i];
+            i++;
+            if (element != null) {
+                p = new Node<T>(element);
+                //设置左孩子
+                p.setLeftChild(createTree(preList));
+                //设置右孩子
+                p.setRightChild(createTree(preList));
+            }
+        }
+        return p;
+    }
+
+    /**
+     * 插入
+     *
+     * @param t
+     * @return
+     */
+    public void insert(T t, boolean isLeftChild) {
+        this.insert(this.root, t, isLeftChild);
+    }
+
+    /**
+     * @param parent
+     * @param x
+     * @param isLeftChild
+     */
+    public void insert(Node<T> parent, T x, boolean isLeftChild) {
+        if (x == null) {
+            return;
+        }
+        if (isLeftChild) {
+            parent.setLeftChild(new Node(x, parent.getLeftChild(), null));
+        } else {
+            parent.setRightChild(new Node(x, null, parent.getRightChild()));
+        }
     }
 
     /**
@@ -131,7 +184,7 @@ public class Tree<T extends Node<T>> {
      * @return
      */
     public boolean isEmpty() {
-        if (this.rootCount == 0) {
+        if (this.root == null) {
             return true;
         }
         return false;
@@ -186,13 +239,51 @@ public class Tree<T extends Node<T>> {
     }
 
     /**
-     * 删除关键字的结点
+     * 递归查找
      *
-     * @param
-     * @param key
+     * @param parent
+     * @param searchNode
+     * @return
      */
-    private void removeByKey(T key) {
+    public Node<T> findNode(Node<T> parent, Node<T> searchNode) {
+        if (searchNode == null || parent == null) {
+            return null;
+        }
+        //显示结点值
+        boolean flag = parent.getData().equals(searchNode.getData());
+        if (flag) {
+            return parent;
+        } else {
+            //递归
+            if (parent.getLeftChild() != null) {
+                parent = findNode(parent.getLeftChild(), searchNode);
+            }
+            if (parent.getRightChild() != null) {
+                parent = findNode(parent.getRightChild(), searchNode);
+            }
+        }
+        return parent;
+    }
 
+
+    /**
+     * 删除结点
+     *
+     * @param parent
+     * @param isLeftChild
+     */
+    public void remove(Node<T> parent, boolean isLeftChild) {
+        System.out.println("移除结点" + parent.toString());
+        if (parent == null) {
+            return;
+        }
+        if (isLeftChild) {
+            //置空左孩子结点
+            parent.setLeftChild(null);
+        } else {
+            //置空右孩子结点
+            parent.setRightChild(null);
+        }
     }
 
     /**
@@ -204,60 +295,40 @@ public class Tree<T extends Node<T>> {
         //
         return this.treeHeight;
     }
-    public Node<T> getRoot() {
-        return root;
-    }
 
-    public void setRoot(Node<T> root) {
-        this.root = root;
-    }
-
-    public int getRootCount() {
-        return rootCount;
-    }
-
-    public void setRootCount(int rootCount) {
-        this.rootCount = rootCount;
-    }
-
-    public int getTreeHeight() {
-        return treeHeight;
-    }
-
-    public void setTreeHeight(int treeHeight) {
-        this.treeHeight = treeHeight;
-    }
     /**
      * @param args
      */
     public static void main(String[] args) {
-
-        //添加一个根节点
-        Node root = new Node<>("A");
-        System.out.println("root:" + root.toString());
-        //生成一个B结点
-        Node node1 = new Node("B");
-        //给B结点添加左子结点B
-        node1.setLeftChild(new Node("D"));
-        //给B添加右子结点E
-        node1.setRightChild(new Node("E"));
-        //添加新的结点
-        Node node2 = new Node("C");
-        //给B结点添加左子结点B
-        node2.setLeftChild(new Node("F"));
-        //给B添加右子结点E
-        node2.setRightChild(new Node("G"));
-        root.setLeftChild(node1);
-        root.setRightChild(node2);
-
-        Tree tree = new Tree(root);
-//        tree.printRootNode();
+        String[] preList = {"A", "B", "D", null, "G", null, null, null, "C", "E", null, null, "F", "H"};
+        Tree<String> tree = new Tree<>(preList);
+        //中根遍历
         tree.inorderTransversal();
-//        //前序遍历
+//        //前根遍历
 //        tree.preOderTransversal();
-//        //后续遍历
-//        tree.tailTransversal();
+//        //后根遍历
+//        tree.postTransversal();
+
+        System.out.println("插入结点");
+//        tree.insert("X", true);
+        tree.insert(tree.root.getLeftChild(), "X", true);
+        tree.insert(tree.root.getRightChild(), "Y", false);
+        //中根遍历
+        tree.inorderTransversal();
+//        //前根遍历
+        tree.preOderTransversal();
+//        //后根遍历
+        tree.postTransversal();
+        //删除结点
+
+        Node target = tree.findNode(tree.root, new Node<>("A"));
+
+        tree.remove(target, true);
         //
+        System.out.println("" + target);
+        tree.inorderTransversal();
+
+
         boolean hasElement = tree.contains("B");
         System.out.println("是否找到结点:" + hasElement);
         hasElement = tree.contains("E");

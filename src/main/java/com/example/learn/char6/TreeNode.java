@@ -33,11 +33,13 @@ public class TreeNode<T> {
                 '}';
     }
 
+
+
     public TreeNode() {
     }
 
     public T getData() {
-        return data;
+        return data ;
     }
 
     public void setData(T data) {

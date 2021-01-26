@@ -5,7 +5,7 @@ package com.example.learn.char5;
  *
  * @param <T>
  */
-public class Node<T> extends Object {
+public class Node<T> {
     /**
      * 结点的值
      */
@@ -19,16 +19,27 @@ public class Node<T> extends Object {
      */
     private Node<T> leftChild;
 
+
+    public Node(T data) {
+        this.data = data;
+    }
+
+    /**
+     * @param data
+     * @param leftChild
+     * @param rightChild
+     */
+    public Node(T data, Node<T> leftChild, Node<T> rightChild) {
+        this.data = data;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
+    }
+
     public T getData() {
         return data;
     }
 
     public void setData(T data) {
-        this.data = data;
-    }
-
-
-    public Node(T data) {
         this.data = data;
     }
 

@@ -1,6 +1,7 @@
 package com.example.learn.char6;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,6 +64,31 @@ public class MultiBranchesTree<T> extends TreeNode<T> {
      */
     public void insertNode(TreeNode<T> newNode, TreeNode<T> parent) {
 
+    }
+
+
+    /**
+     * @param deleteNode
+     */
+    public void removeNode(TreeNode<T> deleteNode) {
+        TreeNode<T> parent = deleteNode.getParent();
+        if (parent == null || deleteNode == null) {
+            return;
+        }
+        if (parent.getChildList() == null || parent.getChildList().size() == 0) {
+            return;
+        }
+        //
+        
+        Iterator iterator = parent.getChildList().iterator();
+        while (iterator.hasNext()) {
+            TreeNode treeNode = (TreeNode) iterator.next();
+            System.out.println("removeNode" +treeNode.toString());
+            if (treeNode.toString().equals(deleteNode.toString())) {
+                System.out.println("delete"+treeNode.toString());
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -188,6 +214,12 @@ public class MultiBranchesTree<T> extends TreeNode<T> {
         System.out.println("结点个数:" + treeNodeSize);
         boolean hasElement = multiBranchesTree.contains(12);
         System.out.println("包含元素:" + hasElement);
+        //
+        Menu menuDelete = new Menu(2, "一级目录2");
+//   Menu menu2 = new Menu(2, "一级目录2");
+        //treeNodeMenu2 = new TreeNode(menu2, treeNodeRoot, menu2ChildList);
+        multiBranchesTree.removeNode(treeNodeMenu2);
 
+        multiBranchesTree.traverse(multiBranchesTree.root);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.learn.char5;
 
-public class BinaryTree<T extends Node<T>> extends Tree<T> {
+public class BinaryTree<T> extends Tree<T> {
     /**
      * @param node
      */
@@ -14,20 +14,9 @@ public class BinaryTree<T extends Node<T>> extends Tree<T> {
      * @param t
      * @return
      */
-    public BinaryTree<T> insert(T t) {
-        return this;
-    }
-
-    /**
-     * 插入x 作为P的左/右孩子结点并返回
-     *
-     * @param p
-     * @param x
-     * @param isLeftChild
-     * @return
-     */
-    public BinaryTree<T> insert(BinaryTree<T> p, T x, boolean isLeftChild) {
-        return this;
+    @Override
+    public void insert(T t, boolean isLeftChild) {
+        super.insert(t, isLeftChild);
     }
 
     /**
@@ -36,18 +25,21 @@ public class BinaryTree<T extends Node<T>> extends Tree<T> {
      * @param parent
      * @param isLeftChild
      */
-    public void remove(BinaryTree<T> parent, boolean isLeftChild) {
-
+    @Override
+    public void remove(Node<T> parent, boolean isLeftChild) {
+        super.remove(parent, isLeftChild);
     }
 
     /**
      * 查找结点
      *
-     * @param key
+     * @param parent
+     * @param searchNode
      * @return
      */
-    public BinaryTree<T> search(T key) {
-        return this;
+    @Override
+    public Node<T> findNode(Node<T> parent, Node<T> searchNode) {
+        return super.findNode(parent, searchNode);
     }
 
     /**
