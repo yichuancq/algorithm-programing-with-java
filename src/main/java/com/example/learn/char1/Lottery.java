@@ -1,5 +1,6 @@
 package com.example.learn.char1;
 
+import java.io.FileWriter;
 import java.util.*;
 
 /**
@@ -7,18 +8,15 @@ import java.util.*;
  *
  * @author yichuan
  */
-public class Lottery {
+public class Lottery extends Thread {
     /**
      * 红球
      */
     private List<Integer> redBallList = new ArrayList<>();
+    //写文件的内容
+    private StringBuffer stringBufferContext = new StringBuffer();
 
-    private List<List<Integer>> secReword = new ArrayList<>();
-
-    /**
-     * 构建生成号码
-     */
-    public Lottery() {
+    private void fillBall() {
         for (int i = 1; i <= 33; i++) {
             //添加红球
             redBallList.add(i);
@@ -30,7 +28,8 @@ public class Lottery {
      *
      * @return
      */
-    List<Integer> buildRedBall(int ballSize) {
+    private List<Integer> buildRedBall(int ballSize) {
+        this.fillBall();
         List<Integer> resultRedBallList = new ArrayList<>();
         if (ballSize < 6) {
             return resultRedBallList;
@@ -60,81 +59,130 @@ public class Lottery {
     /**
      * @return
      */
-    int buildBlueBall() {
+    private int buildBlueBall() {
         int redBall = 0;
         Random random = new Random();
         redBall = random.ints(1, 16).limit(1).findFirst().getAsInt();
         return redBall;
     }
 
-    /**
-     * 比较两个集合是否相等
-     *
-     * @param targetBalls
-     * @param b
-     * @return
-     */
-    public boolean isMatchRedBall(final Collection targetBalls, final Collection b) {
-        if (targetBalls.size() != b.size()) {
-            return false;
-        }
-        for (Iterator ita = targetBalls.iterator(); ita.hasNext(); ) {
-            if (!b.contains(ita.next())) {
-                return false;
-            }
-        }
-        for (Iterator itb = b.iterator(); itb.hasNext(); ) {
-            if (!targetBalls.contains(itb.next())) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
+     * 开奖号码和用户号码匹配的个数
+     *
      * @param targetBalls
+     * @param ballList
+     * @return
+     */
+    private int matchBall(final List<Integer> targetBalls, final List<Integer> ballList) {
+        int number = 0;
+        for (Integer targetBallNumber : targetBalls) {
+            for (Integer userBallNUmber : ballList) {
+                //用户球号码与目标中奖号码匹配
+                if (targetBallNumber.equals(userBallNUmber)) {
+                    number += 1;
+                }
+            }
+        }
+        return number;
+
+    }
+
+
+    /**
+     * @param targetRedBalls
      * @param targetBlueBall
      */
-    private void match(final List<Integer> targetBalls, final int targetBlueBall) {
-        //打印次数
-        int times = 1;
-        do {
-            boolean matchBlueFlag = false;
-            Lottery lottery = new Lottery();
-            List<Integer> userBalls = lottery.buildRedBall(6);
-            //红球匹配
-            boolean matchRedFlag = lottery.isMatchRedBall(targetBalls, userBalls);
-            int blueBallNumber = lottery.buildBlueBall();
-            System.out.println("红球" + userBalls);
+    private void match(final List<Integer> targetRedBalls, final int targetBlueBall) {
+        //生成模拟用户投注的开奖类型的号码组
+        int ballSize = 6;
+        List<Integer> userBallList = this.buildRedBall(ballSize);
+        //sort
+        Collections.sort(userBallList);
+
+        int matchBallNumber = this.matchBall(targetRedBalls, userBallList);
+        //生成蓝色球
+        int blueBallNumber = this.buildBlueBall();
+        System.out.println("=========");
+        System.out.println("红球：" + userBallList.toString());
+        System.out.println("蓝球：" + blueBallNumber);
+        //6+1
+        if ((ballSize - matchBallNumber) == 0 && (blueBallNumber == targetBlueBall)) {
+            System.out.println("=========");
+            System.out.println("一等奖");
+            System.out.println("红球" + userBallList.toString());
             System.out.println("篮球：" + blueBallNumber);
-            //蓝色球匹配
-            if (blueBallNumber == targetBlueBall) {
-                matchBlueFlag = true;
-            }
-            System.out.println("=====\t");
-            times += 1;
-//            System.out.println("计数器：" + times);
-            //如何红色球和蓝色球都匹配则退出循环
-            //全部红球匹配，则为二等奖
-            if (matchRedFlag) {
-                List<Integer> balls = new ArrayList<>();
-                balls.addAll(targetBalls);
-                balls.add(blueBallNumber);// 蓝球
-                if (!matchBlueFlag) {
-                    //红匹配，蓝不匹配，则为二等奖
-                    secReword.add(balls);
-                }
-            }
-            //红色蓝色全匹配，结束循环
-            if (matchRedFlag && matchBlueFlag) {
-                //rate=1/17721088
-                System.out.println("计数器：" + times);
-                for (List<Integer> integerList : secReword) {
-                    System.out.println("二等奖：" + integerList.toString());
-                }
-                break;
-            }
-        } while (true);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n一等奖");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
+
+        //6+0
+        if ((ballSize - matchBallNumber) == 0 && (blueBallNumber != targetBlueBall)) {
+            System.out.println("=========");
+            System.out.println("二等奖");
+            System.out.println("红球" + userBallList.toString());
+            System.out.println("篮球：" + blueBallNumber);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n二等奖");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
+        //5+1
+        if ((ballSize - matchBallNumber) == 1 && (blueBallNumber == targetBlueBall)) {
+            System.out.println("=========");
+            System.out.println("三等奖");
+            System.out.println("红球" + userBallList.toString());
+            System.out.println("篮球：" + blueBallNumber);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n三等奖,单注奖金3000元");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
+        //5+0 or 4+1
+        if (((ballSize - matchBallNumber) == 1 && (blueBallNumber != targetBlueBall))
+                || ((ballSize - matchBallNumber) == 2 && (blueBallNumber == targetBlueBall))) {
+            System.out.println("=========");
+            System.out.println("四等奖");
+            System.out.println("红球" + userBallList.toString());
+            System.out.println("篮球：" + blueBallNumber);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n四等奖,单注奖金200元");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
+        //4+0 or 3+1
+        if (((ballSize - matchBallNumber) == 2 && (blueBallNumber != targetBlueBall))
+                || ((ballSize - matchBallNumber) == 3 && (blueBallNumber == targetBlueBall))) {
+            System.out.println("=========");
+            System.out.println("五等奖");
+            System.out.println("红球" + userBallList.toString());
+            System.out.println("篮球：" + blueBallNumber);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n五等奖,单注奖金10元");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
+        //2+1 or 1+1 or 0+1
+        if (((ballSize - matchBallNumber) == 4 && (blueBallNumber == targetBlueBall))
+                || ((ballSize - matchBallNumber) == 5 && (blueBallNumber == targetBlueBall))
+                || ((ballSize - matchBallNumber) == 6 && (blueBallNumber == targetBlueBall))) {
+            System.out.println("=========");
+            System.out.println("六等奖");
+            System.out.println("红球" + userBallList.toString());
+            System.out.println("篮球：" + blueBallNumber);
+            stringBufferContext.append("\r\n=========");
+            stringBufferContext.append("\r\n六等奖,单注奖金5元");
+            stringBufferContext.append("\r\n红球:" + userBallList.toString());
+            stringBufferContext.append("\r\n篮球:" + blueBallNumber);
+            return;
+        }
     }
 
     /**
@@ -144,18 +192,28 @@ public class Lottery {
      */
     public static void main(String[] args) {
         try {
+            //保存文件的路径
+            final String filePath = "src/main/resources/ssq.txt";
             //假定中奖的红色球组
-            List<Integer> targetBalls = Arrays.asList(2, 3, 7, 8, 17, 22);
+            List<Integer> targetBalls = Arrays.asList(4, 25, 31, 29, 33, 15);
             //假定中奖的蓝色球
-            int targetBlueBall = 15;
+            int targetBlueBall = 6;
             Lottery lottery = new Lottery();
-            //匹配
-            lottery.match(targetBalls, targetBlueBall);
+            //打印次数
+            int times = 1000000;
+            // int times = 365029152 / 2;
+            do {
+                System.out.println("计数器：" + times);
+                lottery.match(targetBalls, targetBlueBall);
+                times--;
+            } while (times > 0);
+            FileWriter fileWriter = new FileWriter(filePath);
+            fileWriter.write(lottery.stringBufferContext.toString());
+            fileWriter.close();
             //21,107,769
             //一等奖1种可能性，概率为1/17,721,088；
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
     }
 }

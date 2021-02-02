@@ -35,7 +35,7 @@ public class Happy8 {
         }
     }
 
-    List<Integer> buildBall(int ballSize) {
+    private List<Integer> buildBall(int ballSize) {
         this.fillBall();
         List<Integer> resultRedBallList = new ArrayList<>();
         Iterator iterator = ballList.iterator();
@@ -391,25 +391,26 @@ public class Happy8 {
     public void test() {
         Happy8 happy8 = new Happy8();
         System.out.println("选10");
-        for (int i = 0; i < 5; i++) {
+        int n = 5;
+        for (int i = 0; i < n; i++) {
             ArrayList<Integer> ball = (ArrayList<Integer>) happy8.buildBall(10);
             Collections.sort(ball);
             System.out.println("" + ball.toString());
         }
         System.out.println("选9");
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < n; i++) {
             ArrayList<Integer> ball = (ArrayList<Integer>) happy8.buildBall(9);
             Collections.sort(ball);
             System.out.println("" + ball.toString());
         }
         System.out.println("选8");
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < n; i++) {
             ArrayList<Integer> ball = (ArrayList<Integer>) happy8.buildBall(8);
             Collections.sort(ball);
             System.out.println("" + ball.toString());
         }
         System.out.println("选7");
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < n; i++) {
             ArrayList<Integer> ball = (ArrayList<Integer>) happy8.buildBall(7);
             Collections.sort(ball);
             System.out.println("" + ball.toString());
