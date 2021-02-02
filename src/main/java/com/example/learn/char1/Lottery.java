@@ -13,6 +13,8 @@ public class Lottery {
      */
     private List<Integer> redBallList = new ArrayList<>();
 
+    private List<List<Integer>> secReword = new ArrayList<>();
+
     /**
      * 构建生成号码
      */
@@ -111,16 +113,25 @@ public class Lottery {
             }
             System.out.println("=====\t");
             times += 1;
+//            System.out.println("计数器：" + times);
             //如何红色球和蓝色球都匹配则退出循环
+            //全部红球匹配，则为二等奖
+            if (matchRedFlag) {
+                List<Integer> balls = new ArrayList<>();
+                balls.addAll(targetBalls);
+                balls.add(blueBallNumber);// 蓝球
+                if (!matchBlueFlag) {
+                    //红匹配，蓝不匹配，则为二等奖
+                    secReword.add(balls);
+                }
+            }
+            //红色蓝色全匹配，结束循环
             if (matchRedFlag && matchBlueFlag) {
                 //rate=1/17721088
                 System.out.println("计数器：" + times);
-                //一周为7天，分析过程如下bai：
-                //平年有365／7＝52……1，即平年有52周余1天，
-                //双色球一年一共开奖150多期
-                int times2 = times / (150 * 10);
-                // int times2 = times / 150;
-                System.out.println("期数(年)：" + times2);
+                for (List<Integer> integerList : secReword) {
+                    System.out.println("二等奖：" + integerList.toString());
+                }
                 break;
             }
         } while (true);
@@ -134,17 +145,14 @@ public class Lottery {
     public static void main(String[] args) {
         try {
             //假定中奖的红色球组
-            List<Integer> targetBalls = Arrays.asList(2, 4, 7, 24, 25, 32);
+            List<Integer> targetBalls = Arrays.asList(2, 3, 7, 8, 17, 22);
             //假定中奖的蓝色球
-            int targetBlueBall = 13;
+            int targetBlueBall = 15;
             Lottery lottery = new Lottery();
             //匹配
             lottery.match(targetBalls, targetBlueBall);
-            //计数器：5753681
-            //计数器：6184761
-            //计数器：1036464
-            //计数器：3367956
-            //计数器：18647151
+            //21,107,769
+            //一等奖1种可能性，概率为1/17,721,088；
         } catch (Exception exception) {
             exception.printStackTrace();
         }

@@ -286,7 +286,6 @@ public class MySorting {
         }
         //当前子树的原根值调整后的位置
         keys[parent] = value;
-//        Array1.print(keys);
     }
 
     /**

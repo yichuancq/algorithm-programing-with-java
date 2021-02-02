@@ -1,5 +1,7 @@
 package com.example.learn.char5;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
  * @param <T>
  */
@@ -60,12 +62,14 @@ public class Tree<T> {
     }
 
     /**
+     * 插入新结点，插入结点是否为右孩子
+     *
      * @param parent
      * @param x
      * @param isLeftChild
      */
     public void insert(Node<T> parent, T x, boolean isLeftChild) {
-        if (x == null) {
+        if (x == null || parent == null) {
             return;
         }
         if (isLeftChild) {
@@ -174,7 +178,7 @@ public class Tree<T> {
      * 清空树
      */
     void clearTree() {
-        System.out.println("清空树");
+        System.out.println("\r\n清空树");
         this.root = null;
     }
 
@@ -242,24 +246,24 @@ public class Tree<T> {
      * 递归查找
      *
      * @param parent
-     * @param searchNode
+     * @param key
      * @return
      */
-    public Node<T> findNode(Node<T> parent, Node<T> searchNode) {
-        if (searchNode == null || parent == null) {
+    public Node<T> findNode(Node<T> parent, Node<T> key) {
+        if (key == null || parent == null) {
             return null;
         }
         //显示结点值
-        boolean flag = parent.getData().equals(searchNode.getData());
+        boolean flag = parent.getData().equals(key.getData());
         if (flag) {
             return parent;
         } else {
             //递归
             if (parent.getLeftChild() != null) {
-                parent = findNode(parent.getLeftChild(), searchNode);
+                parent = findNode(parent.getLeftChild(), key);
             }
             if (parent.getRightChild() != null) {
-                parent = findNode(parent.getRightChild(), searchNode);
+                parent = findNode(parent.getRightChild(), key);
             }
         }
         return parent;
@@ -287,6 +291,56 @@ public class Tree<T> {
     }
 
     /**
+     * 输出广义表
+     */
+    public void printGenList() {
+        System.out.println("输出广义表");
+        printGenList(this.root);
+    }
+
+    /**
+     * 输出广义表
+     *
+     * @param tNode
+     */
+    public void printGenList(Node<T> tNode) {
+        if (tNode == null) {
+            System.out.print("^");
+        } else {
+            System.out.print(tNode.getData().toString());
+            if (tNode.getLeftChild() != null || tNode.getRightChild() != null) {
+                System.out.print("(");
+                printGenList(tNode.getLeftChild());
+                System.out.print(",");
+                printGenList(tNode.getRightChild());
+                System.out.print(")");
+            }
+        }
+    }
+
+    /**
+     * 层次遍历
+     */
+    public void levelOrder() {
+        LinkedBlockingQueue<Node> queue = new LinkedBlockingQueue();
+        System.out.println("\r\n层次遍历");
+        Node p = this.root;
+        while (p != null) {
+            // 访问P结点
+            System.out.print("" + p.getData() + "");
+            if (p.getLeftChild() != null) {
+                queue.add(p.getLeftChild());
+            }
+            if (p.getRightChild() != null) {
+                queue.add(p.getRightChild());
+            }
+            //p 指向出队结点
+            p = queue.poll();
+        }
+        System.out.println();
+    }
+
+    /**
      * 获取树的高度
      *
      * @return
@@ -301,16 +355,17 @@ public class Tree<T> {
      */
     public static void main(String[] args) {
         String[] preList = {"A", "B", "D", null, "G", null, null, null, "C", "E", null, null, "F", "H"};
+//        String[] preList = {"A", "B", "C", "D", "E", "F", "G"};
         Tree<String> tree = new Tree<>(preList);
         //中根遍历
         tree.inorderTransversal();
 //        //前根遍历
-//        tree.preOderTransversal();
+        tree.preOderTransversal();
 //        //后根遍历
-//        tree.postTransversal();
+        tree.postTransversal();
 
         System.out.println("插入结点");
-//        tree.insert("X", true);
+
         tree.insert(tree.root.getLeftChild(), "X", true);
         tree.insert(tree.root.getRightChild(), "Y", false);
         //中根遍历
@@ -320,33 +375,31 @@ public class Tree<T> {
 //        //后根遍历
         tree.postTransversal();
         //删除结点
-
-        Node target = tree.findNode(tree.root, new Node<>("A"));
-
-        tree.remove(target, true);
+//        Node target = tree.findNode(tree.root, new Node<>("A"));
+//        tree.remove(target, true);
         //
-        System.out.println("" + target);
-        tree.inorderTransversal();
-
-
-        boolean hasElement = tree.contains("B");
-        System.out.println("是否找到结点:" + hasElement);
-        hasElement = tree.contains("E");
-        System.out.println("是否找到结点:" + hasElement);
-        hasElement = tree.contains("S");
-        System.out.println("是否找到结点:" + hasElement);
-        //移除结点
-        int size = tree.size();
-        System.out.println("树结点数目:" + size);
-        // tree.removeByKey(new Node("G"));
-        boolean isEmpty = tree.isEmpty();
-        System.out.println("tree is empty:" + isEmpty);
-
-        //树的高度
-        int height = tree.treeHeight();
-        System.out.println("树的高度:" + height);
+//        System.out.println("" + target);
+//        tree.inorderTransversal();
+        //输出广义表
+        tree.printGenList();
+        tree.levelOrder();
+//        boolean hasElement = tree.contains("B");
+//        System.out.println("是否找到结点:" + hasElement);
+//        hasElement = tree.contains("E");
+//        System.out.println("是否找到结点:" + hasElement);
+//        hasElement = tree.contains("S");
+//        System.out.println("是否找到结点:" + hasElement);
+//        //移除结点
+//        int size = tree.size();
+//        System.out.println("树结点数目:" + size);
+//        // tree.removeByKey(new Node("G"));
+//        boolean isEmpty = tree.isEmpty();
+//        System.out.println("tree is empty:" + isEmpty);
+//
+//        //树的高度
+//        int height = tree.treeHeight();
+//        System.out.println("树的高度:" + height);
         tree.clearTree();
     }
-
 
 }
