@@ -444,7 +444,7 @@ public class Happy8 {
         do {
             happy8.chooseN(9);
             i++;
-            if (happy8.winningFlag) {
+            if (happy8.winningFlag && i<10000) {
                 System.out.println("第: " + i + " 组号码");
                 System.out.println("开奖号码：" + happy8.targetBalls);
                 FileWriter fileWriter = new FileWriter(filePath);

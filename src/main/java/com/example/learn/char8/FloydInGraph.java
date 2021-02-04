@@ -67,6 +67,9 @@ public class FloydInGraph {
         this.dist = new int[size][size];
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         FloydInGraph graph = new FloydInGraph(5);
         int[][] matrix = {

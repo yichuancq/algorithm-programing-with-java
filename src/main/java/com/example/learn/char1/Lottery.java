@@ -13,8 +13,6 @@ public class Lottery extends Thread {
      * 红球
      */
     private List<Integer> redBallList = new ArrayList<>();
-    //写文件的内容
-    private StringBuffer stringBufferContext = new StringBuffer();
 
     private void fillBall() {
         for (int i = 1; i <= 33; i++) {
@@ -93,13 +91,14 @@ public class Lottery extends Thread {
      * @param targetRedBalls
      * @param targetBlueBall
      */
-    private void match(final List<Integer> targetRedBalls, final int targetBlueBall) {
+    private StringBuffer match(final List<Integer> targetRedBalls, final int targetBlueBall) {
         //生成模拟用户投注的开奖类型的号码组
+        //写文件的内容
+        StringBuffer stringBufferContext = new StringBuffer();
         int ballSize = 6;
+        //生成红色球号码组
         List<Integer> userBallList = this.buildRedBall(ballSize);
         //sort
-        Collections.sort(userBallList);
-
         int matchBallNumber = this.matchBall(targetRedBalls, userBallList);
         //生成蓝色球
         int blueBallNumber = this.buildBlueBall();
@@ -116,7 +115,7 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n一等奖");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
 
         //6+0
@@ -129,7 +128,7 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n二等奖");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
         //5+1
         if ((ballSize - matchBallNumber) == 1 && (blueBallNumber == targetBlueBall)) {
@@ -141,7 +140,7 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n三等奖,单注奖金3000元");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
         //5+0 or 4+1
         if (((ballSize - matchBallNumber) == 1 && (blueBallNumber != targetBlueBall))
@@ -154,7 +153,7 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n四等奖,单注奖金200元");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
         //4+0 or 3+1
         if (((ballSize - matchBallNumber) == 2 && (blueBallNumber != targetBlueBall))
@@ -167,7 +166,7 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n五等奖,单注奖金10元");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
         //2+1 or 1+1 or 0+1
         if (((ballSize - matchBallNumber) == 4 && (blueBallNumber == targetBlueBall))
@@ -181,8 +180,10 @@ public class Lottery extends Thread {
             stringBufferContext.append("\r\n六等奖,单注奖金5元");
             stringBufferContext.append("\r\n红球:" + userBallList.toString());
             stringBufferContext.append("\r\n篮球:" + blueBallNumber);
-            return;
+            return stringBufferContext;
         }
+
+        return stringBufferContext;
     }
 
     /**
@@ -202,13 +203,19 @@ public class Lottery extends Thread {
             //打印次数
             int times = 1000000;
             // int times = 365029152 / 2;
+            //文件记录追加到尾部
+            FileWriter fileWriter = new FileWriter(filePath, true);
             do {
                 System.out.println("计数器：" + times);
-                lottery.match(targetBalls, targetBlueBall);
+                StringBuffer sbFileContext = lottery.match(targetBalls, targetBlueBall);
+                //如果文件内容不为空
+                if (sbFileContext.length() > 0) {
+                    //写文件
+                    fileWriter.write(sbFileContext.toString());
+                    fileWriter.flush();
+                }
                 times--;
             } while (times > 0);
-            FileWriter fileWriter = new FileWriter(filePath);
-            fileWriter.write(lottery.stringBufferContext.toString());
             fileWriter.close();
             //21,107,769
             //一等奖1种可能性，概率为1/17,721,088；
