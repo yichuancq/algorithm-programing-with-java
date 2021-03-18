@@ -1,4 +1,4 @@
-package com.example.learn.char5;
+package com.example.learn.tree;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

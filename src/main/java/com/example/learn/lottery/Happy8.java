@@ -1,4 +1,4 @@
-package com.example.learn.char1;
+package com.example.learn.lottery;
 
 
 import org.junit.Test;
@@ -423,7 +423,7 @@ public class Happy8 {
         //保存文件的路径
         final String filePath = "src/main/resources/happy8.txt";
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             happy8.chooseN(9);
         }
         System.out.println("开奖号码：" + happy8.targetBalls);
@@ -444,7 +444,7 @@ public class Happy8 {
         do {
             happy8.chooseN(9);
             i++;
-            if (happy8.winningFlag && i<10000) {
+            if (happy8.winningFlag && i < 10000) {
                 System.out.println("第: " + i + " 组号码");
                 System.out.println("开奖号码：" + happy8.targetBalls);
                 FileWriter fileWriter = new FileWriter(filePath);

@@ -1,4 +1,4 @@
-package com.example.learn.char2;
+package com.example.learn.sorting;
 
 /**
  * 排序

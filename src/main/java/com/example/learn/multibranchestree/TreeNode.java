@@ -1,4 +1,4 @@
-package com.example.learn.char6;
+package com.example.learn.multibranchestree;
 
 import java.util.List;
 

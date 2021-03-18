@@ -1,4 +1,4 @@
-package com.example.learn.char3;
+package com.example.learn.sequencelist;
 
 /**
  * Person类

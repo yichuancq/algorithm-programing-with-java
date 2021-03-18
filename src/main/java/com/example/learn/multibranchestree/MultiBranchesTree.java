@@ -1,4 +1,4 @@
-package com.example.learn.char6;
+package com.example.learn.multibranchestree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -79,13 +79,12 @@ public class MultiBranchesTree<T> extends TreeNode<T> {
             return;
         }
         //
-        
         Iterator iterator = parent.getChildList().iterator();
         while (iterator.hasNext()) {
             TreeNode treeNode = (TreeNode) iterator.next();
-            System.out.println("removeNode" +treeNode.toString());
+            System.out.println("removeNode" + treeNode.toString());
             if (treeNode.toString().equals(deleteNode.toString())) {
-                System.out.println("delete"+treeNode.toString());
+                System.out.println("delete" + treeNode.toString());
                 iterator.remove();
             }
         }

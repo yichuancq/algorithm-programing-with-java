@@ -1,4 +1,4 @@
-package com.example.learn.char7;
+package com.example.learn.dijkstra;
 
 public class graph {
     //点个数

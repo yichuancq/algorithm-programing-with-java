@@ -1,4 +1,4 @@
-package com.example.learn.char5;
+package com.example.learn.tree;
 
 /**
  * 树的根节点

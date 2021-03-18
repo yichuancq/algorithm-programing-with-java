@@ -1,4 +1,4 @@
-package com.example.learn.char2;
+package com.example.learn.sorting;
 
 /**
  * 线性存储的随机数集合

@@ -1,4 +1,4 @@
-package com.example.learn.char4;
+package com.example.learn.singlylist;
 
 /**
  * 单链表

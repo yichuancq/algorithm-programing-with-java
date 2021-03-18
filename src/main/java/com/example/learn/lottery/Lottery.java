@@ -1,4 +1,4 @@
-package com.example.learn.char1;
+package com.example.learn.lottery;
 
 import java.io.FileWriter;
 import java.util.*;

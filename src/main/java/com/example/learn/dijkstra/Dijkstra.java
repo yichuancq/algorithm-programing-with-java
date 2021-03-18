@@ -1,4 +1,4 @@
-package com.example.learn.char7;
+package com.example.learn.dijkstra;
 
 import java.util.ArrayList;
 import java.util.Collections;

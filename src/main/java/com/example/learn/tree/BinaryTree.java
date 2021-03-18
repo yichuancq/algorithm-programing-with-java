@@ -1,4 +1,4 @@
-package com.example.learn.char5;
+package com.example.learn.tree;
 
 public class BinaryTree<T> extends Tree<T> {
     /**
