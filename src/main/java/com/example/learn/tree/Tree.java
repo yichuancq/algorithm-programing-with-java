@@ -382,6 +382,7 @@ public class Tree<T> {
 //        tree.inorderTransversal();
         //输出广义表
         tree.printGenList();
+        //层次遍历
         tree.levelOrder();
 //        boolean hasElement = tree.contains("B");
 //        System.out.println("是否找到结点:" + hasElement);
