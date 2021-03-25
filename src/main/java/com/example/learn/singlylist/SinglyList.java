@@ -1,9 +1,13 @@
 package com.example.learn.singlylist;
 
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+
 /**
  * 单链表
  */
-public class SinglyList<T> {
+public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
     //链表的头结点
     public Node<T> head;
     //链表长度
@@ -17,16 +21,16 @@ public class SinglyList<T> {
     }
 
     /**
-     * 用数组构造链表
+     * 构造单链表，由values数组提供元素，忽略其中空对象。采用尾插入，单链表元素次序与数组元素次序相同
      *
-     * @param vale
+     * @param values
      */
-    public SinglyList(T... vale) {
+    public SinglyList(T[] values) {
         this();
         //指向头结点
         Node<T> rear = this.head;
-        for (int i = 0; i < vale.length; i++) {
-            rear.next = new Node<T>(vale[i], null);
+        for (int i = 0; i < values.length; i++) {
+            rear.next = new Node<T>(values[i], null);
             //移动到下一个结点
             rear = rear.next;
         }
@@ -38,7 +42,7 @@ public class SinglyList<T> {
      *
      * @return
      */
-    private boolean isEmpty() {
+    public boolean isEmpty() {
         return head.next == null;
     }
 
@@ -460,6 +464,22 @@ public class SinglyList<T> {
         this.head.next = front;
         return this.head;
     }
+    //5. 单链表的浅拷贝与深拷贝
+    //【思考题2-8】
+//不行    public SinglyList(SinglyList<? extends T> list)   //深拷贝构造方法，复制单链表list的所有结点
+    //相当于Node<? extends T>，即Node<?>
+
+    public SinglyList(SinglyList<T> list)                  //深拷贝构造方法，复制单链表list的所有结点
+    {
+        this();                                            //创建空单链表，只有头结点
+        Node<T> rear=this.head;
+        for (Node<T> p=list.head.next;  p!=null;  p=p.next)  //p遍历list单链表
+        {
+            rear.next = new Node<T>(p.data, null);        //复制结点尾插入到this单链表
+            rear = rear.next;                             //指向this单链表尾
+        }
+    }
+
 
     public static void main(String[] args) {
         String[] strings = {"a", "b", "c", "d", "e", "f", "g"};
@@ -528,5 +548,56 @@ public class SinglyList<T> {
         System.out.println(singlyList.listToString2());
         //清空链表
         singlyList.clear();
+    }
+
+
+    //第10章，10.2 实现迭代器
+    public Iterator<T> iterator()      //返回Java迭代器对象
+    {
+        return new SinglyIterator();
+    }
+
+    private class SinglyIterator implements java.util.Iterator<T> //私有内部类，实现迭代器接口
+    {
+        Node<T> current=SinglyList.this.head;    //当前结点，初值为外部类单链表头结点
+        Node<T> front=null;                      //当前结点的前驱结点
+
+        public boolean hasNext()                 //若有后继元素，返回true
+        {
+            return this.current!=null && this.current.next!=null;
+        }
+
+        public T next()                          //返回后继元素
+        {
+            if (this.hasNext())
+            {
+                this.front = this.current;
+                this.current = this.current.next;
+                return this.current.data;
+            }
+            else throw new java.util.NoSuchElementException();  //抛出无此元素异常
+        }
+
+        public void remove()                     //删除迭代器对象表示的集合当前元素
+        {
+            if (this.front!=null)
+            {
+                this.front.next = this.current.next; //删除当前结点
+                this.current = this.front;
+                this.front=null;                     //设置不能连续删除
+            }
+            else throw new java.lang.IllegalStateException();//抛出无效状态异常
+//            throw new UnsupportedOperationException();     //不支持该操作，抛出异常
+        }
+    }//内部类结束
+    //【思考题10-2】
+    @Override
+    public void forEach(Consumer<? super T> action) {
+
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        return null;
     }
 }
