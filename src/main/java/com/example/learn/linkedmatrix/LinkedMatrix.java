@@ -1,4 +1,4 @@
-package com.example.learn.matrix;
+package com.example.learn.linkedmatrix;
 
 import com.example.learn.seqlist.SeqList;
 import com.example.learn.singlylist.Node;

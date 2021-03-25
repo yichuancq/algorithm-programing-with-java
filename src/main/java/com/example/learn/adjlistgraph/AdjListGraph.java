@@ -1,6 +1,6 @@
 package com.example.learn.adjlistgraph;
 
-import com.example.learn.matrix.LinkedMatrix;
+import com.example.learn.linkedmatrix.LinkedMatrix;
 import com.example.learn.matrixgraph.AbstractGraph;
 import com.example.learn.singlylist.Node;
 import com.example.learn.sortedsingllist.SortedSinglyList;

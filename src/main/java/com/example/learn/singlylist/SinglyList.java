@@ -492,10 +492,27 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
         //空表返回()
         return str + ")";
     }
+
     //返回Java迭代器对象
-    public Iterator<T> iterator()
-    {
+    public Iterator<T> iterator() {
         return new SinglyIterator();
+    }
+
+    /**
+     * 获取元素
+     *
+     * @param index
+     * @return
+     */
+    public T get(int index) {
+        Node<T> p = head.next;
+        for (int j = 0; p != null && j < index; j++) {
+            p = p.next;
+        }
+        if (index >= 0 && p != null) {
+            return p.data;
+        }
+        return null;
     }
 
     /**
