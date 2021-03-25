@@ -59,6 +59,92 @@ public class SinglyList<T> {
         return size;
     }
 
+//（5）查找，散列表用
+    //功能及参数：返回首个与key相等元素结点，若查找不成功返回null
+    //特殊情况：若key为空对象，Java将抛出空对象异常
+    //算法及效率：顺序查找，O(n)
+    //用于7.2.2节图的邻接表，必须返回结点，因为要求后继结点。2014年8月6日，对其他影响未修改
+
+    //顺序查找关键字为key元素，返回首次出现的元素，若查找不成功返回null
+    //key可以只包含关键字数据项，由T类的equals()方法提供比较对象相等的依据
+    public Node<T> search(T key) {
+        for (Node<T> p = this.head.next; p != null; p = p.next)
+            if (key.equals(p.data))                        //执行T类的equals(Object)方法，运行时多态
+                return p;
+        return null;
+    }
+
+    /**
+     * 删除首个与key相等元素结点，返回被删除元素；查找不成功返回null。O(n)散列表用
+     *
+     * @param key
+     * @return
+     */
+    public T remove(T key) {
+        Node<T> front = this.head, p = front.next;
+        //顺序查找首次出现的与key相等元素
+        while (p != null && !key.equals(p.data)) {
+            //front指向p的前驱结点
+            front = p;
+            p = p.next;
+        }
+        //若查找成功，删除front的后继（p结点）
+        if (p != null) {
+            //包括头删除、中间/尾删除
+            front.next = p.next;
+            return p.data;
+        }
+        return null;
+    }
+
+    //（4）删除
+
+    /**
+     * 删除第i个元素，0≤i<n，返回被删除元素；若i越界，返回null。O(n)
+     *
+     * @param i
+     * @return
+     */
+    public T remove(int i) {
+        //front指向头结点
+        Node<T> front = this.head;
+        //遍历寻找第i-1结点（front指向）
+        for (int j = 0; front.next != null && j < i; j++)
+            front = front.next;
+        //若front的后继结点存在，则删除之
+        if (i >= 0 && front.next != null) {
+            //获得待删除结点引用的对象
+            T old = front.next.data;
+            //删除front的后继结点，包括头删除、中间/尾删除
+            front.next = front.next.next;
+            //由Java虚拟机稍后释放结点占用存储单元
+            return old;
+        }
+        return null;                                       //若i<0或i>表长
+//        throw new IndexOutOfBoundsException(i+"");       //抛出序号越界异常
+    }
+
+    /**
+     * 尾插入互异元素x，若查找到与x的关键字相同元素，不插入，返回x结点；覆盖。//散列表用
+     *
+     * @param x
+     * @return
+     */
+    public Node<T> insertDifferent(T x) {
+        //front是p的前驱结点
+        Node<T> front = this.head, p = front.next;
+        //顺序查找
+        while (p != null && !p.data.equals(x)) {
+            front = p;
+            p = p.next;
+        }
+        //查找成功，元素重复，不插入，返回p结点
+        if (p != null) {
+            System.out.println("x=" + x + "，元素重复，未插入。");
+            return p;
+        }
+        return front.next = new Node<T>(x, null);           //尾插入值为x结点，返回插入结点
+    }
 
     /**
      * 获取元素
@@ -80,7 +166,7 @@ public class SinglyList<T> {
     /**
      * 清空链表
      */
-    private void clear() {
+    public void clear() {
         this.head.next = null;
     }
 
