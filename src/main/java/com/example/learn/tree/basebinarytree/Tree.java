@@ -1,4 +1,4 @@
-package com.example.learn.tree;
+package com.example.learn.tree.basebinarytree;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
