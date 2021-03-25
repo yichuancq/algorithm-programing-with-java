@@ -68,7 +68,7 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
     //（2）插入顶点
     public int insertVertex(T x)                           //插入元素为x的顶点，返回x顶点序号
     {
-        int i = this.vertexlist.insert(x);                 //顶点顺序表尾插入x，返回x序号，自动扩容
+        int i = this.vertexes.insert(x);                 //顶点顺序表尾插入x，返回x序号，自动扩容
         if (i >= this.matrix.getRows())                    //若邻接矩阵容量不够，
             this.matrix.setRowsColumns(i + 1, i + 1);           //矩阵扩容。保持邻接矩阵行列数同图的顶点数
         for (int j = 0; j < i; j++)                            //初始化第i行、列元素值为∞。i==j值已为0
@@ -96,7 +96,7 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
     {
         int n = this.vertexCount();                          //原顶点数
         if (i >= 0 && i < n) {
-            this.vertexlist.remove(i);                     //删除顶点顺序表第i个元素，顶点数减1。  //顺序表删除，若i越界，返回null
+            this.vertexes.remove(i);                     //删除顶点顺序表第i个元素，顶点数减1。  //顺序表删除，若i越界，返回null
             for (int j = i + 1; j < n; j++)                      //第i+1〜n-1行元素上移一行，n为原顶点数
                 for (int k = 0; k < n; k++)
                     this.matrix.set(j - 1, k, this.matrix.get(j, k));
@@ -125,7 +125,7 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
 
     public void removeVertex(T vertex)           //删除顶点vertex及其关联的边
     {
-        int i = this.vertexlist.search(vertex);    //在顺序表中查找值为vertex的元素，返回序号
+        int i = this.vertexes.search(vertex);    //在顺序表中查找值为vertex的元素，返回序号
         this.removeVertex(i);                    //删除顶点vi及其关联的边
     }
 }

@@ -1,8 +1,6 @@
 package com.example.learn.singlylist;
 
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 /**
  * 单链表
@@ -378,7 +376,6 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
 
     }
 
-
     /**
      * 移除指定索引的元素，方式1
      *
@@ -427,7 +424,7 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
      *
      * @return
      */
-    private Node<T> reverse2() {
+    public Node<T> reverse2() {
         //p指向第0个结点
         Node<T> p = this.head;
         Node<T> front = null;
@@ -451,7 +448,7 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
      *
      * @return
      */
-    private Node<T> reverse() {
+    public Node<T> reverse() {
         Node<T> p = this.head.next;
         Node<T> front = null;
         while (p != null) {
@@ -480,95 +477,45 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
         }
     }
 
-
-    public static void main(String[] args) {
-        String[] strings = {"a", "b", "c", "d", "e", "f", "g"};
-        SinglyList singlyList = new SinglyList(strings);
-        boolean isEmpty = singlyList.isEmpty();
-//        Object data = singlyList.getElement(1);
-//        System.out.println("data:" + data);
-//        System.out.println("isEmpty:" + isEmpty);
-//        int listSize = singlyList.singleListSize();
-//        System.out.println("listSize:" + listSize);
-//        System.out.println("遍历显示结点");
-//        singlyList.showNodes();
-//        System.out.println("替换元素");
-//        singlyList.replaceElement(2, "cc");
-//        System.out.println("遍历显示结点");
-//        singlyList.showNodes();
-//        System.out.println("递归显示结点");
-//        singlyList.getChildNode(singlyList.head);
-//        System.out.println("遍历打印元素方式1");
-//        System.out.println(singlyList.listToString());
-//        System.out.println("遍历打印元素方式2");
-//        System.out.println(singlyList.listToString2());
-//        System.out.println("插入结点元素");
-//        //插入结点元素
-//        singlyList.insertHead("ss");
-//        System.out.println("遍历显示结点");
-//        singlyList.showNodes();
-//        System.out.println("遍历打印元素方式2");
-//        //尾部插入
-//        singlyList.insertTail("z");
-//        System.out.println("遍历打印元素方式2");
-//        System.out.println(singlyList.listToString2());
-//        listSize = singlyList.singleListSize();
-//        System.out.println("listSize:" + listSize);
-//        //
-//        singlyList.insert(2, "new");
-//        System.out.println("遍历打印元素方式2");
-//        System.out.println(singlyList.listToString2());
-//        //移除指定索引的元素
-//        System.out.println("删除结点元素");
-//        singlyList.removeElement(3);
-////        singlyList.removeElement2(3);
-//        //
-//        System.out.println("遍历打印元素方式2");
-//        System.out.println(singlyList.listToString2());
-//        //删除元素
-//        System.out.println("删除匹配值相同的结点元素");
-//        singlyList.removeElement("cc");
-//        System.out.println("遍历打印元素方式2");
-//        System.out.println(singlyList.listToString2());
-//        //获取某个元素
-//        int index = singlyList.getElementIndex("ss");
-//        System.out.println("index" + index);
-//        singlyList.removeElement2(index);
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-        //反转链表
-        System.out.println("反转链表");
-        singlyList.reverse();
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-        ////
-        System.out.println("反转链表");
-        singlyList.reverse2();
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
-        //清空链表
-        singlyList.clear();
+    //返回单链表所有元素的描述字符串，形式为“(,)”。覆盖Object类的toString()方法，O(n)
+    @Override
+    public String toString() {
+        //返回类名
+        String str = this.getClass().getName() + "(";
+        //p遍历单链表
+        for (Node<T> p = this.head.next; p != null; p = p.next) {
+            str += p.data.toString();
+            if (p.next != null)
+                //不是最后一个结点时，加分隔符
+                str += ",";
+        }
+        //空表返回()
+        return str + ")";
     }
-
-
-    //第10章，10.2 实现迭代器
-    public Iterator<T> iterator()      //返回Java迭代器对象
+    //返回Java迭代器对象
+    public Iterator<T> iterator()
     {
         return new SinglyIterator();
     }
 
-    private class SinglyIterator implements java.util.Iterator<T> //私有内部类，实现迭代器接口
-    {
+    /**
+     * 私有内部类，实现迭代器接口
+     */
+    private class SinglyIterator implements java.util.Iterator<T> {
         Node<T> current = SinglyList.this.head;    //当前结点，初值为外部类单链表头结点
         Node<T> front = null;                      //当前结点的前驱结点
 
-        public boolean hasNext()                 //若有后继元素，返回true
-        {
+        //若有后继元素，返回true
+        public boolean hasNext() {
             return this.current != null && this.current.next != null;
         }
 
-        public T next()                          //返回后继元素
-        {
+        /**
+         * 返回后继元素
+         *
+         * @return
+         */
+        public T next() {
             if (this.hasNext()) {
                 this.front = this.current;
                 this.current = this.current.next;
@@ -576,25 +523,17 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
             } else throw new java.util.NoSuchElementException();  //抛出无此元素异常
         }
 
-        public void remove()                     //删除迭代器对象表示的集合当前元素
-        {
+        /**
+         * 删除迭代器对象表示的集合当前元素
+         */
+        public void remove() {
             if (this.front != null) {
-                this.front.next = this.current.next; //删除当前结点
+                //删除当前结点
+                this.front.next = this.current.next;
                 this.current = this.front;
-                this.front = null;                     //设置不能连续删除
+                //设置不能连续删除
+                this.front = null;
             } else throw new java.lang.IllegalStateException();//抛出无效状态异常
-//            throw new UnsupportedOperationException();     //不支持该操作，抛出异常
         }
     }//内部类结束
-
-    //【思考题10-2】
-    @Override
-    public void forEach(Consumer<? super T> action) {
-
-    }
-
-    @Override
-    public Spliterator<T> spliterator() {
-        return null;
-    }
 }

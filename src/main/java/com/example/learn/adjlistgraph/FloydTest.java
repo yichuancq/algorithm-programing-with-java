@@ -1,16 +1,28 @@
-package com.example.learn.matrixgraph;
+package com.example.learn.adjlistgraph;
 
+import com.example.learn.matrixgraph.MatrixGraph;
 import com.example.learn.triple.Triple;
 
 public class FloydTest {
     public static void main(String args[]) {
         //【例7.1】  带权图的存储及操作。
         String[] vertices = {"A", "B", "C", "D", "E"};           //带权无向图G3的顶点集合（除F） ，图7.13
-        Triple[] edges = {new Triple(0, 1, 45), new Triple(0, 2, 28), new Triple(0, 3, 10),
-                new Triple(1, 0, 45), new Triple(1, 2, 12), new Triple(1, 4, 21),
-                new Triple(2, 0, 28), new Triple(2, 1, 12), new Triple(2, 3, 17), new Triple(2, 4, 26),
-                new Triple(3, 0, 10), new Triple(3, 2, 17), new Triple(3, 4, 15),
-                new Triple(4, 1, 21), new Triple(4, 2, 26), new Triple(4, 3, 15)};//G3的边集合（除F）
+        Triple[] edges = {new Triple(0, 1, 45),
+                new Triple(0, 2, 28),
+                new Triple(0, 3, 10),
+                new Triple(1, 0, 45),
+                new Triple(1, 2, 12),
+                new Triple(1, 4, 21),
+                new Triple(2, 0, 28),
+                new Triple(2, 1, 12),
+                new Triple(2, 3, 17),
+                new Triple(2, 4, 26),
+                new Triple(3, 0, 10),
+                new Triple(3, 2, 17),
+                new Triple(3, 4, 15),
+                new Triple(4, 1, 21),
+                new Triple(4, 2, 26),
+                new Triple(4, 3, 15)};//G3的边集合（除F）
         MatrixGraph<String> graph = new MatrixGraph<String>(vertices, edges);  //邻接矩阵表示的图
 //        AdjListGraph<String> graph = new AdjListGraph<String>(vertices, edges);     //邻接表表示的图
 //        System.out.println("带权无向图G3（除顶点F），"+graph.toString());
@@ -54,8 +66,8 @@ public class FloydTest {
 
         //7.5.1   非负权值的单源最短路径（Dijkstra算法）
         System.out.println("带权无向图G3，Dijkstra算法");
-//        for (i=0; i<graph.vertexCount(); i++)       //图10.6
-//            graph.shortestPath(i);               //顶点vi的单源最短路径，Dijkstra算法
+        for (i=0; i<graph.vertexCount(); i++)       //图10.6
+            graph.shortestPath(i);               //顶点vi的单源最短路径，Dijkstra算法
 
         /*        //习题7
         System.out.print("有"+graph.edgeCount()+"条边，");

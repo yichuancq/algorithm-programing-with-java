@@ -15,11 +15,11 @@ public abstract class AbstractGraph<T> {
     //最大权值（表示无穷大∞），不能用Integer.MAX_VALUE;
     protected static final int MAX_WEIGHT = 99999;//0x0000ffff;
     //顶点顺序表，存储图的顶点集合
-    protected SeqList<T> vertexlist;
+    protected SeqList<T> vertexes;
 
     public AbstractGraph(int length)                       //构造空图，顶点数为0，length指定顶点顺序表容量
     {
-        this.vertexlist = new SeqList<T>(length);          //构造容量为length的空顺序表。//若length<0，Java抛出负数组长度异常
+        this.vertexes = new SeqList<T>(length);          //构造容量为length的空顺序表。//若length<0，Java抛出负数组长度异常
     }
 
     public AbstractGraph()                                 //构造空图，顶点数为0
@@ -29,22 +29,22 @@ public abstract class AbstractGraph<T> {
 
     public int vertexCount()                               //返回图的顶点数
     {
-        return this.vertexlist.size();                     //返回顶点顺序表的元素个数
+        return this.vertexes.size();                     //返回顶点顺序表的元素个数
     }
 
     public String toString()                               //返回图的顶点集合描述字符串
     {
-        return "顶点集合：" + this.vertexlist.toString() + "\n";
+        return "顶点集合：" + this.vertexes.toString() + "\n";
     }
 
     public T getVertex(int i)                              //返回顶点vi元素
     {
-        return this.vertexlist.get(i);                     //若i越界，则返回null
+        return this.vertexes.get(i);                     //若i越界，则返回null
     }//遍历用
 
     public void setVertex(int i, T x)                      //设置顶点vi元素为x
     {
-        this.vertexlist.set(i, x);                          //若i越界，则抛出异常
+        this.vertexes.set(i, x);                          //若i越界，则抛出异常
     }
 
     //以下抽象方法没有方法体，由子类提供实现
@@ -212,6 +212,7 @@ public abstract class AbstractGraph<T> {
 //            System.out.print("\tdist数组"+toString(dist));
         }
 
+        // 的单源最短路径
         System.out.print(this.getVertex(i) + "的单源最短路径：");
         for (int j = 0; j < n; j++)                            //输出顶点vi的单源最短路径
             if (j != i) {

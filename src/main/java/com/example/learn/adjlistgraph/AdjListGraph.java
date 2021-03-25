@@ -1,6 +1,7 @@
-package com.example.learn.matrixgraph;
+package com.example.learn.adjlistgraph;
 
 import com.example.learn.matrix.LinkedMatrix;
+import com.example.learn.matrixgraph.AbstractGraph;
 import com.example.learn.singlylist.Node;
 import com.example.learn.sortedsingllist.SortedSinglyList;
 import com.example.learn.triple.Triple;
@@ -35,6 +36,7 @@ public class AdjListGraph<T> extends AbstractGraph<T> {
             this.insertEdge(edges[j]);                     //插入一条边
     }
 
+    @Override
     public String toString()                               //返回图的顶点集合和邻接表描述字符串
     {
         return super.toString() + "出边表：\n" + this.adjlist.toString();
@@ -60,7 +62,7 @@ public class AdjListGraph<T> extends AbstractGraph<T> {
     //（2）插入顶点
     public int insertVertex(T x)                           //插入元素为x的顶点，返回x顶点序号
     {
-        int i = this.vertexlist.insert(x);                 //顶点顺序表尾插入顶点x，返回x顶点序号，长度加1，自动扩容
+        int i = this.vertexes.insert(x);                 //顶点顺序表尾插入顶点x，返回x顶点序号，长度加1，自动扩容
         if (i >= this.adjlist.getRows())                   //若邻接表容量不够，
             this.adjlist.setRowsColumns(i + 1, i + 1);         //则扩容，保持邻接表行数同图的顶点数
         return i;                                          //返回插入顶点序号
@@ -103,7 +105,7 @@ public class AdjListGraph<T> extends AbstractGraph<T> {
                         p.data.column--;
                 }
             }
-            this.vertexlist.remove(i);           //删除顶点vi，i后顶点序号减1，图顶点数减1
+            this.vertexes.remove(i);           //删除顶点vi，i后顶点序号减1，图顶点数减1
         } else throw new IndexOutOfBoundsException("i=" + i);//抛出序号越界异常
     }
 
