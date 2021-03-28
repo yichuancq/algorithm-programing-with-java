@@ -3,44 +3,79 @@ package com.example.learn.stack;
 
 import com.example.learn.seqlist.SeqList;
 
-//顺序栈类，最终类，实现栈接口，T表示数据元素的数据类型
-public final class SeqStack<T> implements Stack<T> {
-    private SeqList<T> list;                               //使用顺序表（第2章）存储栈元素
 
-    public SeqStack(int length)                            //构造容量为length的空栈
-    {
-        this.list = new SeqList<T>(length);                //执行顺序表构造方法
+/***
+ * 顺序栈类，最终类，实现栈接口，T表示数据元素的数据类型
+ * @param <T>
+ */
+public final class SeqStack<T> implements Stack<T> {
+    //使用顺序表（第2章）存储栈元素
+    private SeqList<T> list;
+
+    /**
+     * 构造容量为length的空栈
+     *
+     * @param length
+     */
+    public SeqStack(int length) {
+        //执行顺序表构造方法
+        this.list = new SeqList<T>(length);
     }
 
-    public SeqStack()                                      //构造默认容量的空栈
-    {
+    /**
+     * 构造默认容量的空栈
+     */
+    public SeqStack() {
         this(64);
     }
 
-    public boolean isEmpty()                               //判断栈是否空，若空返回true
-    {
+    /**
+     * 判断栈是否空，若空返回true
+     *
+     * @return
+     */
+    public boolean isEmpty() {
         return this.list.isEmpty();
     }
 
-    public void push(T x)                                  //元素x入栈，空对象不能入栈
-    {
-        this.list.insert(x);                               //顺序表尾插入元素x，自动扩充容量
+    /**
+     * 元素x入栈，空对象不能入栈
+     *
+     * @param x
+     */
+    public void push(T x) {
+        //顺序表尾插入元素x，自动扩充容量
+        this.list.insert(x);
     }
 
-    public T peek()                                        //返回栈顶元素（未出栈），若栈空返回null
-    {
-        return this.list.get(list.size() - 1);               //若栈空，get(i)返回null
+    /**
+     * 返回栈顶元素（未出栈），若栈空返回null
+     *
+     * @return
+     */
+    public T peek() {
+        //若栈空，get(i)返回null
+        return this.list.get(list.size() - 1);
 //        return this.isEmpty() ? null : this.list.get(list.size()-1);
     }
 
-    public T pop()                                         //出栈，返回栈顶元素；若栈空返回null
-    {
-        return this.list.remove(list.size() - 1);            //若栈不空，顺序表尾删除，返回删除元素
+    /**
+     * 出栈，返回栈顶元素；若栈空返回null
+     *
+     * @return
+     */
+    public T pop() {
+        //若栈不空，顺序表尾删除，返回删除元素
+        return this.list.remove(list.size() - 1);
 //        return this.isEmpty() ? null : this.list.remove(list.size()-1); //若栈不空，顺序表尾删除，返回删除元素
     }
 
-    public String toString()                               //返回栈所有元素的描述字符串，形式为“(,)”
-    {
+    /**
+     * 返回栈所有元素的描述字符串，形式为“(,)”
+     *
+     * @return
+     */
+    public String toString() {
         return this.getClass().getName() + " " + this.list.toString();
     }
 }
