@@ -21,9 +21,15 @@ public class ListNode {
 
     @Override
     public String toString() {
-        return "ListNode{" +
-                "val=" + val +
-                ", next=" + next +
-                '}';
+
+        if (this == null) {
+            return "list is null";
+        } else {
+            return "ListNode{" +
+                    "val=" + val +
+                    ", next=" + next +
+                    '}';
+        }
+
     }
 }

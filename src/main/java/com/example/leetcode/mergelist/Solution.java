@@ -141,21 +141,56 @@ public class Solution {
         }
     }
 
+    /**
+     * 合并数组链表，返回新链表
+     * 给定一个链表数组，每个链表都已经按升序排列
+     * 将所有链表合并到一个升序链表中，返回合并后的链表。
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        ListNode head = new ListNode(0);
+        //front指向头结点
+        ListNode front = head;
+        for (ListNode listNode : lists) {
+            System.out.println("" + listNode.toString());
+            //内部结点
+            ListNode p = listNode;
+            while (p != null) {
+                //下一个结点赋值
+                front.next = new ListNode(p.val);
+                front = front.next;
+                //移动外层结点元素
+                p = p.next;
+            }
+        }
+        //返回前排序元素
+        return this.orderList(head.next);
+    }
 
     public static void main(String[] args) {
         int[] arrays1 = {1, 2, 4, 5, 5, 6};
         int[] arrays2 = {1, 3, 4};
+        int[] arrays3 = {1, 3, 10};
         Solution solution = new Solution();
         //构造结点1
         ListNode listNode1 = new ListNodeBuilder(arrays1).buildListNode();
         //构造结点2
         ListNode listNode2 = new ListNodeBuilder(arrays2).buildListNode();
+        //构造结点3
+        ListNode listNode3 = new ListNodeBuilder(arrays3).buildListNode();
         //
         System.out.println("" + listNode1.toString());
         System.out.println("" + listNode2.toString());
+        System.out.println("" + listNode3.toString());
         //
-        ListNode listNode = solution.merge(listNode1, listNode2);
+        //  ListNode listNode = solution.merge(listNode1, listNode2);
 //        ListNode listNode = solution.mergeTwoLists(listNode1, listNode2);
-        System.out.println("合并后的链表：" + listNode.toString());
+        //   System.out.println("合并后的链表：" + listNode.toString());
+        //合并链表
+        ListNode[] lists = {listNode1, listNode2, listNode3};
+        ListNode last = solution.mergeKLists(lists);
+        System.out.println(last);
     }
 }
