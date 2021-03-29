@@ -1,6 +1,7 @@
 package com.example.leetcode.mergelist;
 
 import com.example.leetcode.node.ListNode;
+import com.example.leetcode.node.ListNodeBuilder;
 
 /**
  * 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的
@@ -10,23 +11,6 @@ public class Solution {
     public Solution() {
     }
 
-    /**
-     * 构造树结点
-     *
-     * @param arrays
-     */
-    public ListNode buildListNode(int[] arrays) {
-        //生成一个临时结点
-        ListNode head = new ListNode(0);
-        //指向头结点
-        ListNode rear = head;
-        for (Integer integer : arrays) {
-            rear.next = new ListNode(integer);
-            //移动到下一个结点
-            rear = rear.next;
-        }
-        return head.next;
-    }
 
     /**
      * 合并方法2
@@ -162,12 +146,14 @@ public class Solution {
         int[] arrays1 = {1, 2, 4, 5, 5, 6};
         int[] arrays2 = {1, 3, 4};
         Solution solution = new Solution();
-        ListNode listNode1 = solution.buildListNode(arrays1);
-
-        ListNode listNode2 = solution.buildListNode(arrays2);
+        //构造结点1
+        ListNode listNode1 = new ListNodeBuilder(arrays1).buildListNode();
+        //构造结点2
+        ListNode listNode2 = new ListNodeBuilder(arrays2).buildListNode();
+        //
         System.out.println("" + listNode1.toString());
         System.out.println("" + listNode2.toString());
-
+        //
         ListNode listNode = solution.merge(listNode1, listNode2);
 //        ListNode listNode = solution.mergeTwoLists(listNode1, listNode2);
         System.out.println("合并后的链表：" + listNode.toString());

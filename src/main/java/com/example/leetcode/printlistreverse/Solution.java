@@ -1,28 +1,12 @@
 package com.example.leetcode.printlistreverse;
 
 import com.example.leetcode.node.ListNode;
+import com.example.leetcode.node.ListNodeBuilder;
 
 /**
  * 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）
  */
 public class Solution {
-
-    public ListNode head;
-
-    public Solution() {
-        this.head = new ListNode(0);
-    }
-
-    public Solution(int[] values) {
-        this();
-        //指向头结点
-        ListNode rear = this.head;
-        for (Integer integer : values) {
-            rear.next = new ListNode(integer);
-            //移动到下一个结点
-            rear = rear.next;
-        }
-    }
 
     /**
      * 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
@@ -69,12 +53,13 @@ public class Solution {
 
     public static void main(String[] args) {
         int[] arrays = {1, 2, 3, 4, 5};
-        Solution solution = new Solution(arrays);
-        System.out.println("array:" + solution.head.next);
+        Solution solution=new Solution();
+        ListNode listNode=new ListNodeBuilder(arrays).buildListNode();
+        System.out.println("array:" + listNode);
         System.out.println();
         //
         System.out.println("翻转打印");
-        int[] result = solution.reversePrint(solution.head.next);
+        int[] result = solution.reversePrint(listNode);
         for (Integer integer : result) {
             System.out.print("\t" + integer);
         }
