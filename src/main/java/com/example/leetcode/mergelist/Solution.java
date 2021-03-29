@@ -154,7 +154,6 @@ public class Solution {
         //front指向头结点
         ListNode front = head;
         for (ListNode listNode : lists) {
-            System.out.println("" + listNode.toString());
             //内部结点
             ListNode p = listNode;
             while (p != null) {
