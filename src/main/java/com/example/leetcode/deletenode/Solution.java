@@ -34,9 +34,11 @@ class Solution {
      * 输入：单向链表a->b->c->d->e->f中的节点c
      * 结果：不返回任何数据，但该链表变为a->b->d->e->f
      */
-    public void deleteNode(ListNode node, int del) {
+    public ListNode deleteNode(ListNode head, int del) {
         //设置一个临时结点
-        ListNode p = head;
+        //添加临时结点
+        ListNode p = new ListNode(-1);
+        p.next = head;
         while (p.next != null) {
             if (p.next.val == del && p.next != null) {
                 System.out.println("delete: " + del);
@@ -45,14 +47,16 @@ class Solution {
                 p = p.next;
             }
         }
+        return head;
     }
 
     public static void main(String[] args) {
         // 删除结点'c'
         Solution solution = new Solution(new int[]{1, 2, 3, 4, 5, 7});
         System.out.println("" + solution.head.next.toString());
-        solution.deleteNode(solution.head.next, 7);
-        System.out.println("" + solution.head.next.toString());
+        ListNode listNode = solution.deleteNode(solution.head.next, 3);
+        System.out.println(listNode.toString());
+       // System.out.println("" + solution.head.next.toString());
     }
 
 

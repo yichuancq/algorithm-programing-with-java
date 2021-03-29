@@ -119,7 +119,7 @@ public class Solution {
 //        System.out.println("" + listNode2);
 //        //removeElements3
 
-        ListNode listNode3 = solution.removeElements3(solution.head.next, 5);
+        ListNode listNode3 = solution.removeElements(solution.head.next, 5);
         System.out.println("" + listNode3);
     }
 
