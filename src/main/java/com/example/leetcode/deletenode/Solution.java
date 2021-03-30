@@ -50,13 +50,26 @@ class Solution {
         return head;
     }
 
+
+    /**
+     * 改成for 循环
+     *
+     * @param head
+     * @param del
+     * @return
+     */
+    public ListNode deleteNode2(ListNode head, int del) {
+        return head;
+
+    }
+
     public static void main(String[] args) {
         // 删除结点'c'
         Solution solution = new Solution(new int[]{1, 2, 3, 4, 5, 7});
         System.out.println("" + solution.head.next.toString());
         ListNode listNode = solution.deleteNode(solution.head.next, 3);
         System.out.println(listNode.toString());
-       // System.out.println("" + solution.head.next.toString());
+        // System.out.println("" + solution.head.next.toString());
     }
 
 
