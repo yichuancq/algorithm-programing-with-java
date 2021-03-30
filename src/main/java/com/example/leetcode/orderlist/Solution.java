@@ -3,8 +3,6 @@ package com.example.leetcode.orderlist;
 import com.example.leetcode.node.ListNode;
 import com.example.leetcode.node.ListNodeBuilder;
 
-import java.util.Arrays;
-
 /**
  * 给出链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表
  * 输入：head = [-1,5,3,4,0]
@@ -13,7 +11,7 @@ import java.util.Arrays;
 public class Solution {
 
     /**
-     * 排序链表
+     * 排序
      *
      * @param head
      * @return
@@ -22,42 +20,45 @@ public class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-        //获取长度
-        int len = getLength(head);
-        int[] numbs = ListNode2Array(head, len);
-        //排序
-        Arrays.sort(numbs);
-        ListNode newHead = new ListNode(-1);
-        ListNode tmp = newHead;
-        for (int i = 0; i <= len - 1; i++) {
-            newHead.val = numbs[i];
-            if (i < len - 1) {
-                newHead.next = new ListNode(-1);
-                newHead = newHead.next;
-            }
+
+        /**
+         *查找 当前链表的 “中点”
+         */
+        ListNode fastNode = head;
+        ListNode slowHead = head;
+        while (fastNode.next != null && fastNode.next.next != null) {
+            slowHead = slowHead.next;
+            fastNode = fastNode.next.next;
         }
 
-        return tmp;
+        ListNode midNode = slowHead.next;
+        slowHead.next = null;   // 将 两半链表 断开
+        ListNode leftHead = sortList(head);
+        ListNode rightHead = sortList(midNode);
+        return merge(leftHead, rightHead);
     }
 
-    public int getLength(ListNode head) {
-        int len = 0;
-        while (head != null) {
-            len++;
-            head = head.next;
+    /**
+     * 为 两个链表 进行 “归并排序”
+     *
+     * @param leftHead  左链表头
+     * @param rightHead 右链表头
+     * @return 当前两个链表的 排序后的头
+     */
+    private ListNode merge(ListNode leftHead, ListNode rightHead) {
+        if (leftHead == null) {
+            return rightHead;
         }
-        return len;
-    }
-
-    public int[] ListNode2Array(ListNode head, int len) {
-        int[] numbs = new int[len];
-        int i = 0;
-        while (head != null) {
-            numbs[i] = head.val;
-            head = head.next;
-            i++;
+        if (rightHead == null) {
+            return leftHead;
         }
-        return numbs;
+        if (leftHead.val < rightHead.val) {
+            leftHead.next = merge(leftHead.next, rightHead);
+            return leftHead;
+        } else {
+            rightHead.next = merge(leftHead, rightHead.next);
+            return rightHead;
+        }
     }
 
     public static void main(String[] args) {
@@ -68,6 +69,7 @@ public class Solution {
         System.out.println();
         //
         ListNode last = solution.sortList(listNode);
+        //   ListNode last = solution.sortList(listNode);
         System.out.println(last);
 
     }
