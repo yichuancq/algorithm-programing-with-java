@@ -4,20 +4,42 @@ import com.example.leetcode.node.ListNode;
 
 public class Solution {
 
+
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
+
         LinkedList linkedList = new LinkedList();
-        linkedList.addAtTail(1);
-        linkedList.addAtTail(2);
+        //头部添加元素
+        linkedList.addAtHead(1);
+        linkedList.deleteAtIndex(0);
+        linkedList.addAtHead(1);
+        linkedList.addAtHead(2);
+        linkedList.addAtHead(3);
+        linkedList.printNodes();
+        //添加索引元素
+        linkedList.addAtIndex(2, 0);
+        linkedList.printNodes();
+        // 尾部添加元素
         linkedList.addAtTail(4);
-        linkedList.addAtHead(8);
-        linkedList.addAtHead(9);
         linkedList.printNodes();
-        linkedList.addAtIndex(3, 99);   //链表变为1-> 2-> 3
-        int element = linkedList.get(4);            //返回2
-        System.out.println("获取元素值:" + element);
+        //
+        int element = linkedList.get(3);
+        System.out.println("find val:" + element);
+        //删除元素
+//        linkedList.deleteAtIndex(4);
+        linkedList.deleteAtIndex(4);
         linkedList.printNodes();
-        linkedList.deleteAtIndex(3);  //现在链表是1-> 3
-        linkedList.printNodes();
+//        linkedList.addAtIndex(5, 0);
+//        linkedList.deleteAtIndex(2);
+//        linkedList.addAtHead(6);
+//        linkedList.addAtTail(4);
+//        int element = linkedList.get(4);
+//        linkedList.addAtIndex(5, 0);
+//        linkedList.addAtHead(6);
+//        linkedList.printNodes();
+
     }
 }
 
@@ -117,6 +139,9 @@ class LinkedList {
      */
     public void addAtHead(int val) {
         System.out.println("头部添加元素->" + val);
+        if (Integer.valueOf(val) == null) {
+            return;
+        }
         ListNode q = new ListNode(val);
         if (head == null) {
             head = q;
@@ -161,12 +186,19 @@ class LinkedList {
         ListNode p = head;
         ListNode insertNode = new ListNode(val);
         int pose = 0;
+        if (size == 1 && index == size) {
+            //
+            this.addAtTail(val);
+            return;
+        }
+        //
         while (p != null) {
             if (pose == index) {
                 //insert node
-                ListNode pre = getNodeByIndex(index);
+                ListNode pre = getNodeByIndex(index - 1);
                 //新结点下一个指向当前结点的下一个结点
-                insertNode.next = p.next;
+                insertNode.val = val;
+                insertNode.next = p;
                 System.out.println("上一个结点：" + pre);
                 //上一个结点的下一个结点指向新插入的结点
                 pre.next = insertNode;
@@ -176,28 +208,29 @@ class LinkedList {
         }
     }
 
+
     /**
      * 如果索引index有效，则删除链表中的第index个节点。
      */
     public void deleteAtIndex(int index) {
         System.out.println("删除的索引: " + index);
+        ListNode front = this.head;
+        //遍历元素，且不为最后一个结点。且小于当前索引
         int size = this.size();
-        if (index < 0 || index > size) {
+        //只有一个结点
+        if (size == (index + 1) && size == 1) {
+            head = null;
+            font = this.head;
             return;
         }
-        ListNode p = head;
-        int pose = 0;
-        while (p != null) {
-            if (pose == index) {
-                System.out.println("delete...");
-                //赋值
-                p.val = p.next.val;
-                //结点向前移动一位
-                p.next = p.next.next;
-                return;
+        for (int j = 0; front != null && j <= index; front = front.next) {
+            //当索引匹配则删除
+            j++;
+            if (j == index && front.next != null) {
+                //移除front的后继
+                front.next = front.next.next;
+                break;
             }
-            pose++;
-            p = p.next;
         }
     }
 }
