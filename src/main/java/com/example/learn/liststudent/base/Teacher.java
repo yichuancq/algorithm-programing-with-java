@@ -8,7 +8,7 @@ public class Teacher extends Person {
     /**
      * 教师授课课程
      */
-    public Course[] courses;
+    public String[] csNumber;
 
     public Teacher() {
     }
@@ -17,8 +17,8 @@ public class Teacher extends Person {
         super(number, name);
     }
 
-    public Teacher(String number, String name, Course[] courses) {
+    public Teacher(String number, String name, String[] courses) {
         super(number, name);
-        this.courses = courses;
+        this.csNumber = courses;
     }
 }

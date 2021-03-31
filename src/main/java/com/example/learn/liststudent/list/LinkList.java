@@ -59,7 +59,6 @@ public class LinkList<T> extends LinkNode<T> {
         }
     }
 
-
     //删除第i个元素，0≤i<n，返回被删除元素；若i越界，返回null。O(n)
     public T remove(int i) {
         //front指向头结点
@@ -230,6 +229,23 @@ public class LinkList<T> extends LinkNode<T> {
             System.out.println("" + p.data);
             p = p.next;
         }
+    }
+
+    /**
+     * @return
+     */
+    public Student[] ListToArray() {
+        int size = this.size();
+        Student[] arrays = new Student[size];
+        LinkNode p = head.next;
+        int i = 0;
+        while (p != null) {
+            System.out.println("" + p.data);
+            arrays[i] = (Student) p.data;
+            i++;
+            p = p.next;
+        }
+        return arrays;
     }
 
 }

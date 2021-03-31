@@ -1,11 +1,13 @@
 package com.example.learn.liststudent;
 
+import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
 import com.example.learn.liststudent.list.LinkList;
 import org.junit.Test;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -15,6 +17,26 @@ public class StudentTest {
      * 学生信息链表
      */
     private LinkList linkList = new LinkList();
+    //保存文件的路径
+    private final String studentFilePath = "src/main/resources/student.txt";
+
+
+    @Test
+    public void testWriteFile() throws Exception {
+        int stuSize = 5;
+        Student[] students = new Student[stuSize];
+        for (int i = 0; i < stuSize; i++) {
+            students[i] = new Student("stuNo" + i, "stuName" + i);
+        }
+        String fileContent = JSON.toJSONString(students);
+        //Person newPerson = JSON.parseObject(jsonObject, Person.class);
+        //
+        System.out.println("json->" + fileContent);
+        FileWriter fileWriter = new FileWriter(studentFilePath);
+        fileWriter.write(fileContent);
+        fileWriter.close();
+
+    }
 
 
     @Test
@@ -25,7 +47,9 @@ public class StudentTest {
         for (int i = 0; i < stuSize; i++) {
             students[i] = new Student("stuNo" + i, "stuName" + i);
         }
-
+        String person = JSON.toJSONString(students);
+        //
+        System.out.println("json->" + person);
         LinkList linkList = new LinkList(students);
         //new LinkList(students);
         linkList.printNode();
@@ -96,8 +120,28 @@ public class StudentTest {
         }
         linkList.add(student);
         System.out.println("学生集合长度：" + linkList.size());
+//       保存学生信息到文件
+        this.saveStudentInfoToDisk();
         //返回上一步
         this.showPersonMenu();
+    }
+
+    /**
+     * 保存学生信息到文件
+     */
+    private void saveStudentInfoToDisk() throws Exception {
+//        int stuSize = 5;
+        Student[] students = linkList.ListToArray();
+        if (students == null || students.length == 0) {
+            System.out.println("无写入内容到磁盘!");
+            return;
+        }
+        String fileContent = JSON.toJSONString(students);
+//        //Person newPerson = JSON.parseObject(jsonObject, Person.class);
+        System.out.println("json->" + fileContent);
+        FileWriter fileWriter = new FileWriter(studentFilePath);
+        fileWriter.write(fileContent);
+        fileWriter.close();
     }
 
     /**
