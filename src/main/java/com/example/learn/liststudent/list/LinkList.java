@@ -16,6 +16,9 @@ public class LinkList<T> extends LinkNode<T> {
      */
     public LinkNode head;
 
+    /**
+     * 构造函数
+     */
     public LinkList() {
         head = new LinkNode<>();
     }
@@ -44,7 +47,7 @@ public class LinkList<T> extends LinkNode<T> {
      */
     public void add(T elementT) {
         //指向头结点
-        System.out.println("添加结点" + elementT.toString());
+      //  System.out.println("添加结点" + elementT.toString());
         LinkNode rear = head;
         if (elementT == null) {
             System.out.println("添加对象为空");
@@ -223,24 +226,27 @@ public class LinkList<T> extends LinkNode<T> {
         return string;
     }
 
+    /**
+     * 打印结点信息
+     */
     public void printNode() {
         LinkNode p = head.next;
         while (p != null) {
-            System.out.println("" + p.data);
             p = p.next;
         }
     }
 
     /**
+     * 链表结点生成对象数组
+     *
      * @return
      */
-    public Student[] ListToArray() {
+    public Student[] ListToArrays() {
         int size = this.size();
         Student[] arrays = new Student[size];
         LinkNode p = head.next;
         int i = 0;
         while (p != null) {
-            System.out.println("" + p.data);
             arrays[i] = (Student) p.data;
             i++;
             p = p.next;

@@ -7,8 +7,10 @@ import com.example.learn.liststudent.base.Student;
 import com.example.learn.liststudent.list.LinkList;
 import org.junit.Test;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class StudentTest {
@@ -28,9 +30,11 @@ public class StudentTest {
         for (int i = 0; i < stuSize; i++) {
             students[i] = new Student("stuNo" + i, "stuName" + i);
         }
+        //JSON.toJSONString
         String fileContent = JSON.toJSONString(students);
         //Person newPerson = JSON.parseObject(jsonObject, Person.class);
         //
+
         System.out.println("json->" + fileContent);
         FileWriter fileWriter = new FileWriter(studentFilePath);
         fileWriter.write(fileContent);
@@ -63,30 +67,88 @@ public class StudentTest {
         }
         len = linkList.size();
         System.out.println("len ->" + len);
-        System.out.println(linkList.listToString2());
+//        System.out.println(linkList.listToString2());
         //del
         //linkList.remove(new Person("stuNo4", "stuName4"));
         //
         linkList.delete(new Person("stuNo0", "stuName0"));
         //
-        System.out.println(linkList.listToString2());
+//        System.out.println(linkList.listToString2());
         len = linkList.size();
         System.out.println("len ->" + len);
+    }
+
+
+    @Test
+    public void readFile() {
+        try {
+            FileReader fileReader = new FileReader(studentFilePath);
+            int ch = 0;
+            String context = "";
+            while ((ch = fileReader.read()) != -1) {
+                System.out.print((char) ch);
+                context += String.valueOf((char) ch);
+            }
+            fileReader.close();
+            System.out.println();
+            System.out.println("context" + context);
+            // JSON串转用户对象列表
+            List<Student> users2 = JSON.parseArray(context, Student.class);
+            for (Student student : users2) {
+                System.out.println(student.toString());
+            }
+        } catch (IOException e) {
+            System.out.println("异常：" + e.toString());
+        } finally {
+        }
+
+    }
+
+    /**
+     * @return
+     * @throws Exception
+     */
+    public Student[] readStudentInfoFromDisk() throws Exception {
+        FileReader fileReader = new FileReader(studentFilePath);
+        int ch = 0;
+        String context = "";
+        while ((ch = fileReader.read()) != -1) {
+            context += String.valueOf((char) ch);
+        }
+        fileReader.close();
+        // JSON串转用户对象列表
+        List<Student> studentList = JSON.parseArray(context, Student.class);
+        Student[] students = new Student[studentList.size()];
+        for (int i = 0; i < studentList.size(); i++) {
+            students[i] = studentList.get(i);
+        }
+        return students;
     }
 
     /**
      * 显示学生基本信息
      */
     public void showStudentInto() throws Exception {
-        int len = linkList.size();
-        if (len <= 0) {
+        //
+        // Student[] students = linkList.ListToArrays();
+        Student[] students = this.readStudentInfoFromDisk();
+        if (students == null || students.length == 0) {
             System.out.println("无学生信息，返回上一级");
             System.out.println("");
             this.showPersonMenu();
-
-        } else {
-            linkList.printNode();
+            return;
         }
+        // TODO: 2021/3/31  
+        //如果存在记录同时加载到内存里面，给链表赋值
+        //linkList
+        linkList = new LinkList(students);
+        //print
+        System.out.println("=====学生信息如下=====");
+        for (Student student : students) {
+            System.out.println("学号：" + student.getNumber() + "\t姓名：" + student.getName());
+        }
+        System.out.println("======end =====");
+        return;
 
     }
 
@@ -120,7 +182,7 @@ public class StudentTest {
         }
         linkList.add(student);
         System.out.println("学生集合长度：" + linkList.size());
-//       保存学生信息到文件
+//      保存学生信息到文件
         this.saveStudentInfoToDisk();
         //返回上一步
         this.showPersonMenu();
@@ -130,15 +192,12 @@ public class StudentTest {
      * 保存学生信息到文件
      */
     private void saveStudentInfoToDisk() throws Exception {
-//        int stuSize = 5;
-        Student[] students = linkList.ListToArray();
+        Student[] students = linkList.ListToArrays();
         if (students == null || students.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
         String fileContent = JSON.toJSONString(students);
-//        //Person newPerson = JSON.parseObject(jsonObject, Person.class);
-        System.out.println("json->" + fileContent);
         FileWriter fileWriter = new FileWriter(studentFilePath);
         fileWriter.write(fileContent);
         fileWriter.close();
@@ -210,14 +269,22 @@ public class StudentTest {
             if (stuNumber.equals("exit")) {
                 //返回上一步
                 this.showPersonMenu();
+                return;
             }
             if (!stuNumber.isEmpty()) {
                 //del
                 linkList.delete(new Student(stuNumber, ""));
+
+                // 把内存数据删除的写入文件
+                // TODO: 2021/3/31 把内存数据删除的写入文件
+                this.saveStudentInfoToDisk();
                 //显示学生信息
-                showStudentInto();
+                this.showStudentInto();
                 //返回上一步
+
                 this.showPersonMenu();
+
+                break;
             }
         }
 
