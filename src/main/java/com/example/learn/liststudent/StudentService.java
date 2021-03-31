@@ -208,7 +208,7 @@ public class StudentService {
         }
         Classes classesKey = new Classes(classesNumber, "");
         //查询班级信息
-        Classes classes = new ClassesService().searchByKey(classesKey);
+        Classes classes = new ClassesService(baseService).searchByKey(classesKey);
         if (classes == null) {
             System.out.println("查询失败， 无此记录~");
             //返回上一层
@@ -312,12 +312,10 @@ public class StudentService {
         fileWriter.close();
     }
 
-
     /**
      * 编辑学生班级信息
      */
     public void editStudentClass() throws Exception {
-        System.out.println("=====编辑学生班级信息,班级信息如下====");
         /**
          * 显示学生信息
          */
@@ -325,11 +323,11 @@ public class StudentService {
         /***
          *显示班级信息
          */
-        new ClassesService().showClassesInto();
-
-        //编辑前显示已经有的数据
+        new ClassesService(baseService).showClassesInto();
+        /**
+         * 编辑前显示已经有的数据
+         */
         this.showStudentClassesInfo();
-
         /***
          * 1用户录入学号，录入班级编号
          */
@@ -402,7 +400,6 @@ public class StudentService {
                     break;
                 case 2:
                     System.out.println("编辑学生班级信息");
-
                     this.editStudentClass();
                     break;
                 case 3:
@@ -421,8 +418,7 @@ public class StudentService {
      * @throws Exception
      */
     private void showStudentClassesInfo() throws Exception {
-        // TODO: 2021/4/1 显示学生班级信息关系记录
-        ///加载文件内容到内存
+        //加载文件内容到内存
         StudentClasses[] studentClasses = this.readStudentClassesInfoFromDisk();
         if (studentClasses == null || studentClasses.length == 0) {
             System.out.println("无信息，返回上一级");
@@ -442,8 +438,8 @@ public class StudentService {
                     "\t学生姓名:" + sClasses.stuName);
         }
         System.out.println("======end =====");
-       // this.editStudent();
-       // return;
+        // this.editStudent();
+        // return;
     }
 
     /**
@@ -512,7 +508,7 @@ public class StudentService {
                     break;
                 case 2:
                     System.out.println("班级信息管理.");
-                    new ClassesService().showClassesMenu();
+                    new ClassesService(baseService).showClassesMenu();
                     break;
                 case 3:
                     System.out.println("课程信息管理.");

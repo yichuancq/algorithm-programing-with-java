@@ -26,7 +26,13 @@ public class ClassesService<T> {
     //保存文件的路径
     private final String filePath = "src/main/resources/classes.txt";
 
+    public BaseService baseService;
+
     public ClassesService() {
+    }
+
+    public ClassesService(BaseService baseService) {
+        this.baseService = baseService;
     }
 
     /**
@@ -125,7 +131,7 @@ public class ClassesService<T> {
             return classes;
         }
         //
-        classes =classesNode.data;
+        classes = classesNode.data;
         return classes;
     }
 
@@ -223,7 +229,8 @@ public class ClassesService<T> {
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
-                    new StudentService().initMenu();
+                    // TODO: 2021/4/1  fix bug
+                    new StudentService(baseService).initMenu();
                     break;
                 case 1:
                     System.out.println("添加班级信息.");
