@@ -109,7 +109,6 @@ public class ClassesService<T> {
             return;
         }
         classesLinkList = new ClassesLinkList(classes);
-
     }
 
     /**
@@ -126,7 +125,7 @@ public class ClassesService<T> {
             return classes;
         }
         //
-        classes = (Classes) classesNode.data;
+        classes =classesNode.data;
         return classes;
     }
 

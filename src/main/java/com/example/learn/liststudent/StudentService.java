@@ -17,7 +17,7 @@ public class StudentService {
      */
     private PersonLinkList personLinkList = new PersonLinkList();
     //保存文件的路径
-    private final String filePath = "src/main/resources/student.txt";
+    private final String studentFilePath = "src/main/resources/student.txt";
     //
     private BaseService baseService;
 
@@ -34,7 +34,7 @@ public class StudentService {
      * @return
      * @throws Exception
      */
-    private boolean checkFile() throws Exception {
+    private boolean checkFile(String filePath) throws Exception {
         File file = new File(filePath);
         if (file.exists()) {
             return true;
@@ -43,17 +43,16 @@ public class StudentService {
         return false;
     }
 
-
     /**
      * @return
      * @throws Exception
      */
     public Student[] readStudentInfoFromDisk() throws Exception {
-        boolean flag = this.checkFile();
+        boolean flag = this.checkFile(studentFilePath);
         if (!flag) {
             return null;
         }
-        FileReader fileReader = new FileReader(filePath);
+        FileReader fileReader = new FileReader(studentFilePath);
         int ch = 0;
         String context = "";
         while ((ch = fileReader.read()) != -1) {
@@ -141,7 +140,7 @@ public class StudentService {
             return;
         }
         String fileContent = JSON.toJSONString(students);
-        FileWriter fileWriter = new FileWriter(filePath);
+        FileWriter fileWriter = new FileWriter(studentFilePath);
         fileWriter.write(fileContent);
         fileWriter.close();
     }
@@ -196,7 +195,6 @@ public class StudentService {
     }
 
     private void searchPerson(String personNumber, String classesNumber) throws Exception {
-
         StudentClasses studentClasses = null;
         //通过对象查找元素
         Person personKey = new Person(personNumber, "");
@@ -228,6 +226,48 @@ public class StudentService {
 
     }
 
+
+    /**
+     * 读取磁盘数据
+     *
+     * @return
+     * @throws Exception
+     */
+    private StudentClasses[] readStudentClassesInfoFromDisk() throws Exception {
+        boolean flag = this.checkFile(baseService.studentClassesFilePath);
+        if (!flag) {
+            return null;
+        }
+        //注意文件路径
+        FileReader fileReader = new FileReader(baseService.studentClassesFilePath);
+        int ch = 0;
+        String context = "";
+        while ((ch = fileReader.read()) != -1) {
+            context += String.valueOf((char) ch);
+        }
+        fileReader.close();
+        // JSON串转用户对象列表
+        List<StudentClasses> studentClasses = JSON.parseArray(context, StudentClasses.class);
+        StudentClasses[] sClasses = new StudentClasses[studentClasses.size()];
+        for (int i = 0; i < studentClasses.size(); i++) {
+            sClasses[i] = studentClasses.get(i);
+        }
+        return sClasses;
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    private void loadStudentClassesInfoFromDisk() throws Exception {
+        StudentClasses[] arrays = readStudentClassesInfoFromDisk();
+        if (arrays == null || arrays.length == 0) {
+            System.out.println("文件无数据，请继续操作~");
+            return;
+        }
+        baseService.init(arrays);
+    }
+
     /**
      * 保存学生班级信息到磁盘
      * <p>
@@ -241,6 +281,9 @@ public class StudentService {
         if (studentClasses == null) {
             return;
         }
+        ///加载文件内容到内存
+        this.loadStudentClassesInfoFromDisk();
+        // TODO: 2021/4/1  saveStudentClassesInfoToDisk fix bug
         //添加到链表中，加载到内存
         baseService.getStudentClassesLinkList().add(studentClasses);
         //集合长度
@@ -249,6 +292,7 @@ public class StudentService {
 //      保存学生信息到文件
         this.saveStudentClassesLinkNodesInfoToDisk();
     }
+    //
 
 
     /**
@@ -282,6 +326,10 @@ public class StudentService {
          *显示班级信息
          */
         new ClassesService().showClassesInto();
+
+        //编辑前显示已经有的数据
+        this.showStudentClassesInfo();
+
         /***
          * 1用户录入学号，录入班级编号
          */
@@ -337,7 +385,7 @@ public class StudentService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 2) {
+            if (orderNumber < 0 || orderNumber > 3) {
                 System.out.println("录入非法.");
                 break;
             }
@@ -348,10 +396,13 @@ public class StudentService {
                     break;
                 case 1:
                     System.out.println("修改学生姓名信息");
-                    //showPersonMenu();
+                    //编辑前显示已经有的数据
+                    this.showStudentClassesInfo();
+                    //todo 修改学生姓名信息
                     break;
                 case 2:
                     System.out.println("编辑学生班级信息");
+
                     this.editStudentClass();
                     break;
                 case 3:
@@ -371,6 +422,28 @@ public class StudentService {
      */
     private void showStudentClassesInfo() throws Exception {
         // TODO: 2021/4/1 显示学生班级信息关系记录
+        ///加载文件内容到内存
+        StudentClasses[] studentClasses = this.readStudentClassesInfoFromDisk();
+        if (studentClasses == null || studentClasses.length == 0) {
+            System.out.println("无信息，返回上一级");
+            return;
+        }
+        //如果存在记录同时加载到内存里面，给链表赋值
+        baseService.init(studentClasses);
+        int size = baseService.getStudentClassesLinkList().size();
+        //print
+        System.out.println("=====学生班级信息记录数如下=====");
+        System.out.println("记录数：" + size);
+        System.out.println("=====学生班级信息如下=====");
+        for (StudentClasses sClasses : studentClasses) {
+            System.out.println("班级号：" + sClasses.classesNumber +
+                    "\t班级名称：" + sClasses.classesName
+                    + "\t学号: " + sClasses.stuNumber +
+                    "\t学生姓名:" + sClasses.stuName);
+        }
+        System.out.println("======end =====");
+       // this.editStudent();
+       // return;
     }
 
     /**

@@ -23,7 +23,7 @@ public class StudentClasses {
     /**
      * 学生姓名
      */
-    private String stuName;
+    public String stuName;
 
     public StudentClasses() {
     }

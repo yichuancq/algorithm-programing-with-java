@@ -5,7 +5,7 @@ import com.example.learn.liststudent.list.StudentClassesLinkList;
 /**
  * 全局基础服务
  */
-public class BaseService {
+public class BaseService<T> {
     //保存文件的路径
     public final String studentClassesFilePath = "src/main/resources/studentClasses.txt";
 
@@ -15,16 +15,16 @@ public class BaseService {
     private StudentClassesLinkList studentClassesLinkList;
 
     public BaseService() {
-        this.init();
+        studentClassesLinkList = new StudentClassesLinkList();
     }
 
     /**
-     *
+     * @param arrays
      */
-    private void init() {
-        studentClassesLinkList = new StudentClassesLinkList();
-
+    public void init(T[] arrays) {
+        studentClassesLinkList = new StudentClassesLinkList(arrays);
     }
+
 
     public StudentClassesLinkList getStudentClassesLinkList() {
         return studentClassesLinkList;
