@@ -19,6 +19,7 @@ public class LinkList<T> extends LinkNode<T> {
     public LinkList() {
         head = new LinkNode<>();
     }
+
     /**
      * 构造链表
      *
@@ -115,14 +116,19 @@ public class LinkList<T> extends LinkNode<T> {
         LinkNode rear = head;
         for (; rear != null && rear.next != null; ) {
             //编号相同
-            if (elementT.toString().equals( rear.next.data.toString())) {
+            Person element = (Person) elementT;
+            Person person = (Person) rear.next.data;
+            if (element.getNumber().equals(person.getNumber())) {
                 rear.next = rear.next.next;
                 break;
             }
+//            if (elementT.toString().equals(rear.next.data.toString())) {
+//                rear.next = rear.next.next;
+//                break;
+//            }
             rear = rear.next;
         }
     }
-
 
     /**
      * 按索引查找元素
@@ -139,7 +145,6 @@ public class LinkList<T> extends LinkNode<T> {
             p = p.next;
         }
         System.out.println("查找失败!");
-        // throw new Exception("\"查找失败！\"");
         return null;
     }
 

@@ -159,6 +159,7 @@ public class StudentTest {
         //显示学生信息
         showStudentInto();
         //用户输入
+        System.out.println("录入学号:");
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
             String stuNumber = scanner.nextLine();
