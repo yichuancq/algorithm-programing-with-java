@@ -10,8 +10,6 @@ public class Solution {
 
     public Solution() {
     }
-
-
     /**
      * 找出相同的元素并返回A∩B
      *

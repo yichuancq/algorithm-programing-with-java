@@ -2,6 +2,7 @@ package com.example.learn.liststudent;
 
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.Student;
+import com.example.learn.liststudent.base.StudentClasses;
 import com.example.learn.liststudent.list.PersonLinkList;
 
 import java.io.File;
@@ -22,7 +23,6 @@ public class StudentService {
     private PersonLinkList personLinkList = new PersonLinkList();
     //保存文件的路径
     private final String filePath = "src/main/resources/student.txt";
-
 
     /**
      * 检查文件是否存在
@@ -150,13 +150,13 @@ public class StudentService {
         System.out.println("\t 1.添加学生信息");
         System.out.println("\t 2.删除学生信息");
         System.out.println("\t 3.查看学生信息");
-        System.out.println("\t 4.修改学生信息");
+        System.out.println("\t 4.修改(编辑)学生信息");
         System.out.println("\t 0.返回上一层");
         System.out.println("===================");
         System.out.println("请选择?(0-4)");
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
+        while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
             if (orderNumber < 0 || orderNumber > 4) {
                 System.out.println("录入非法,exit...");
@@ -165,12 +165,12 @@ public class StudentService {
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
-                    GOTO:
-                    initMenu();
+                    this.initMenu();
                     break;
                 case 1:
                     System.out.println("添加学生信息.");
-                    addStudent();
+                    this.showStudentInto();
+                    this.addStudent();
                     break;
                 case 2:
                     System.out.println("删除学生信息.");
@@ -182,11 +182,103 @@ public class StudentService {
                     break;
                 case 4:
                     System.out.println("修改学生信息.");
+                    editStudent();
                     break;
                 default:
+                    System.out.println("非法数字");
                     return;
             }
         }
+    }
+
+    /**
+     * 编辑学生班级信息
+     */
+    public void editStudentClass() throws Exception {
+        System.out.println("=====编辑学生班级信息,班级信息如下====");
+        /**
+         * 显示学生信息
+         */
+        this.showStudentInto();
+        //  显示班级信息
+        new ClassesService().showClassesInto();
+        /***
+         * 1用户录入学号，录入班级编号
+         */
+        System.out.println("请选择需要编辑的学号:");
+        //todo
+        //学号
+        String stuNumber = "";
+        //班级编号
+        String classesNumber = "";
+        //用户输入
+        Scanner scanner = new Scanner(System.in);
+        stuNumber = scanner.nextLine();
+        System.out.println("输入学号:" + stuNumber);
+        System.out.println("=====显示信息====");
+        System.out.println("输入班级编号");
+        System.out.println("");
+        //用户输入
+        scanner = new Scanner(System.in);
+        classesNumber = scanner.nextLine();
+        System.out.println("输入：" + classesNumber);
+        ///todo 保存到文件
+        //学生班级信息编码
+        String scNumber = "test";
+       // String classesNumber = "";
+        //班级名称
+        String classesName = "test";
+        //String stuNumber = "";
+        //学生姓名
+        String stuName = "test";
+        //
+        StudentClasses studentClasses = new StudentClasses(scNumber, classesNumber,
+                classesName, stuNumber, stuName);
+
+        System.out.println("" +studentClasses);
+        return;
+    }
+
+    /**
+     * 修改学生信息
+     */
+    private void editStudent() throws Exception {
+        System.out.println("=====显示修改学生信息菜单====");
+        System.out.println("\t1 修改学生姓名信息");
+        System.out.println("\t2 编辑学生班级信息");
+        System.out.println("\t0 返回上一层");
+        System.out.println("===================");
+        /**
+         * 1 加载班级信息
+         * 2 通过学号编辑姓名，如果不存在学生返回失败
+         * 3 编辑学生班级信息，如果班级存在
+         */
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            int orderNumber = scanner.nextInt();
+            if (orderNumber < 0 || orderNumber > 2) {
+                System.out.println("录入非法.");
+                break;
+            }
+            switch (orderNumber) {
+                case 0:
+                    System.out.println("返回上一层");
+                    showPersonMenu();
+                    break;
+                case 1:
+                    System.out.println("修改学生姓名信息");
+                    //showPersonMenu();
+                    break;
+                case 2:
+                    System.out.println("编辑学生班级信息");
+                    this.editStudentClass();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
     }
 
     /**
@@ -210,7 +302,7 @@ public class StudentService {
                 this.showPersonMenu();
                 return;
             }
-            if (!stuNumber.isEmpty()) {
+            if (!stuNumber.isEmpty() && personLinkList.size() > 0) {
                 //del
                 personLinkList.delete(new Student(stuNumber, ""));
                 // 把内存数据删除的写入文件
@@ -238,7 +330,7 @@ public class StudentService {
         System.out.println("请选择?(0-4)");
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
+        while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
             if (orderNumber < 0 || orderNumber > 4) {
                 System.out.println("录入非法,exit...");
@@ -255,7 +347,6 @@ public class StudentService {
                     break;
                 case 2:
                     System.out.println("班级信息管理.");
-                    // TODO: 2021/3/31  ClassesService
                     new ClassesService().showClassesMenu();
                     break;
                 case 3:

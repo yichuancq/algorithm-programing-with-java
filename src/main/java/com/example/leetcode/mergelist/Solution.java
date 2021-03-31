@@ -106,13 +106,13 @@ public class Solution {
         ListNode p1 = left;
         ListNode p2 = right;
         ListNode p = head.next;
-        ListNode base = head;  // 选取头节点为基准节点
-        base.next = null;
+        ListNode front = head;  // 选取头节点为基准节点
+        front.next = null;
         // 剩余节点中比基准值小就放left里,否则放right里,按照大小拆分为两条链表
         while (p != null) {
             ListNode pn = p.next;
             p.next = null;
-            if (p.val < base.val) {
+            if (p.val < front.val) {
                 p1.next = p;
                 p1 = p1.next;
             } else {
@@ -125,7 +125,7 @@ public class Solution {
         left.next = orderList(left.next);
         right.next = orderList(right.next);
         // 先把又链表拼到base后面
-        base.next = right.next;
+        front.next = right.next;
         // 左链表+基准节点+右链表拼接,左链表有可能是空,所以需要特殊处理下
         if (left.next != null) {
             p = left.next;
@@ -134,10 +134,10 @@ public class Solution {
                 p = p.next;
             }
             // 把base拼接到左链表的末尾
-            p.next = base;
+            p.next = front;
             return left.next;
         } else {
-            return base;
+            return front;
         }
     }
 

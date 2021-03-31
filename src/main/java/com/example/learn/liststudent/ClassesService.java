@@ -17,7 +17,6 @@ import java.util.Scanner;
  * @param <T>
  */
 public class ClassesService<T> {
-
     /**
      *
      */
@@ -59,9 +58,9 @@ public class ClassesService<T> {
         //用户输入
         Scanner scanner = new Scanner(System.in);
         classesNumber = scanner.nextLine();
-        System.out.println("输入：" + classesNumber);
+        System.out.println("输入:" + classesNumber);
         System.out.println("=====显示信息====");
-        System.out.println("输入学生姓名（字符如:yichuan）");
+        System.out.println("输入班级名（字符如:计算机01）");
         System.out.println("");
         //用户输入
         scanner = new Scanner(System.in);
@@ -94,9 +93,7 @@ public class ClassesService<T> {
         FileWriter fileWriter = new FileWriter(filePath);
         fileWriter.write(fileContent);
         fileWriter.close();
-
     }
-
 
     /**
      * 显示班级基本信息
@@ -163,7 +160,6 @@ public class ClassesService<T> {
             classes[i] = classesList.get(i);
         }
         return classes;
-
     }
 
     /**
@@ -180,7 +176,7 @@ public class ClassesService<T> {
         System.out.println("请选择?(0-4)");
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
+        while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
             if (orderNumber < 0 || orderNumber > 4) {
                 System.out.println("录入非法,exit...");
@@ -194,6 +190,8 @@ public class ClassesService<T> {
                     break;
                 case 1:
                     System.out.println("添加班级信息.");
+                    this.showClassesInto();
+                    //
                     this.addClasses();
                     break;
                 case 2:
