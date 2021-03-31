@@ -281,15 +281,14 @@ public class StudentService {
         if (studentClasses == null) {
             return;
         }
-        ///加载文件内容到内存
+        //加载文件内容到内存
         this.loadStudentClassesInfoFromDisk();
-        // TODO: 2021/4/1  saveStudentClassesInfoToDisk fix bug
         //添加到链表中，加载到内存
         baseService.getStudentClassesLinkList().add(studentClasses);
         //集合长度
         int size = baseService.getStudentClassesLinkList().size();
         System.out.println("集合长度：" + size);
-//      保存学生信息到文件
+        //保存学生信息到文件
         this.saveStudentClassesLinkNodesInfoToDisk();
     }
     //
@@ -396,7 +395,7 @@ public class StudentService {
                     System.out.println("修改学生姓名信息");
                     //编辑前显示已经有的数据
                     this.showStudentClassesInfo();
-                    //todo 修改学生姓名信息
+                    //修改学生姓名信息
                     break;
                 case 2:
                     System.out.println("编辑学生班级信息");
@@ -438,8 +437,6 @@ public class StudentService {
                     "\t学生姓名:" + sClasses.stuName);
         }
         System.out.println("======end =====");
-        // this.editStudent();
-        // return;
     }
 
     /**
@@ -456,24 +453,24 @@ public class StudentService {
         //用户输入
         System.out.println("录入学号:");
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
-            String stuNumber = scanner.nextLine();
-            if (stuNumber.equals("exit")) {
-                //返回上一步
-                this.showPersonMenu();
-                return;
-            }
-            if (!stuNumber.isEmpty() && personLinkList.size() > 0) {
-                //del
-                personLinkList.delete(new Student(stuNumber, ""));
-                // 把内存数据删除的写入文件
-                this.saveStudentInfoToDisk();
-                //显示学生信息
-                this.showStudentInto();
-                //返回上一步
-                this.showPersonMenu();
-                break;
-            }
+        String stuNumber = "";
+        if (scanner.hasNext()) {
+            stuNumber = scanner.nextLine();
+        }
+        if (stuNumber.equals("exit")) {
+            //返回上一步
+            this.showPersonMenu();
+            return;
+        }
+        if (!stuNumber.isEmpty() && personLinkList != null && personLinkList.size() > 0) {
+            //del
+            personLinkList.delete(new Student(stuNumber, ""));
+            // 把内存数据删除的写入文件
+            this.saveStudentInfoToDisk();
+            //显示学生信息
+            this.showStudentInto();
+            //返回上一步
+            this.showPersonMenu();
         }
     }
 

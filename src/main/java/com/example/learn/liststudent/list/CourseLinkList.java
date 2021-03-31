@@ -8,7 +8,7 @@ import com.example.learn.liststudent.base.LinkNode;
  *
  * @param <T>
  */
-public class CourseLinkList<T> extends LinkNode<T> {
+public class CourseLinkList<T> {
 
     public LinkNode head;
 

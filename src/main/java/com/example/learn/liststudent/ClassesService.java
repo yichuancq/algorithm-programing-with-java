@@ -150,9 +150,7 @@ public class ClassesService<T> {
             this.showClassesMenu();
             return;
         }
-        // TODO: 2021/3/31
         //如果存在记录同时加载到内存里面，给链表赋值
-        //linkList
         classesLinkList = new ClassesLinkList(classes);
         //print
         System.out.println("=====班级数目如下=====");
@@ -229,7 +227,6 @@ public class ClassesService<T> {
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
-                    // TODO: 2021/4/1  fix bug
                     new StudentService(baseService).initMenu();
                     break;
                 case 1:

@@ -6,7 +6,7 @@ import com.example.learn.liststudent.base.LinkNode;
 /**
  * @param <T>
  */
-public class ClassesLinkList<T> extends LinkNode<T> {
+public class ClassesLinkList<T> {
 
     private LinkNode head;
 

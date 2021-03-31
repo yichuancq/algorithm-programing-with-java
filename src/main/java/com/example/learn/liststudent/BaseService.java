@@ -8,7 +8,6 @@ import com.example.learn.liststudent.list.StudentClassesLinkList;
 public class BaseService<T> {
     //保存文件的路径
     public final String studentClassesFilePath = "src/main/resources/studentClasses.txt";
-
     /**
      *
      */

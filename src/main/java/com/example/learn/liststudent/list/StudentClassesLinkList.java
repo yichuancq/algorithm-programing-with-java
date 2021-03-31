@@ -8,7 +8,7 @@ import com.example.learn.liststudent.base.StudentClasses;
  *
  * @param <T>
  */
-public class StudentClassesLinkList<T> extends LinkNode<T> {
+public class StudentClassesLinkList<T> {
 
 
     private LinkNode head;
@@ -54,7 +54,6 @@ public class StudentClassesLinkList<T> extends LinkNode<T> {
             rear = rear.next;
         }
     }
-
 
     /**
      * 添加
@@ -108,5 +107,4 @@ public class StudentClassesLinkList<T> extends LinkNode<T> {
         }
         return length;
     }
-
 }

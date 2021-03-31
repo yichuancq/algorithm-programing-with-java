@@ -9,7 +9,7 @@ import com.example.learn.liststudent.base.Student;
  *
  * @param <T>
  */
-public class PersonLinkList<T> extends LinkNode<T> {
+public class PersonLinkList<T> {
     /**
      * 头结点
      */
