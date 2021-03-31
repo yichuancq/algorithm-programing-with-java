@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
-import com.example.learn.liststudent.list.LinkList;
+import com.example.learn.liststudent.list.PersonLinkList;
 import org.junit.Test;
 
 import java.io.FileReader;
@@ -18,7 +18,7 @@ public class StudentTest {
     /**
      * 学生信息链表
      */
-    private LinkList linkList = new LinkList();
+    private PersonLinkList personLinkList = new PersonLinkList();
     //保存文件的路径
     private final String studentFilePath = "src/main/resources/student.txt";
 
@@ -54,27 +54,27 @@ public class StudentTest {
         String person = JSON.toJSONString(students);
         //
         System.out.println("json->" + person);
-        LinkList linkList = new LinkList(students);
+        PersonLinkList personLinkList = new PersonLinkList(students);
         //new LinkList(students);
-        linkList.printNode();
-        int len = linkList.size();
+        personLinkList.printNode();
+        int len = personLinkList.size();
         System.out.println("len ->" + len);
         //查找结点
-        LinkNode linkNode = linkList.search(4);
+        LinkNode linkNode = personLinkList.search(4);
 
         if (linkNode != null) {
             System.out.println(linkNode.data);
         }
-        len = linkList.size();
+        len = personLinkList.size();
         System.out.println("len ->" + len);
 //        System.out.println(linkList.listToString2());
         //del
         //linkList.remove(new Person("stuNo4", "stuName4"));
         //
-        linkList.delete(new Person("stuNo0", "stuName0"));
+        personLinkList.delete(new Person("stuNo0", "stuName0"));
         //
 //        System.out.println(linkList.listToString2());
-        len = linkList.size();
+        len = personLinkList.size();
         System.out.println("len ->" + len);
     }
 
@@ -129,7 +129,6 @@ public class StudentTest {
      * 显示学生基本信息
      */
     public void showStudentInto() throws Exception {
-        //
         // Student[] students = linkList.ListToArrays();
         Student[] students = this.readStudentInfoFromDisk();
         if (students == null || students.length == 0) {
@@ -141,8 +140,10 @@ public class StudentTest {
         // TODO: 2021/3/31  
         //如果存在记录同时加载到内存里面，给链表赋值
         //linkList
-        linkList = new LinkList(students);
+        personLinkList = new PersonLinkList(students);
         //print
+        System.out.println("=====学生总人数如下=====");
+        System.out.println("学生总人数：" + students.length);
         System.out.println("=====学生信息如下=====");
         for (Student student : students) {
             System.out.println("学号：" + student.getNumber() + "\t姓名：" + student.getName());
@@ -180,8 +181,8 @@ public class StudentTest {
             System.out.println("录入不合法");
             return;
         }
-        linkList.add(student);
-        System.out.println("学生集合长度：" + linkList.size());
+        personLinkList.add(student);
+        System.out.println("学生集合长度：" + personLinkList.size());
 //      保存学生信息到文件
         this.saveStudentInfoToDisk();
         //返回上一步
@@ -192,7 +193,7 @@ public class StudentTest {
      * 保存学生信息到文件
      */
     private void saveStudentInfoToDisk() throws Exception {
-        Student[] students = linkList.ListToArrays();
+        Student[] students = personLinkList.ListToArrays();
         if (students == null || students.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
@@ -273,21 +274,16 @@ public class StudentTest {
             }
             if (!stuNumber.isEmpty()) {
                 //del
-                linkList.delete(new Student(stuNumber, ""));
-
+                personLinkList.delete(new Student(stuNumber, ""));
                 // 把内存数据删除的写入文件
-                // TODO: 2021/3/31 把内存数据删除的写入文件
                 this.saveStudentInfoToDisk();
                 //显示学生信息
                 this.showStudentInto();
                 //返回上一步
-
                 this.showPersonMenu();
-
                 break;
             }
         }
-
     }
 
     /**

@@ -8,14 +8,14 @@ import com.example.learn.liststudent.base.LinkNode;
  *
  * @param <T>
  */
-public class CourseList<T> extends LinkNode<T> {
-
+public class CourseLinkList<T> extends LinkNode<T> {
     /**
      *
      */
+
     public LinkNode head;
 
-    public CourseList() {
+    public CourseLinkList() {
         this.head = new LinkNode<T>();
     }
 
@@ -25,7 +25,7 @@ public class CourseList<T> extends LinkNode<T> {
      * @param arrays
      * @return
      */
-    public CourseList(T[] arrays) {
+    public CourseLinkList(T[] arrays) {
         this();
         //指向头结点
         LinkNode rear = head;
@@ -35,7 +35,6 @@ public class CourseList<T> extends LinkNode<T> {
             //移动指针
             rear = rear.next;
         }
-        //return rear;
     }
 
     /**
@@ -109,7 +108,6 @@ public class CourseList<T> extends LinkNode<T> {
             p = p.next;
         }
         return length;
-
     }
 
     /**
@@ -124,7 +122,6 @@ public class CourseList<T> extends LinkNode<T> {
         }
         return false;
     }
-
 
     public void printNode() {
         LinkNode p = head;

@@ -10,7 +10,7 @@ import com.example.learn.liststudent.base.Teacher;
  *
  * @param <T>
  */
-public class LinkList<T> extends LinkNode<T> {
+public class PersonLinkList<T> extends LinkNode<T> {
     /**
      * 头结点
      */
@@ -19,7 +19,7 @@ public class LinkList<T> extends LinkNode<T> {
     /**
      * 构造函数
      */
-    public LinkList() {
+    public PersonLinkList() {
         head = new LinkNode<>();
     }
 
@@ -29,7 +29,7 @@ public class LinkList<T> extends LinkNode<T> {
      * @param arrays
      * @return
      */
-    public LinkList(T[] arrays) {
+    public PersonLinkList(T[] arrays) {
         //指向头结点
         this();
         LinkNode rear = head;
