@@ -46,8 +46,6 @@ public class PersonLinkList<T> extends LinkNode<T> {
      * @param elementT
      */
     public void add(T elementT) {
-        //指向头结点
-      //  System.out.println("添加结点" + elementT.toString());
         LinkNode rear = head;
         if (elementT == null) {
             System.out.println("添加对象为空");
@@ -168,7 +166,6 @@ public class PersonLinkList<T> extends LinkNode<T> {
                 Person person = (Person) p.data;
                 //学号相同
                 if (element.getNumber().equals(person.getNumber())) {
-                    System.out.println("eq");
                     return p;
                 }
             }

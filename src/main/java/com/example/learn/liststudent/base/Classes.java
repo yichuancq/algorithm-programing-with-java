@@ -7,19 +7,11 @@ public class Classes {
     /**
      * 班级号
      */
-    public String classesNumber;
+    public String classesNumber="";
     /**
      * 班级名称
      */
     public String classesName;
-    /**
-     * 班级的学生编号
-     */
-    public String[] stuNumbers;
-    /**
-     * 班级人数
-     */
-    public int studentAmount;
 
 
     public Classes() {

@@ -13,9 +13,17 @@ public class StudentCourse {
      */
     public String stuNumber;
     /**
+     * 学生姓名
+     */
+    private String stuName;
+    /**
      * 课程编号
      */
     public String curseNumber;
+    /**
+     * 课程名称
+     */
+    public String curseName;
     /**
      * 成绩
      */

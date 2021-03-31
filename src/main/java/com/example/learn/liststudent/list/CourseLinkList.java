@@ -9,9 +9,6 @@ import com.example.learn.liststudent.base.LinkNode;
  * @param <T>
  */
 public class CourseLinkList<T> extends LinkNode<T> {
-    /**
-     *
-     */
 
     public LinkNode head;
 
@@ -123,10 +120,12 @@ public class CourseLinkList<T> extends LinkNode<T> {
         return false;
     }
 
+    /**
+     * 打印链表
+     */
     public void printNode() {
         LinkNode p = head;
         while (p != null) {
-            System.out.println("" + p.data);
             p = p.next;
         }
     }
