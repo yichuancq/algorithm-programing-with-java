@@ -44,7 +44,8 @@ public class SinglyListTest {
 //        System.out.println("遍历打印元素方式2");
 //        System.out.println(singlyList.listToString2());
 //        //移除指定索引的元素
-//        System.out.println("删除结点元素");
+
+
 //        singlyList.removeElement(3);
 ////        singlyList.removeElement2(3);
 //        //
@@ -59,19 +60,22 @@ public class SinglyListTest {
 //        int index = singlyList.getElementIndex("ss");
 //        System.out.println("index" + index);
 //        singlyList.removeElement2(index);
-        System.out.println("遍历打印元素方式2");
-        System.out.println(singlyList.listToString2());
+//        System.out.println("遍历打印元素方式2");
+//        System.out.println(singlyList.listToString2());
         //反转链表
-        System.out.println("反转链表");
-        singlyList.reverse();
+//        System.out.println("反转链表");
+//        singlyList.reverse();
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
         ////
-        System.out.println("反转链表");
-        singlyList.reverse2();
+//        System.out.println("反转链表");
+//        singlyList.reverse2();
+
+        //清空链表
+        System.out.println("删除结点元素");
+        singlyList.remove("g");
         System.out.println("遍历打印元素方式2");
         System.out.println(singlyList.listToString2());
-        //清空链表
         singlyList.clear();
     }
 }
