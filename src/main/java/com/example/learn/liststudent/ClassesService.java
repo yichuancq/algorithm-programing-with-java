@@ -3,6 +3,7 @@ package com.example.learn.liststudent;
 
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.Classes;
+import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.list.ClassesLinkList;
 
 import java.io.File;
@@ -95,8 +96,46 @@ public class ClassesService<T> {
         fileWriter.close();
     }
 
+
+    /**
+     * 加载磁盘数据填充链表
+     *
+     * @throws Exception
+     */
+    private void loadData() throws Exception {
+        Classes[] classes = this.readInfoFromDisk();
+        if (classes == null || classes.length == 0) {
+            System.out.println("无信息，返回上一级");
+            return;
+        }
+        classesLinkList = new ClassesLinkList(classes);
+
+    }
+
+    /**
+     * 查询单个信息
+     *
+     * @param classesKey
+     * @return
+     */
+    public Classes searchByKey(Classes classesKey) throws Exception {
+        this.loadData();
+        Classes classes = null;
+        LinkNode<Classes> classesNode = classesLinkList.search(classesKey);
+        if (classesNode == null) {
+            return classes;
+        }
+        //
+        classes = (Classes) classesNode.data;
+        return classes;
+    }
+
     /**
      * 显示班级基本信息
+     * <p>
+     * 1、先加载磁盘数据
+     * 2、如果存在记录同时加载到内存里面，给链表赋值
+     * 3、显示到用户界面
      */
     public void showClassesInto() throws Exception {
         Classes[] classes = this.readInfoFromDisk();
@@ -117,7 +156,7 @@ public class ClassesService<T> {
         for (Classes temp : classes) {
             System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName);
         }
-        System.out.println("======end =====");
+        System.out.println("======end=====");
         return;
 
     }
@@ -163,7 +202,7 @@ public class ClassesService<T> {
     }
 
     /**
-     * 显示班级信息
+     * 显示班级信息菜单
      */
     public void showClassesMenu() throws Exception {
         System.out.println("=====显示系统菜单====");
@@ -185,7 +224,6 @@ public class ClassesService<T> {
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
-                    //todo 返回上一层
                     new StudentService().initMenu();
                     break;
                 case 1:
@@ -209,20 +247,5 @@ public class ClassesService<T> {
                     return;
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        Classes[] classes = new Classes[]{
-                new Classes("cs0001", "计算机01班级"),
-                new Classes("cs0002", "计算机02班级"),
-                new Classes("cs0003", "自动化01班级")};
-
-        ClassesService service = new ClassesService(classes);
-        Classes[] classesInfo = service.showClassesInfo();
-
-        String jsonString = JSON.toJSONString(classesInfo);
-        System.out.println(jsonString);
-
     }
 }

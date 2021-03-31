@@ -68,6 +68,33 @@ public class ClassesLinkList<T> extends LinkNode<T> {
     }
 
     /**
+     * 通过对象查找元素
+     *
+     * @param elementT
+     * @return
+     */
+    public LinkNode<T> search(T elementT) {
+        LinkNode p = head;
+        if (elementT == null) {
+            return null;
+        }
+        while (p != null && p.next != null) {
+            //person
+            if (elementT instanceof Classes) {
+                Classes element = (Classes) elementT;
+                Classes classes = (Classes) p.next.data;
+                //班级编号相同
+                if (element.classesNumber.equals(classes.classesNumber)) {
+                    return p.next;
+                }
+            }
+            p = p.next;
+        }
+        return null;
+    }
+
+
+    /**
      * 链表的长度
      *
      * @return

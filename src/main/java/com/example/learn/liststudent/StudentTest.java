@@ -9,6 +9,25 @@ import org.junit.Test;
 
 public class StudentTest {
 
+
+
+    @Test
+    public void tetSearch(){
+        int stuSize = 5;
+        Student[] students = new Student[stuSize];
+        for (int i = 0; i < stuSize; i++) {
+            students[i] = new Student("stuNo" + i, "stuName" + i);
+        }
+        String person = JSON.toJSONString(students);
+        //
+        System.out.println("json->" + person);
+        PersonLinkList personLinkList = new PersonLinkList(students);
+        LinkNode linkNode = personLinkList.search(new Person("stuNo4", "stuName0"));
+        if (linkNode != null) {
+            System.out.println(linkNode.data);
+        }
+
+    }
     @Test
     public void testPerson() {
 
@@ -40,7 +59,11 @@ public class StudentTest {
 
     public static void main(String[] args) {
         try {
-            StudentService studentTest = new StudentService();
+            //基础服务类
+            BaseService baseService = new BaseService();
+            //
+            StudentService studentTest = new StudentService(baseService);
+            //
             studentTest.initMenu();
         } catch (Exception e) {
             e.printStackTrace();

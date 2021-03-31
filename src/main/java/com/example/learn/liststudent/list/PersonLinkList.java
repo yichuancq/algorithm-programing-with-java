@@ -3,7 +3,6 @@ package com.example.learn.liststudent.list;
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
-import com.example.learn.liststudent.base.Teacher;
 
 /**
  * 数据链表
@@ -122,10 +121,6 @@ public class PersonLinkList<T> extends LinkNode<T> {
                 rear.next = rear.next.next;
                 break;
             }
-//            if (elementT.toString().equals(rear.next.data.toString())) {
-//                rear.next = rear.next.next;
-//                break;
-//            }
             rear = rear.next;
         }
     }
@@ -161,12 +156,12 @@ public class PersonLinkList<T> extends LinkNode<T> {
         }
         while (p != null && p.next != null) {
             //person
-            if (elementT instanceof Student || elementT instanceof Teacher) {
+            if (elementT instanceof Person) {
                 Person element = (Person) elementT;
-                Person person = (Person) p.data;
+                Person person = (Person) p.next.data;
                 //学号相同
                 if (element.getNumber().equals(person.getNumber())) {
-                    return p;
+                    return p.next;
                 }
             }
             p = p.next;
