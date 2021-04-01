@@ -4,15 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
-import com.example.learn.liststudent.list.PersonLinkList;
+import com.example.learn.liststudent.linklist.PersonLinkList;
 import org.junit.Test;
 
 public class StudentTest {
 
 
-
     @Test
-    public void tetSearch(){
+    public void tetSearch() {
         int stuSize = 5;
         Student[] students = new Student[stuSize];
         for (int i = 0; i < stuSize; i++) {
@@ -28,6 +27,7 @@ public class StudentTest {
         }
 
     }
+
     @Test
     public void testPerson() {
 
@@ -57,16 +57,4 @@ public class StudentTest {
         System.out.println("len ->" + len);
     }
 
-    public static void main(String[] args) {
-        try {
-            //基础服务类
-            BaseService baseService = new BaseService();
-            //
-            StudentService studentTest = new StudentService(baseService);
-            //
-            studentTest.initMenu();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

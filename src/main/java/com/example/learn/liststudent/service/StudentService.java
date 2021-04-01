@@ -1,8 +1,8 @@
-package com.example.learn.liststudent;
+package com.example.learn.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.*;
-import com.example.learn.liststudent.list.PersonLinkList;
+import com.example.learn.liststudent.linklist.PersonLinkList;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,15 +11,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * @author yichuan
+ */
 public class StudentService {
-    /**
-     * 学生信息链表
-     */
-    private PersonLinkList personLinkList = new PersonLinkList();
-    /**
-     * 保存文件的路径
-     */
-    private final String studentFilePath = "src/main/resources/student.txt";
+
 
     private BaseService baseService;
 
@@ -50,11 +46,12 @@ public class StudentService {
      * @throws Exception
      */
     public Student[] readStudentInfoFromDisk() throws Exception {
-        boolean flag = this.checkFile(studentFilePath);
+        //文件路径检查
+        boolean flag = this.checkFile(baseService.studentFilePath);
         if (!flag) {
             return null;
         }
-        FileReader fileReader = new FileReader(studentFilePath);
+        FileReader fileReader = new FileReader(baseService.studentFilePath);
         int ch = 0;
         String context = "";
         while ((ch = fileReader.read()) != -1) {
@@ -82,8 +79,7 @@ public class StudentService {
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        //linkList
-        personLinkList = new PersonLinkList(students);
+        baseService.setPersonLinkList(new PersonLinkList(students));
         //print
         System.out.println("=====学生总人数如下=====");
         System.out.println("学生总人数：" + students.length);
@@ -124,25 +120,26 @@ public class StudentService {
             return;
         }
         //添加到内存链表
-        personLinkList.add(student);
+        this.baseService.getPersonLinkList().add(student);
+        PersonLinkList personLinkList = this.baseService.getPersonLinkList();
         System.out.println("学生集合长度：" + personLinkList.size());
-//      保存学生信息到文件
+        //保存学生信息到文件
         this.saveStudentInfoToDisk();
         //返回上一步
-        this.showPersonMenu();
+//        this.showPersonMenu();
     }
 
     /**
      * 保存学生信息到文件
      */
     private void saveStudentInfoToDisk() throws Exception {
-        Student[] students = personLinkList.listToArrays();
+        Student[] students = this.baseService.getPersonLinkList().listToArrays();
         if (students == null || students.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
         String fileContent = JSON.toJSONString(students);
-        FileWriter fileWriter = new FileWriter(studentFilePath);
+        FileWriter fileWriter = new FileWriter(baseService.studentFilePath);
         fileWriter.write(fileContent);
         fileWriter.close();
     }
@@ -151,14 +148,19 @@ public class StudentService {
      *
      */
     public void showPersonMenu() throws Exception {
-        System.out.println("=====显示系统菜单====");
-        System.out.println("\t 1.添加学生信息");
-        System.out.println("\t 2.删除学生信息");
-        System.out.println("\t 3.查看学生信息");
-        System.out.println("\t 4.修改(编辑)学生信息");
-        System.out.println("\t 0.返回上一层");
-        System.out.println("===================");
-        System.out.println("请选择?(0-4)");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\r\n=====显示系统菜单====");
+        stringBuilder.append("\r\n1.添加学生信息");
+        stringBuilder.append("\r\n2.删除学生信息");
+        stringBuilder.append("\r\n3.查看学生信息");
+        stringBuilder.append("\r\n4.修改(编辑)学生信息");
+        stringBuilder.append("\r\n0.返回上一层");
+        stringBuilder.append("\r\n===================");
+        stringBuilder.append("\r\n请选择?(0-4)\r\n");
+        
+        String inflows=stringBuilder.toString();
+        System.out.println(inflows);
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
@@ -176,18 +178,22 @@ public class StudentService {
                     System.out.println("添加学生信息.");
                     this.showStudentInto();
                     this.addStudent();
+                    System.out.println(inflows);
                     break;
                 case 2:
                     System.out.println("删除学生信息.");
                     delStudent();
+                    System.out.println(inflows);
                     break;
                 case 3:
                     System.out.println("查看学生信息.");
                     showStudentInto();
+                    System.out.println(inflows);
                     break;
                 case 4:
                     System.out.println("修改学生信息.");
                     editStudent();
+                    System.out.println(inflows);
                     break;
                 default:
                     System.out.println("非法数字");
@@ -196,12 +202,19 @@ public class StudentService {
         }
     }
 
+    /***
+     * 查询人员信息
+     * @param personNumber
+     * @param classesNumber
+     * @throws Exception
+     */
+
     private void searchPerson(String personNumber, String classesNumber) throws Exception {
         StudentClasses studentClasses = null;
         //通过对象查找元素
         Person personKey = new Person(personNumber, "");
         //查询学生信息
-        LinkNode<Person> personLinkNode = personLinkList.search(personKey);
+        LinkNode<Person> personLinkNode = baseService.getPersonLinkList().search(personKey);
         if (personLinkNode == null) {
             System.out.println("查询失败， 无此记录~");
             //返回上一层
@@ -226,9 +239,7 @@ public class StudentService {
         //返回上一层
         this.editStudent();
         return;
-
     }
-
 
     /**
      * 读取磁盘数据
@@ -294,8 +305,6 @@ public class StudentService {
         //保存学生信息到文件
         this.saveStudentClassesLinkNodesInfoToDisk();
     }
-    //
-
 
     /**
      * 集合保存到磁盘
@@ -465,6 +474,7 @@ public class StudentService {
             this.showPersonMenu();
             return;
         }
+        PersonLinkList personLinkList = this.baseService.getPersonLinkList();
         if (!stuNumber.isEmpty() && personLinkList != null && personLinkList.size() > 0) {
             //del
             personLinkList.delete(new Student(stuNumber, ""));
@@ -473,7 +483,7 @@ public class StudentService {
             //显示学生信息
             this.showStudentInto();
             //返回上一步
-            this.showPersonMenu();
+//            this.showPersonMenu();
         }
     }
 

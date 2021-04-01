@@ -1,4 +1,4 @@
-package com.example.learn.liststudent.list;
+package com.example.learn.liststudent.linklist;
 
 import com.example.learn.liststudent.base.Course;
 import com.example.learn.liststudent.base.LinkNode;

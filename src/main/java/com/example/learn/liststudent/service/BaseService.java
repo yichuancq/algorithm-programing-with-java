@@ -1,11 +1,19 @@
-package com.example.learn.liststudent;
+package com.example.learn.liststudent.service;
 
-import com.example.learn.liststudent.list.StudentClassesLinkList;
+import com.example.learn.liststudent.linklist.PersonLinkList;
+import com.example.learn.liststudent.linklist.StudentClassesLinkList;
 
 /**
  * 全局基础服务
+ * @author yichuan
  */
 public class BaseService<T> {
+
+    /**
+     * 保存文件的路径
+     */
+    public final String studentFilePath = "src/main/resources/student.txt";
+
     /**
      * 保存文件的路径
      */
@@ -15,8 +23,16 @@ public class BaseService<T> {
      */
     private StudentClassesLinkList studentClassesLinkList;
 
+    /**
+     * 学生信息链表
+     */
+    private PersonLinkList personLinkList;
+
+
+
     public BaseService() {
         studentClassesLinkList = new StudentClassesLinkList();
+        personLinkList = new PersonLinkList();
     }
 
     /**
@@ -33,5 +49,17 @@ public class BaseService<T> {
 
     public void setStudentClassesLinkList(StudentClassesLinkList studentClassesLinkList) {
         this.studentClassesLinkList = studentClassesLinkList;
+    }
+
+    public String getStudentFilePath() {
+        return studentFilePath;
+    }
+
+    public PersonLinkList getPersonLinkList() {
+        return personLinkList;
+    }
+
+    public void setPersonLinkList(PersonLinkList personLinkList) {
+        this.personLinkList = personLinkList;
     }
 }

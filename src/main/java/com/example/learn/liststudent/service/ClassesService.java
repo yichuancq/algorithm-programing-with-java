@@ -1,10 +1,10 @@
-package com.example.learn.liststudent;
+package com.example.learn.liststudent.service;
 
 
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.Classes;
 import com.example.learn.liststudent.base.LinkNode;
-import com.example.learn.liststudent.list.ClassesLinkList;
+import com.example.learn.liststudent.linklist.ClassesLinkList;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,8 +23,8 @@ public class ClassesService<T> {
      */
     public ClassesLinkList classesLinkList = new ClassesLinkList();
 
-    /**保存文件的路径
-     *
+    /**
+     * 保存文件的路径
      */
     private final String filePath = "src/main/resources/classes.txt";
 
@@ -84,15 +84,13 @@ public class ClassesService<T> {
         System.out.println("班级集合长度：" + classesLinkList.size());
 //      保存信息到文件
         this.saveClassInfoToDisk();
-        //返回上一步
-        this.showClassesMenu();
+
     }
 
     /**
      * 保存信息到文件
      */
     private void saveClassInfoToDisk() throws Exception {
-
         Classes[] classes = classesLinkList.listToArrays();
         if (classes == null || classes.length == 0) {
             System.out.println("无写入内容到磁盘!");
@@ -162,7 +160,6 @@ public class ClassesService<T> {
             System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName);
         }
         System.out.println("======end=====");
-        return;
 
     }
 
@@ -210,21 +207,28 @@ public class ClassesService<T> {
      * 显示班级信息菜单
      */
     public void showClassesMenu() throws Exception {
-        System.out.println("=====显示系统菜单====");
-        System.out.println("\t 1.添加班级信息");
-        System.out.println("\t 2.删除班级信息");
-        System.out.println("\t 3.查看班级信息");
-        System.out.println("\t 4.修改班级信息");
-        System.out.println("\t 0.返回上一层");
-        System.out.println("===================");
-        System.out.println("请选择?(0-4)");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\r\n=====显示系统菜单====\r\n");
+        stringBuilder.append("1.添加班级信息\r\n");
+        stringBuilder.append("2.删除班级信息\r\n");
+        stringBuilder.append("3.查看班级信息\r\n");
+        stringBuilder.append("4.修改班级信息\r\n");
+        stringBuilder.append("0.返回上一层\r\n");
+        stringBuilder.append("请选择?(0-4)\r\n");
+        stringBuilder.append("===================\r\n");
+        String disInfo = stringBuilder.toString();
+        System.out.println(disInfo);
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
+//            disInfo = stringBuilder.toString();
+//            System.out.println(disInfo);
+            //
             int orderNumber = scanner.nextInt();
             if (orderNumber < 0 || orderNumber > 4) {
                 System.out.println("录入非法,exit...");
-                System.exit(0);
+                return;
             }
             switch (orderNumber) {
                 case 0:
@@ -236,14 +240,17 @@ public class ClassesService<T> {
                     this.showClassesInto();
                     //
                     this.addClasses();
+                    //show menu
+                    System.out.println(disInfo);
                     break;
                 case 2:
                     System.out.println("删除班级信息.");
-                    //delStudent();
                     break;
                 case 3:
                     System.out.println("查看班级信息.");
-                    showClassesInto();
+                    //显示信息
+                    this.showClassesInto();
+                    System.out.println(disInfo);
                     break;
                 case 4:
                     System.out.println("修改班级信息.");
