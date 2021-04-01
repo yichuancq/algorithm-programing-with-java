@@ -145,7 +145,8 @@ public class SinglyList<T> extends Object implements java.lang.Iterable<T> {
             System.out.println("x=" + x + "，元素重复，未插入。");
             return p;
         }
-        return front.next = new Node<T>(x, null);           //尾插入值为x结点，返回插入结点
+        //尾插入值为x结点，返回插入结点
+        return front.next = new Node<T>(x, null);
     }
 
     /**
