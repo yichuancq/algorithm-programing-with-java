@@ -28,7 +28,10 @@ public class Solution {
         linkedList.addAtIndex(1, 2);
         linkedList.printNodes();//链表变为1-> 2-> 3
         linkedList.get(1);            //返回2
-        linkedList.deleteAtIndex(2);
+
+        linkedList.addAtTail(4);
+        linkedList.addAtTail(5);
+        linkedList.deleteAtIndex(3);
         linkedList.printNodes();//现在链表是1-> 3
         int element = linkedList.get(1);//返回3
         System.out.println("find element:" + element);
@@ -37,13 +40,13 @@ public class Solution {
 
 class LinkedList {
     //head node
-    private ListNode head = new ListNode(-1);
-    public ListNode font = head;
+    private ListNode head;
 
     /**
      * Initialize your data structure here.
      */
     public LinkedList() {
+        head = new ListNode();
     }
 
     public void printNodes() {
@@ -152,17 +155,18 @@ class LinkedList {
         //只有一个结点
         if (size == (index + 1) && size == 1) {
             head = null;
-            font = null;
             return;
         }
-        for (int j = 1; front != null && j <= index; front = front.next) {
+        int j = 0;
+        while (front != null && front.next != null) {
+            j++;
             //当索引匹配则删除
-            if (j == index && front.next != null) {
+            if (j == index) {
                 //移除front的后继
                 front.next = front.next.next;
                 break;
             }
-            j++;
+            front = front.next;
         }
     }
 }
