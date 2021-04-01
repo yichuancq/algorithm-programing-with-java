@@ -23,7 +23,9 @@ public class ClassesService<T> {
      */
     public ClassesLinkList classesLinkList = new ClassesLinkList();
 
-    //保存文件的路径
+    /**保存文件的路径
+     *
+     */
     private final String filePath = "src/main/resources/classes.txt";
 
     public BaseService baseService;
@@ -48,7 +50,7 @@ public class ClassesService<T> {
      * @return
      */
     public Classes[] showClassesInfo() {
-        return classesLinkList.ListToArrays();
+        return classesLinkList.listToArrays();
     }
 
     /**
@@ -91,7 +93,7 @@ public class ClassesService<T> {
      */
     private void saveClassInfoToDisk() throws Exception {
 
-        Classes[] classes = classesLinkList.ListToArrays();
+        Classes[] classes = classesLinkList.listToArrays();
         if (classes == null || classes.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;

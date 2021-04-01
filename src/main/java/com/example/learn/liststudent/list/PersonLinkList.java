@@ -65,8 +65,8 @@ public class PersonLinkList<T> {
         LinkNode<T> front = this.head;
         //遍历寻找第i-1结点（front指向）
         front = front.next;
-        for (int j = 0; front.next != null && j < i; j++)
-            //若front的后继结点存在，则删除之
+        //若front的后继结点存在，则删除之
+        for (int j = 0; front.next != null && j < i; j++) {
             if (i >= 0 && front.next != null) {
                 //获得待删除结点引用的对象
                 T old = front.next.data;
@@ -74,6 +74,7 @@ public class PersonLinkList<T> {
                 front.next = front.next.next;
                 return old;
             }
+        }
         return null;
     }
 
@@ -233,7 +234,7 @@ public class PersonLinkList<T> {
      *
      * @return
      */
-    public Student[] ListToArrays() {
+    public Student[] listToArrays() {
         int size = this.size();
         Student[] arrays = new Student[size];
         LinkNode p = head.next;

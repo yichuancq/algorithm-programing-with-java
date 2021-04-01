@@ -125,7 +125,7 @@ public class ClassesLinkList<T> {
      *
      * @return
      */
-    public Classes[] ListToArrays() {
+    public Classes[] listToArrays() {
         int size = this.size();
         Classes[] arrays = new Classes[size];
         LinkNode p = head.next;

@@ -80,7 +80,7 @@ public class StudentClassesLinkList<T> {
      *
      * @return
      */
-    public StudentClasses[] ListToArrays() {
+    public StudentClasses[] listToArrays() {
         int size = this.size();
         StudentClasses[] arrays = new StudentClasses[size];
         LinkNode p = head.next;

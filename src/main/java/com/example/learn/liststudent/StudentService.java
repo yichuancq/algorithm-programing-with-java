@@ -16,9 +16,11 @@ public class StudentService {
      * 学生信息链表
      */
     private PersonLinkList personLinkList = new PersonLinkList();
-    //保存文件的路径
+    /**
+     * 保存文件的路径
+     */
     private final String studentFilePath = "src/main/resources/student.txt";
-    //
+
     private BaseService baseService;
 
     public StudentService() {
@@ -134,7 +136,7 @@ public class StudentService {
      * 保存学生信息到文件
      */
     private void saveStudentInfoToDisk() throws Exception {
-        Student[] students = personLinkList.ListToArrays();
+        Student[] students = personLinkList.listToArrays();
         if (students == null || students.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
@@ -216,7 +218,8 @@ public class StudentService {
             return;
         }//
         Student student = (Student) personLinkNode.data;
-        String scNumber = ""; //自定义编码
+        //自定义编码
+        String scNumber = "";
         studentClasses = new StudentClasses(scNumber, classes.classesNumber,
                 classes.classesName, student.getNumber(), student.getName());
         this.saveStudentClassesInfoToDisk(studentClasses);
@@ -300,7 +303,7 @@ public class StudentService {
      * @throws Exception
      */
     private void saveStudentClassesLinkNodesInfoToDisk() throws Exception {
-        StudentClasses[] classes = baseService.getStudentClassesLinkList().ListToArrays();
+        StudentClasses[] classes = baseService.getStudentClassesLinkList().listToArrays();
         if (classes == null || classes.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
@@ -446,7 +449,7 @@ public class StudentService {
         System.out.println("=====显示系统菜单====");
         System.out.println("\t 删除学生信息");
         System.out.println("\t 输入删除的学生编号");
-        System.out.println("\t 输入 exit 返回");
+        System.out.println("\t 输入0返回");
         System.out.println("===================");
         //显示学生信息
         showStudentInto();
@@ -457,7 +460,7 @@ public class StudentService {
         if (scanner.hasNext()) {
             stuNumber = scanner.nextLine();
         }
-        if (stuNumber.equals("exit")) {
+        if ("0".equals(stuNumber)) {
             //返回上一步
             this.showPersonMenu();
             return;
