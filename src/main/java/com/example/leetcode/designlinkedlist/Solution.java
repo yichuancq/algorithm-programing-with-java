@@ -27,8 +27,8 @@ public class Solution {
         System.out.println("list size:" + size);
         linkedList.addAtIndex(1, 2);
         linkedList.printNodes();//链表变为1-> 2-> 3
-        linkedList.get(1);            //返回2
-
+        linkedList.get(1);
+        //返回2
         linkedList.addAtTail(4);
         linkedList.addAtTail(5);
         linkedList.deleteAtIndex(0);

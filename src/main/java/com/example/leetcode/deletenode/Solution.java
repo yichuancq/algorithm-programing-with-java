@@ -69,10 +69,7 @@ class Solution {
         System.out.println("" + solution.head.next.toString());
         ListNode listNode = solution.deleteNode(solution.head.next, 3);
         System.out.println(listNode.toString());
-        // System.out.println("" + solution.head.next.toString());
     }
-
-
 }
 
 
