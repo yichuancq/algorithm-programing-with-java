@@ -1,6 +1,6 @@
 package com.example.learn.search.binarytreesearch;
 
-import com.example.learn.tree.binarytree.BinarySortTree;
+import com.example.learn.binarytree.BinarySortTree;
 import org.junit.Test;
 
 public class BinarySortTreeTest {

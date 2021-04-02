@@ -1,4 +1,4 @@
-package com.example.learn.tree.binarytree;
+package com.example.learn.binarytree;
 
 /**
  * 三叉链表结点类

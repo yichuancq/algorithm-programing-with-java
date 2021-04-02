@@ -1,4 +1,4 @@
-package com.example.learn.tree.binarytree;
+package com.example.learn.binarytree;
 
 import com.example.learn.queue.LinkedQueue;
 

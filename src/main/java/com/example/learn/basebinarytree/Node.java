@@ -1,4 +1,4 @@
-package com.example.learn.tree.basebinarytree;
+package com.example.learn.basebinarytree;
 
 /**
  * 树的根节点

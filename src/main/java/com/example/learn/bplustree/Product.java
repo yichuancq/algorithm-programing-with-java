@@ -1,4 +1,4 @@
-package com.example.learn.tree.bplustree;
+package com.example.learn.bplustree;
 
 /**
  *
