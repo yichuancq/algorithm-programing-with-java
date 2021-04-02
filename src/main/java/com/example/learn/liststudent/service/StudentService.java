@@ -149,10 +149,6 @@ public class StudentService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 4) {
-                System.out.println("录入非法,exit...");
-                System.exit(0);
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
@@ -179,7 +175,8 @@ public class StudentService {
                     System.out.println(inflows);
                     break;
                 default:
-                    System.out.println("非法数字");
+                    System.out.println("录入非法");
+                    System.out.println(inflows);
                     return;
             }
         }
@@ -486,10 +483,6 @@ public class StudentService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 5) {
-                System.out.println("录入非法,exit...");
-                System.exit(0);
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("退出系统");

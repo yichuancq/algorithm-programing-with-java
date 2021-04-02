@@ -127,7 +127,6 @@ public class TeacherService {
         System.out.println("======end=====");
     }
 
-
     /**
      * 删除教师信息（内存+磁盘文件）
      */
@@ -181,10 +180,6 @@ public class TeacherService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 4) {
-                System.out.println("录入非法,exit...");
-                return;
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
@@ -214,6 +209,8 @@ public class TeacherService {
                     System.out.println("修改教师信息");
                     break;
                 default:
+                    System.out.println("录入非法,exit...");
+                    System.out.println(disInfo);
                     return;
             }
         }

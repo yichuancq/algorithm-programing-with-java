@@ -45,17 +45,13 @@ public class ScoreService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 4) {
-                System.out.println("录入非法,exit...");
-                return;
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
                     new StudentService(baseService).initMenu();
                     break;
                 case 1:
-                    System.out.println("添加课程信息.");
+                    System.out.println("添加成绩信息");
                     //显示信息
                     this.showScoreInto();
                     //
@@ -64,21 +60,26 @@ public class ScoreService {
                     System.out.println(disInfo);
                     break;
                 case 2:
-                    System.out.println("删除课程信息");
+                    System.out.println("删除成绩信息");
                     delScore();
                     System.out.println(disInfo);
                     break;
                 case 3:
-                    System.out.println("查看课程信息");
+                    System.out.println("查看成绩信息");
                     //显示信息
                     this.showScoreInto();
                     System.out.println(disInfo);
                     break;
                 case 4:
-                    System.out.println("修改课程信息");
+                    System.out.println("修改课程成绩信息");
+                    break;
+                case 5:
+                    System.out.println("统计成绩信息");
                     break;
                 default:
-                    return;
+                    System.out.println("录入非法");
+                    System.out.println(disInfo);
+                    break;
             }
         }
     }

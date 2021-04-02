@@ -181,10 +181,6 @@ public class CourseService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 4) {
-                System.out.println("录入非法,exit...");
-                return;
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层.");
