@@ -127,15 +127,6 @@ public class TeacherRepository<T> {
         return false;
     }
 
-    /**
-     * 打印链表
-     */
-    public void printNode() {
-        LinkNode p = head;
-        while (p != null) {
-            p = p.next;
-        }
-    }
 
     /**
      * 链表结点生成对象数组

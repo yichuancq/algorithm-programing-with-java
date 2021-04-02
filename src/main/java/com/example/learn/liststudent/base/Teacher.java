@@ -5,6 +5,7 @@ package com.example.learn.liststudent.base;
  */
 public class Teacher extends Person {
     /**
+     * 课程编号和教师编号关联
      * 教师授课课程
      */
     public String[] csNumber = new String[10];

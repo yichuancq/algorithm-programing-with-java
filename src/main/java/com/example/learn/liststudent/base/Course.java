@@ -1,5 +1,7 @@
 package com.example.learn.liststudent.base;
 
+import java.math.BigDecimal;
+
 /**
  * 课程
  */
@@ -15,7 +17,7 @@ public class Course {
     /**
      * 平均分
      */
-    public float avgScore;
+    public BigDecimal avgScore;
     /**
      * 参加课程人数
      */
@@ -23,7 +25,7 @@ public class Course {
     /**
      * 平均绩点
      */
-    public int avgGradePointAverage;
+    public BigDecimal avgGradePointAverage;
 
     public Course() {
     }

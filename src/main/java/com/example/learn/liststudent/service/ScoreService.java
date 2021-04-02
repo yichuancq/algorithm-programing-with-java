@@ -3,35 +3,39 @@ package com.example.learn.liststudent.service;
 import java.util.Scanner;
 
 /**
- * 课程服务类
+ * 学生选课信息服务类
  */
-public class CourseService {
+public class ScoreService {
+
     /**
      * 基础服务类
      */
     public BaseService baseService;
 
-    public CourseService(BaseService baseService) {
+    public ScoreService(BaseService baseService) {
         this.baseService = baseService;
     }
-    private void delCourse() throws Exception {
+
+    private void addScore() throws Exception {
     }
 
-    private void addCourse() throws Exception {
+    private void showScoreInto() throws Exception {
     }
 
-    private void showCourseInto() throws Exception {
+    private void delScore() throws Exception {
     }
+
     /**
-     * 显示课程信息菜单
+     * 显示成绩信息信息菜单
      */
-    public void showCourseMenu() throws Exception {
+    public void showScoreMenu() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\r\n=====显示课程信息菜单====\r\n");
-        stringBuilder.append("1.添加课程信息\r\n");
-        stringBuilder.append("2.删除课程信息\r\n");
-        stringBuilder.append("3.查看课程信息\r\n");
-        stringBuilder.append("4.修改课程信息\r\n");
+        stringBuilder.append("\r\n=====显示成绩信息信息菜单====\r\n");
+        stringBuilder.append("1.添加成绩信息(教师)\r\n");
+        stringBuilder.append("2.删除成绩信息(教师)\r\n");
+        stringBuilder.append("3.查看成绩信息(教师、学生)\r\n");
+        stringBuilder.append("4.修改课程成绩信息(教师)\r\n");
+        stringBuilder.append("5.统计成绩信息(教师、学生)\r\n");
         stringBuilder.append("0.返回上一层\r\n");
         stringBuilder.append("请选择?(0-4)\r\n");
         stringBuilder.append("===================\r\n");
@@ -53,21 +57,21 @@ public class CourseService {
                 case 1:
                     System.out.println("添加课程信息.");
                     //显示信息
-                    this.showCourseInto();
+                    this.showScoreInto();
                     //
-                    this.addCourse();
+                    this.addScore();
                     //show menu
                     System.out.println(disInfo);
                     break;
                 case 2:
                     System.out.println("删除课程信息");
-                    delCourse();
+                    delScore();
                     System.out.println(disInfo);
                     break;
                 case 3:
-                    System.out.println("查看课程信息.");
+                    System.out.println("查看课程信息");
                     //显示信息
-                    this.showCourseInto();
+                    this.showScoreInto();
                     System.out.println(disInfo);
                     break;
                 case 4:

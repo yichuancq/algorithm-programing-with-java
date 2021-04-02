@@ -477,10 +477,10 @@ public class StudentService {
     public void initMenu() throws Exception {
         System.out.println("=====显示系统菜单====");
         System.out.println("1.学生信息管理");
-        System.out.println("2.班级信息管理");
-        System.out.println("3.课程信息管理");
-        System.out.println("4.成绩信息管理");
-        System.out.println("5.教师信息管理");
+        System.out.println("2.教师信息管理");
+        System.out.println("3.班级信息管理");
+        System.out.println("4.课程信息管理");
+        System.out.println("5.成绩信息管理");
         System.out.println("0.exit");
         System.out.println("===================");
         System.out.println("请选择?(0-4)");
@@ -498,23 +498,25 @@ public class StudentService {
                     System.exit(0);
                     break;
                 case 1:
-                    System.out.println("人员信息管理");
+                    System.out.println("学生信息管理");
                     showPersonMenu();
                     break;
                 case 2:
-                    System.out.println("班级信息管理");
-                    new ClassesService(baseService).showClassesMenu();
-                    break;
-                case 3:
-                    System.out.println("课程信息管理");
-                    break;
-                case 4:
-                    System.out.println("成绩信息管理");
-                    break;
-                case 5:
                     System.out.println("教师信息管理");
                     //显示教师管理菜单
                     new TeacherService(baseService).showTeacherMenu();
+                    break;
+                case 3:
+                    System.out.println("班级信息管理");
+                    new ClassesService(baseService).showClassesMenu();
+                    break;
+                case 4:
+                    System.out.println("课程信息管理");
+                    new CourseService(baseService).showCourseMenu();
+                    break;
+                case 5:
+                    System.out.println("成绩信息管理");
+                    new ScoreService(baseService).showScoreMenu();
                     break;
                 default:
                     System.out.println("录入非法");

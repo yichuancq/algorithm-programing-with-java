@@ -28,45 +28,52 @@ public class CourseRepository<T> {
         //指向头结点
         LinkNode rear = head;
         for (T t : arrays) {
-            rear.data = t;
-            rear.next = new LinkNode();
+            rear.next = new LinkNode(t, null);
             //移动指针
             rear = rear.next;
         }
     }
 
     /**
-     * 添加课程结点
+     * 添加结点
      *
-     * @param elementT
+     * @param course
      */
-    public void add(T elementT) {
+    public void add(Course course) {
+        LinkNode rear = head;
+        if (course == null) {
+            System.out.println("添加对象为空");
+            return;
+        }
+        while (rear != null) {
+            if (rear.next == null) {
+                rear.next = new LinkNode(course);
+                return;
+            }
+            rear = rear.next;
+        }
     }
 
     /**
      * 删除结点
      *
-     * @param index
+     * @param course
      */
-    public void delete(int index) {
-    }
-
-    /**
-     * 按索引查找元素
-     *
-     * @param index
-     * @return
-     */
-    public LinkNode<T> search(int index) {
-        LinkNode p = head;
-        for (int i = 0; p != null && p.next != null && i <= index; i++) {
-            if (i == index) {
-                return p;
-            }
-            p = p.next;
+    public void delete(Course course) {
+        if (course == null) {
+            System.out.println("对象为空");
+            return;
         }
-        System.out.println("查找失败!");
-        return null;
+        LinkNode rear = head;
+        for (; rear != null && rear.next != null; ) {
+            //编号相同
+            Course node = (Course) rear.next.data;
+            if (course.curseNumber.equals(node.curseNumber)) {
+                rear.next = rear.next.next;
+                break;
+            }
+            rear = rear.next;
+        }
     }
 
     /**
@@ -85,7 +92,6 @@ public class CourseRepository<T> {
             Course temp = (Course) p.data;
             //学号相同
             if (course.curseNumber.equals(temp.curseNumber)) {
-                System.out.println("eq");
                 return p;
             }
             p = p.next;
@@ -122,14 +128,21 @@ public class CourseRepository<T> {
     }
 
     /**
-     * 打印链表
+     * 链表结点生成对象数组
+     *
+     * @return
      */
-    public void printNode() {
-        LinkNode p = head;
+    public Course[] listToArrays() {
+        int size = this.size();
+        Course[] arrays = new Course[size];
+        LinkNode p = head.next;
+        int i = 0;
         while (p != null) {
+            arrays[i] = (Course) p.data;
+            i++;
             p = p.next;
         }
+        return arrays;
     }
-
 
 }
