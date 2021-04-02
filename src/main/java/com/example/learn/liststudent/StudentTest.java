@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
-import com.example.learn.liststudent.linklist.PersonLinkList;
+import com.example.learn.liststudent.repository.PersonRepository;
 import org.junit.Test;
 
 public class StudentTest {
@@ -20,8 +20,8 @@ public class StudentTest {
         String person = JSON.toJSONString(students);
         //
         System.out.println("json->" + person);
-        PersonLinkList personLinkList = new PersonLinkList(students);
-        LinkNode linkNode = personLinkList.search(new Person("stuNo4", "stuName0"));
+        PersonRepository personRepository = new PersonRepository(students);
+        LinkNode linkNode = personRepository.search(new Person("stuNo4", "stuName0"));
         if (linkNode != null) {
             System.out.println(linkNode.data);
         }
@@ -39,21 +39,21 @@ public class StudentTest {
         String person = JSON.toJSONString(students);
         //
         System.out.println("json->" + person);
-        PersonLinkList personLinkList = new PersonLinkList(students);
+        PersonRepository personRepository = new PersonRepository(students);
         //new LinkList(students);
-        personLinkList.printNode();
-        int len = personLinkList.size();
+        personRepository.printNode();
+        int len = personRepository.size();
         System.out.println("len ->" + len);
         //查找结点
-        LinkNode linkNode = personLinkList.search(4);
+        LinkNode linkNode = personRepository.search(4);
 
         if (linkNode != null) {
             System.out.println(linkNode.data);
         }
-        len = personLinkList.size();
+        len = personRepository.size();
         System.out.println("len ->" + len);
-        personLinkList.delete(new Person("stuNo0", "stuName0"));
-        len = personLinkList.size();
+        personRepository.delete(new Person("stuNo0", "stuName0"));
+        len = personRepository.size();
         System.out.println("len ->" + len);
     }
 

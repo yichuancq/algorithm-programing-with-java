@@ -2,9 +2,9 @@ package com.example.learn.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.*;
-import com.example.learn.liststudent.linklist.PersonLinkList;
+import com.example.learn.liststudent.repository.PersonRepository;
+import com.example.learn.liststudent.utils.Utils;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,27 +27,12 @@ public class StudentService {
     }
 
     /**
-     * 检查文件是否存在
-     *
-     * @return
-     * @throws Exception
-     */
-    private boolean checkFile(String filePath) throws Exception {
-        File file = new File(filePath);
-        if (file.exists()) {
-            return true;
-        }
-        System.out.println("请先录入数据!");
-        return false;
-    }
-
-    /**
      * @return
      * @throws Exception
      */
     public Student[] readStudentInfoFromDisk() throws Exception {
         //文件路径检查
-        boolean flag = this.checkFile(baseService.studentFilePath);
+        boolean flag = Utils.checkFile(baseService.studentFilePath);
         if (!flag) {
             return null;
         }
@@ -79,7 +64,7 @@ public class StudentService {
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        baseService.setPersonLinkList(new PersonLinkList(students));
+        baseService.setPersonLinkList(new PersonRepository(students));
         //print
         System.out.println("=====学生总人数如下=====");
         System.out.println("学生总人数：" + students.length);
@@ -109,7 +94,7 @@ public class StudentService {
         System.out.println("输入：" + number);
         System.out.println("=====显示信息====");
         System.out.println("输入学生姓名（字符如:yichuan）");
-        System.out.println("");
+        System.out.println();
         //用户输入
         scanner = new Scanner(System.in);
         name = scanner.nextLine();
@@ -121,12 +106,11 @@ public class StudentService {
         }
         //添加到内存链表
         this.baseService.getPersonLinkList().add(student);
-        PersonLinkList personLinkList = this.baseService.getPersonLinkList();
-        System.out.println("学生集合长度：" + personLinkList.size());
+        PersonRepository personRepository = this.baseService.getPersonLinkList();
+        System.out.println("学生集合长度：" + personRepository.size());
         //保存学生信息到文件
         this.saveStudentInfoToDisk();
         //返回上一步
-//        this.showPersonMenu();
     }
 
     /**
@@ -158,8 +142,8 @@ public class StudentService {
         stringBuilder.append("\r\n0.返回上一层");
         stringBuilder.append("\r\n===================");
         stringBuilder.append("\r\n请选择?(0-4)\r\n");
-        
-        String inflows=stringBuilder.toString();
+
+        String inflows = stringBuilder.toString();
         System.out.println(inflows);
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
@@ -248,7 +232,7 @@ public class StudentService {
      * @throws Exception
      */
     private StudentClasses[] readStudentClassesInfoFromDisk() throws Exception {
-        boolean flag = this.checkFile(baseService.studentClassesFilePath);
+        boolean flag = Utils.checkFile(baseService.studentClassesFilePath);
         if (!flag) {
             return null;
         }
@@ -474,10 +458,10 @@ public class StudentService {
             this.showPersonMenu();
             return;
         }
-        PersonLinkList personLinkList = this.baseService.getPersonLinkList();
-        if (!stuNumber.isEmpty() && personLinkList != null && personLinkList.size() > 0) {
+        PersonRepository personRepository = this.baseService.getPersonLinkList();
+        if (!stuNumber.isEmpty() && personRepository != null && personRepository.size() > 0) {
             //del
-            personLinkList.delete(new Student(stuNumber, ""));
+            personRepository.delete(new Student(stuNumber, ""));
             // 把内存数据删除的写入文件
             this.saveStudentInfoToDisk();
             //显示学生信息
@@ -492,11 +476,11 @@ public class StudentService {
      */
     public void initMenu() throws Exception {
         System.out.println("=====显示系统菜单====");
-        System.out.println("\t 1.人员信息管理");
-        System.out.println("\t 2.班级信息管理");
-        System.out.println("\t 3.课程信息管理");
-        System.out.println("\t 4.成绩信息管理");
-        System.out.println("\t 0.exit");
+        System.out.println("1.人员信息管理");
+        System.out.println("2.班级信息管理");
+        System.out.println("3.课程信息管理");
+        System.out.println("4.成绩信息管理");
+        System.out.println("0.exit");
         System.out.println("===================");
         System.out.println("请选择?(0-4)");
         //用户输入信息

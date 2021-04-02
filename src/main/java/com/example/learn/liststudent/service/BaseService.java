@@ -1,10 +1,12 @@
 package com.example.learn.liststudent.service;
 
-import com.example.learn.liststudent.linklist.PersonLinkList;
-import com.example.learn.liststudent.linklist.StudentClassesLinkList;
+import com.example.learn.liststudent.repository.ClassesRepository;
+import com.example.learn.liststudent.repository.PersonRepository;
+import com.example.learn.liststudent.repository.StudentClassesRepository;
 
 /**
  * 全局基础服务
+ *
  * @author yichuan
  */
 public class BaseService<T> {
@@ -18,48 +20,67 @@ public class BaseService<T> {
      * 保存文件的路径
      */
     public final String studentClassesFilePath = "src/main/resources/studentClasses.txt";
+
+    /**
+     * 保存文件的路径
+     */
+    public final String classesFilePath = "src/main/resources/classes.txt";
+
     /**
      *
      */
-    private StudentClassesLinkList studentClassesLinkList;
+    private StudentClassesRepository studentClassesRepository;
 
     /**
      * 学生信息链表
      */
-    private PersonLinkList personLinkList;
+    private PersonRepository personRepository;
 
+    /**
+     * 班级
+     */
+    private ClassesRepository classesRepository;
 
 
     public BaseService() {
-        studentClassesLinkList = new StudentClassesLinkList();
-        personLinkList = new PersonLinkList();
+        studentClassesRepository = new StudentClassesRepository();
+        personRepository = new PersonRepository();
+        classesRepository = new ClassesRepository();
     }
 
     /**
      * @param arrays
      */
     public void init(T[] arrays) {
-        studentClassesLinkList = new StudentClassesLinkList(arrays);
+        studentClassesRepository = new StudentClassesRepository(arrays);
     }
 
 
-    public StudentClassesLinkList getStudentClassesLinkList() {
-        return studentClassesLinkList;
+    public StudentClassesRepository getStudentClassesLinkList() {
+        return studentClassesRepository;
     }
 
-    public void setStudentClassesLinkList(StudentClassesLinkList studentClassesLinkList) {
-        this.studentClassesLinkList = studentClassesLinkList;
+    public void setStudentClassesRepository(StudentClassesRepository studentClassesRepository) {
+        this.studentClassesRepository = studentClassesRepository;
     }
 
     public String getStudentFilePath() {
         return studentFilePath;
     }
 
-    public PersonLinkList getPersonLinkList() {
-        return personLinkList;
+    public PersonRepository getPersonLinkList() {
+        return personRepository;
     }
 
-    public void setPersonLinkList(PersonLinkList personLinkList) {
-        this.personLinkList = personLinkList;
+    public void setPersonLinkList(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
+
+    public ClassesRepository getClassesRepository() {
+        return classesRepository;
+    }
+
+    public void setClassesRepository(ClassesRepository classesRepository) {
+        this.classesRepository = classesRepository;
     }
 }

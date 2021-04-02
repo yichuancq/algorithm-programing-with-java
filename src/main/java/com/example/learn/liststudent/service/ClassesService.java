@@ -4,9 +4,9 @@ package com.example.learn.liststudent.service;
 import com.alibaba.fastjson.JSON;
 import com.example.learn.liststudent.base.Classes;
 import com.example.learn.liststudent.base.LinkNode;
-import com.example.learn.liststudent.linklist.ClassesLinkList;
+import com.example.learn.liststudent.repository.ClassesRepository;
+import com.example.learn.liststudent.utils.Utils;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.List;
@@ -18,15 +18,6 @@ import java.util.Scanner;
  * @param <T>
  */
 public class ClassesService<T> {
-    /**
-     *
-     */
-    public ClassesLinkList classesLinkList = new ClassesLinkList();
-
-    /**
-     * 保存文件的路径
-     */
-    private final String filePath = "src/main/resources/classes.txt";
 
     public BaseService baseService;
 
@@ -35,22 +26,6 @@ public class ClassesService<T> {
 
     public ClassesService(BaseService baseService) {
         this.baseService = baseService;
-    }
-
-    /**
-     * @param arrays
-     */
-    public ClassesService(T[] arrays) {
-        classesLinkList = new ClassesLinkList(arrays);
-    }
-
-    /**
-     * 显示链表的班级信息
-     *
-     * @return
-     */
-    public Classes[] showClassesInfo() {
-        return classesLinkList.listToArrays();
     }
 
     /**
@@ -80,8 +55,8 @@ public class ClassesService<T> {
             System.out.println("录入不合法");
             return;
         }
-        classesLinkList.add(classes);
-        System.out.println("班级集合长度：" + classesLinkList.size());
+        this.baseService.getClassesRepository().add(classes);
+        System.out.println("班级集合长度：" + this.baseService.getClassesRepository().size());
 //      保存信息到文件
         this.saveClassInfoToDisk();
 
@@ -91,13 +66,13 @@ public class ClassesService<T> {
      * 保存信息到文件
      */
     private void saveClassInfoToDisk() throws Exception {
-        Classes[] classes = classesLinkList.listToArrays();
+        Classes[] classes = this.baseService.getClassesRepository().listToArrays();
         if (classes == null || classes.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
         String fileContent = JSON.toJSONString(classes);
-        FileWriter fileWriter = new FileWriter(filePath);
+        FileWriter fileWriter = new FileWriter(baseService.classesFilePath);
         fileWriter.write(fileContent);
         fileWriter.close();
     }
@@ -114,7 +89,7 @@ public class ClassesService<T> {
             System.out.println("无信息，返回上一级");
             return;
         }
-        classesLinkList = new ClassesLinkList(classes);
+        baseService.setClassesRepository(new ClassesRepository(classes));
     }
 
     /**
@@ -126,13 +101,11 @@ public class ClassesService<T> {
     public Classes searchByKey(Classes classesKey) throws Exception {
         this.loadData();
         Classes classes = null;
-        LinkNode<Classes> classesNode = classesLinkList.search(classesKey);
+        LinkNode<Classes> classesNode = baseService.getClassesRepository().search(classesKey);
         if (classesNode == null) {
             return classes;
         }
-        //
-        classes = classesNode.data;
-        return classes;
+        return classesNode.data;
     }
 
     /**
@@ -151,7 +124,7 @@ public class ClassesService<T> {
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        classesLinkList = new ClassesLinkList(classes);
+        baseService.setClassesRepository(new ClassesRepository(classes));
         //print
         System.out.println("=====班级数目如下=====");
         System.out.println("班级数目：" + classes.length);
@@ -164,30 +137,17 @@ public class ClassesService<T> {
     }
 
     /**
-     * @return
-     * @throws Exception
-     */
-    private boolean checkFile() throws Exception {
-        File file = new File(filePath);
-        if (file.exists()) {
-            return true;
-        }
-        System.out.println("请先录入数据!");
-        return false;
-    }
-
-    /**
      * 读取磁盘数据
      *
      * @return
      * @throws Exception
      */
     private Classes[] readInfoFromDisk() throws Exception {
-        boolean flag = this.checkFile();
+        boolean flag = Utils.checkFile(baseService.classesFilePath);
         if (!flag) {
             return null;
         }
-        FileReader fileReader = new FileReader(filePath);
+        FileReader fileReader = new FileReader(baseService.classesFilePath);
         int ch = 0;
         String context = "";
         while ((ch = fileReader.read()) != -1) {
@@ -222,9 +182,6 @@ public class ClassesService<T> {
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
-//            disInfo = stringBuilder.toString();
-//            System.out.println(disInfo);
-            //
             int orderNumber = scanner.nextInt();
             if (orderNumber < 0 || orderNumber > 4) {
                 System.out.println("录入非法,exit...");

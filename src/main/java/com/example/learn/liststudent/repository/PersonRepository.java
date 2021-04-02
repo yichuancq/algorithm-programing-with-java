@@ -1,4 +1,4 @@
-package com.example.learn.liststudent.linklist;
+package com.example.learn.liststudent.repository;
 
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
@@ -7,9 +7,10 @@ import com.example.learn.liststudent.base.Student;
 /**
  * 数据链表
  *
+ * @author yichuan
  * @param <T>
  */
-public class PersonLinkList<T> {
+public class PersonRepository<T> {
     /**
      * 头结点
      */
@@ -18,7 +19,7 @@ public class PersonLinkList<T> {
     /**
      * 构造函数
      */
-    public PersonLinkList() {
+    public PersonRepository() {
         head = new LinkNode<>();
     }
 
@@ -28,7 +29,7 @@ public class PersonLinkList<T> {
      * @param arrays
      * @return
      */
-    public PersonLinkList(T[] arrays) {
+    public PersonRepository(T[] arrays) {
         //指向头结点
         this();
         LinkNode rear = head;
@@ -58,8 +59,6 @@ public class PersonLinkList<T> {
             rear = rear.next;
         }
     }
-
-    //删除第i个元素，0≤i<n，返回被删除元素；若i越界，返回null。O(n)
     public T remove(int i) {
         //front指向头结点
         LinkNode<T> front = this.head;

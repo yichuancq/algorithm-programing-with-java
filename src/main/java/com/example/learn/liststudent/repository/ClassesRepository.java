@@ -1,16 +1,17 @@
-package com.example.learn.liststudent.linklist;
+package com.example.learn.liststudent.repository;
 
 import com.example.learn.liststudent.base.Classes;
 import com.example.learn.liststudent.base.LinkNode;
 
 /**
+ * @author yichuan
  * @param <T>
  */
-public class ClassesLinkList<T> {
+public class ClassesRepository<T> {
 
     private LinkNode head;
 
-    public ClassesLinkList() {
+    public ClassesRepository() {
         head = new LinkNode<>();
     }
 
@@ -19,7 +20,7 @@ public class ClassesLinkList<T> {
      *
      * @param arrays
      */
-    public ClassesLinkList(T[] arrays) {
+    public ClassesRepository(T[] arrays) {
         this();
         LinkNode rear = head;
         for (T t : arrays) {

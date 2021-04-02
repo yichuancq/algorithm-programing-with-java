@@ -1,4 +1,4 @@
-package com.example.learn.liststudent.linklist;
+package com.example.learn.liststudent.repository;
 
 import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.StudentClasses;
@@ -6,14 +6,15 @@ import com.example.learn.liststudent.base.StudentClasses;
 /**
  * 学生课程信息链表
  *
+ * @author yichuan
  * @param <T>
  */
-public class StudentClassesLinkList<T> {
+public class StudentClassesRepository<T> {
 
 
     private LinkNode head;
 
-    public StudentClassesLinkList() {
+    public StudentClassesRepository() {
         head = new LinkNode<>();
     }
 
@@ -22,7 +23,7 @@ public class StudentClassesLinkList<T> {
      *
      * @param arrays
      */
-    public StudentClassesLinkList(T[] arrays) {
+    public StudentClassesRepository(T[] arrays) {
         this();
         LinkNode rear = head;
         for (T t : arrays) {
