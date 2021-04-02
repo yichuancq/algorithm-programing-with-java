@@ -43,7 +43,6 @@ public class Happy8 {
             Random random = new Random();
             //最大边界
             int maxNumberBound = ballList.size();
-//            System.out.println("最大边界:" + maxNumberBound);
             int currentBall = random.ints(1, maxNumberBound).limit(1).findFirst().getAsInt();
             //获取当前号码
             int ballNumber = ballList.get(currentBall);
