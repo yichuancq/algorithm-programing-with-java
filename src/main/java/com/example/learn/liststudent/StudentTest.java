@@ -5,10 +5,21 @@ import com.example.learn.liststudent.base.LinkNode;
 import com.example.learn.liststudent.base.Person;
 import com.example.learn.liststudent.base.Student;
 import com.example.learn.liststudent.repository.PersonRepository;
+import com.example.learn.liststudent.utils.SnowflakeUtil;
 import org.junit.Test;
 
 public class StudentTest {
 
+    /**
+     * 测试主键生成
+     */
+    @Test
+    public void testKey() {
+        for (int i = 0; i < 10; i++) {
+            long id = SnowflakeUtil.getInstance().nextId();
+            System.out.println(id);
+        }
+    }
 
     @Test
     public void tetSearch() {

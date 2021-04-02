@@ -24,34 +24,27 @@ public class TeacherService {
         this.baseService = baseService;
     }
 
-
     /**
      * 添加教师信息
      */
     private void addTeacher() throws Exception {
         System.out.println("=====显示信息====");
-        System.out.println("输入教师编号（字符+数字 如:tea）");
-        System.out.println("");
-        String teacherNumber = "";
+        String teacherNumber = Utils.getInnerId("TEA");
+        System.out.println("系统生成的教师编号:" + teacherNumber);
         String teacherName = "";
         //用户输入
-        Scanner scanner = new Scanner(System.in);
-        teacherNumber = scanner.nextLine();
-        System.out.println("输入:" + teacherNumber);
         System.out.println("=====显示信息====");
         System.out.println("输入教师名（字符如:王明）");
         System.out.println("");
         //用户输入
-        scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         teacherName = scanner.nextLine();
         System.out.println("输入：" + teacherName);
-        if (teacherName.isEmpty() || teacherNumber.isEmpty()) {
+        if (teacherName.isEmpty()) {
             System.out.println("录入不合法");
             return;
         }
         Teacher teacher = new Teacher(teacherNumber, teacherName);
-
-
         this.baseService.getTeacherRepository().add(teacher);
         System.out.println("集合长度：" + this.baseService.getTeacherRepository().size());
         this.saveTeacherInfoToDisk();
@@ -80,7 +73,6 @@ public class TeacherService {
      * @return
      */
     private Teacher[] readInfoFromDisk() throws Exception {
-
         boolean flag = Utils.checkFile(baseService.teacherFilePath);
         if (!flag) {
             return null;
@@ -95,6 +87,9 @@ public class TeacherService {
         // JSON串转用户对象列表
         List<Teacher> teacherList = JSON.parseArray(context, Teacher.class);
         // list to array
+        if (teacherList == null || teacherList.size() == 0) {
+            return null;
+        }
         Teacher[] teachers = new Teacher[teacherList.size()];
         for (int i = 0; i < teacherList.size(); i++) {
             teachers[i] = teacherList.get(i);
@@ -114,7 +109,6 @@ public class TeacherService {
         if (teachers == null || teachers.length == 0) {
             System.out.println("无信息，返回上一级");
             System.out.println("");
-            //this.showTeacherMenu();
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
@@ -123,8 +117,12 @@ public class TeacherService {
         System.out.println("=====教师人数如下=====");
         System.out.println("教师数目：" + teachers.length);
         System.out.println("=====教师信息如下=====");
+
         for (Teacher t : teachers) {
-            System.out.println("教师编号：" + t.getNumber() + "\t教师姓名：" + t.getName());
+            String createTime = Utils.getStringFormatDate(t.getCreateTime());
+            String updateTime = Utils.getStringFormatDate(t.getUpdateTime());
+            System.out.println("教师编号：" + t.getNumber() + "\t教师姓名：" + t.getName() + "\t"
+                    + "添加日期：" + createTime + "\t修改日期：" + updateTime);
         }
         System.out.println("======end=====");
     }

@@ -45,11 +45,14 @@ public class StudentService {
         fileReader.close();
         // JSON串转用户对象列表
         List<Student> studentList = JSON.parseArray(context, Student.class);
-        Student[] students = new Student[studentList.size()];
-        for (int i = 0; i < studentList.size(); i++) {
-            students[i] = studentList.get(i);
+        if (studentList != null && studentList.size() > 0) {
+            Student[] students = new Student[studentList.size()];
+            for (int i = 0; i < studentList.size(); i++) {
+                students[i] = studentList.get(i);
+            }
+            return students;
         }
-        return students;
+        return null;
     }
 
     /**
@@ -70,7 +73,10 @@ public class StudentService {
         System.out.println("学生总人数：" + students.length);
         System.out.println("=====学生信息如下=====");
         for (Student student : students) {
-            System.out.println("学号：" + student.getNumber() + "\t姓名：" + student.getName());
+            String createTime = Utils.getStringFormatDate(student.getCreateTime());
+            String updateTime = Utils.getStringFormatDate(student.getUpdateTime());
+            System.out.println("学号：" + student.getNumber() + "\t姓名：" + student.getName() +
+                    "\t" + "添加日期：" + createTime + "\t修改日期：" + updateTime);
         }
         System.out.println("======end =====");
         return;
@@ -84,19 +90,14 @@ public class StudentService {
      */
     private void addStudent() throws Exception {
         System.out.println("=====显示信息====");
-        System.out.println("输入学生编号（字符+数字 如:stu1）");
-        System.out.println("");
-        String number = "";
+        String number = Utils.getInnerId("STU");
+        System.out.println("系统生成的学生编号:" + number);
         String name = "";
         //用户输入
-        Scanner scanner = new Scanner(System.in);
-        number = scanner.nextLine();
-        System.out.println("输入：" + number);
         System.out.println("=====显示信息====");
         System.out.println("输入学生姓名（字符如:yichuan）");
         System.out.println();
-        //用户输入
-        scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         name = scanner.nextLine();
         System.out.println("输入：" + name);
         Student student = new Student(number, name);
@@ -142,7 +143,6 @@ public class StudentService {
         stringBuilder.append("\r\n0.返回上一层");
         stringBuilder.append("\r\n===================");
         stringBuilder.append("\r\n请选择?(0-4)\r\n");
-
         String inflows = stringBuilder.toString();
         System.out.println(inflows);
         //用户输入信息
@@ -160,7 +160,6 @@ public class StudentService {
                     break;
                 case 1:
                     System.out.println("添加学生信息.");
-                    this.showStudentInto();
                     this.addStudent();
                     System.out.println(inflows);
                     break;
@@ -467,7 +466,6 @@ public class StudentService {
             //显示学生信息
             this.showStudentInto();
             //返回上一步
-//            this.showPersonMenu();
         }
     }
 

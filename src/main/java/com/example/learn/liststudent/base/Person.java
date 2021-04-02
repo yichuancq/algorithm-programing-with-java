@@ -5,8 +5,7 @@ import java.util.Objects;
 /**
  *
  */
-public class Person {
-
+public class Person extends BaseEntity {
     /**
      * 编号
      */

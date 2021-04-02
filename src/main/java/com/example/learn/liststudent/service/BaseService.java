@@ -1,9 +1,6 @@
 package com.example.learn.liststudent.service;
 
-import com.example.learn.liststudent.repository.ClassesRepository;
-import com.example.learn.liststudent.repository.PersonRepository;
-import com.example.learn.liststudent.repository.StudentClassesRepository;
-import com.example.learn.liststudent.repository.TeacherRepository;
+import com.example.learn.liststudent.repository.*;
 
 /**
  * 全局基础服务
@@ -29,6 +26,9 @@ public class BaseService<T> {
 
     public final String teacherFilePath = "src/main/resources/teacher.txt";
 
+    //course
+    public final String courseFilePath = "src/main/resources/course.txt";
+
     /**
      *
      */
@@ -49,12 +49,14 @@ public class BaseService<T> {
      */
     private TeacherRepository teacherRepository;
 
+    private CourseRepository courseRepository;
 
     public BaseService() {
         studentClassesRepository = new StudentClassesRepository();
         personRepository = new PersonRepository();
         classesRepository = new ClassesRepository();
         teacherRepository=new TeacherRepository();
+        courseRepository=new CourseRepository();
     }
 
     /**
@@ -99,5 +101,13 @@ public class BaseService<T> {
 
     public void setTeacherRepository(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
+    }
+
+    public CourseRepository getCourseRepository() {
+        return courseRepository;
+    }
+
+    public void setCourseRepository(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 }

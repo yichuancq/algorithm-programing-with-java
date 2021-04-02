@@ -1,11 +1,10 @@
 package com.example.learn.liststudent.base;
 
-import java.math.BigDecimal;
 
 /**
  * 课程
  */
-public class Course {
+public class Course  extends BaseEntity{
     /**
      * 课程编号
      */
@@ -15,17 +14,9 @@ public class Course {
      */
     public String curseName;
     /**
-     * 平均分
+     * 学分数
      */
-    public BigDecimal avgScore;
-    /**
-     * 参加课程人数
-     */
-    public int studentAmount;
-    /**
-     * 平均绩点
-     */
-    public BigDecimal avgGradePointAverage;
+    public float gradePoint;
 
     public Course() {
     }
@@ -34,9 +25,10 @@ public class Course {
      * @param curseNumber
      * @param curseName
      */
-    public Course(String curseNumber, String curseName) {
+    public Course(String curseNumber, String curseName, float gradePoint) {
         this.curseNumber = curseNumber;
         this.curseName = curseName;
+        this.gradePoint = gradePoint;
     }
 
     @Override
@@ -44,8 +36,6 @@ public class Course {
         return "Course{" +
                 "curseNumber='" + curseNumber + '\'' +
                 ", curseName='" + curseName + '\'' +
-                ", avgScore=" + avgScore +
-                ", studentAmount=" + studentAmount +
                 '}';
     }
 }

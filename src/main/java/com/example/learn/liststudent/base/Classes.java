@@ -3,11 +3,11 @@ package com.example.learn.liststudent.base;
 /**
  * 学生班级
  */
-public class Classes {
+public class Classes extends BaseEntity {
     /**
      * 班级号
      */
-    public String classesNumber="";
+    public String classesNumber = "";
     /**
      * 班级名称
      */

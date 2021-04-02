@@ -35,23 +35,18 @@ public class ClassesService<T> {
      */
     private void addClasses() throws Exception {
         System.out.println("=====显示信息====");
-        System.out.println("输入班级编号（字符+数字 如:cls）");
-        System.out.println("");
-        String classesNumber = "";
+        String classesNumber = Utils.getInnerId("CLS");
+        System.out.println("系统生成的班级编号:" + classesNumber);
         String classesName = "";
         //用户输入
-        Scanner scanner = new Scanner(System.in);
-        classesNumber = scanner.nextLine();
-        System.out.println("输入:" + classesNumber);
         System.out.println("=====显示信息====");
         System.out.println("输入班级名（字符如:计算机01）");
         System.out.println("");
         //用户输入
-        scanner = new Scanner(System.in);
+        Scanner  scanner = new Scanner(System.in);
         classesName = scanner.nextLine();
         System.out.println("输入：" + classesName);
-
-        if (classesName.isEmpty() || classesNumber.isEmpty()) {
+        if (classesName.isEmpty()) {
             System.out.println("录入不合法");
             return;
         }
@@ -131,7 +126,10 @@ public class ClassesService<T> {
         System.out.println("班级数目：" + classes.length);
         System.out.println("=====班级信息如下=====");
         for (Classes temp : classes) {
-            System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName);
+            String createTime = Utils.getStringFormatDate(temp.getCreateTime());
+            String updateTime = Utils.getStringFormatDate(temp.getUpdateTime());
+            System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName+
+                    "\t" + "添加日期：" + createTime + "\t修改日期：" + updateTime);
         }
         System.out.println("======end=====");
 
@@ -195,7 +193,7 @@ public class ClassesService<T> {
                     break;
                 case 1:
                     System.out.println("添加班级信息.");
-                    this.showClassesInto();
+                   // this.showClassesInto();
                     //
                     this.addClasses();
                     //show menu
