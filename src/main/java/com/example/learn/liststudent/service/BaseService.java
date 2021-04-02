@@ -3,6 +3,7 @@ package com.example.learn.liststudent.service;
 import com.example.learn.liststudent.repository.ClassesRepository;
 import com.example.learn.liststudent.repository.PersonRepository;
 import com.example.learn.liststudent.repository.StudentClassesRepository;
+import com.example.learn.liststudent.repository.TeacherRepository;
 
 /**
  * 全局基础服务
@@ -26,6 +27,8 @@ public class BaseService<T> {
      */
     public final String classesFilePath = "src/main/resources/classes.txt";
 
+    public final String teacherFilePath = "src/main/resources/teacher.txt";
+
     /**
      *
      */
@@ -41,11 +44,17 @@ public class BaseService<T> {
      */
     private ClassesRepository classesRepository;
 
+    /**
+     * 教师
+     */
+    private TeacherRepository teacherRepository;
+
 
     public BaseService() {
         studentClassesRepository = new StudentClassesRepository();
         personRepository = new PersonRepository();
         classesRepository = new ClassesRepository();
+        teacherRepository=new TeacherRepository();
     }
 
     /**
@@ -82,5 +91,13 @@ public class BaseService<T> {
 
     public void setClassesRepository(ClassesRepository classesRepository) {
         this.classesRepository = classesRepository;
+    }
+
+    public TeacherRepository getTeacherRepository() {
+        return teacherRepository;
+    }
+
+    public void setTeacherRepository(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
     }
 }

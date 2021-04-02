@@ -460,7 +460,7 @@ public class StudentService {
         }
         PersonRepository personRepository = this.baseService.getPersonLinkList();
         if (!stuNumber.isEmpty() && personRepository != null && personRepository.size() > 0) {
-            //del
+            //执行删除动作
             personRepository.delete(new Student(stuNumber, ""));
             // 把内存数据删除的写入文件
             this.saveStudentInfoToDisk();
@@ -476,10 +476,11 @@ public class StudentService {
      */
     public void initMenu() throws Exception {
         System.out.println("=====显示系统菜单====");
-        System.out.println("1.人员信息管理");
+        System.out.println("1.学生信息管理");
         System.out.println("2.班级信息管理");
         System.out.println("3.课程信息管理");
         System.out.println("4.成绩信息管理");
+        System.out.println("5.教师信息管理");
         System.out.println("0.exit");
         System.out.println("===================");
         System.out.println("请选择?(0-4)");
@@ -487,28 +488,33 @@ public class StudentService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 4) {
+            if (orderNumber < 0 || orderNumber > 5) {
                 System.out.println("录入非法,exit...");
                 System.exit(0);
             }
             switch (orderNumber) {
                 case 0:
-                    System.out.println("退出系统.");
+                    System.out.println("退出系统");
                     System.exit(0);
                     break;
                 case 1:
-                    System.out.println("人员信息管理.");
+                    System.out.println("人员信息管理");
                     showPersonMenu();
                     break;
                 case 2:
-                    System.out.println("班级信息管理.");
+                    System.out.println("班级信息管理");
                     new ClassesService(baseService).showClassesMenu();
                     break;
                 case 3:
-                    System.out.println("课程信息管理.");
+                    System.out.println("课程信息管理");
                     break;
                 case 4:
-                    System.out.println("成绩信息管理.");
+                    System.out.println("成绩信息管理");
+                    break;
+                case 5:
+                    System.out.println("教师信息管理");
+                    //显示教师管理菜单
+                    new TeacherService(baseService).showTeacherMenu();
                     break;
                 default:
                     System.out.println("录入非法");

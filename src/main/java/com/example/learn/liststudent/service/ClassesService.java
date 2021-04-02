@@ -50,11 +50,12 @@ public class ClassesService<T> {
         scanner = new Scanner(System.in);
         classesName = scanner.nextLine();
         System.out.println("输入：" + classesName);
-        Classes classes = new Classes(classesNumber, classesName);
+
         if (classesName.isEmpty() || classesNumber.isEmpty()) {
             System.out.println("录入不合法");
             return;
         }
+        Classes classes = new Classes(classesNumber, classesName);
         this.baseService.getClassesRepository().add(classes);
         System.out.println("班级集合长度：" + this.baseService.getClassesRepository().size());
 //      保存信息到文件

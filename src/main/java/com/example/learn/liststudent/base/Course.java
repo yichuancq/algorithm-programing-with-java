@@ -13,10 +13,6 @@ public class Course {
      */
     public String curseName;
     /**
-     * 总分数
-     */
-    public float totalScore;
-    /**
      * 平均分
      */
     public float avgScore;
@@ -24,6 +20,10 @@ public class Course {
      * 参加课程人数
      */
     public int studentAmount;
+    /**
+     * 平均绩点
+     */
+    public int avgGradePointAverage;
 
     public Course() {
     }
@@ -42,7 +42,6 @@ public class Course {
         return "Course{" +
                 "curseNumber='" + curseNumber + '\'' +
                 ", curseName='" + curseName + '\'' +
-                ", totalScore=" + totalScore +
                 ", avgScore=" + avgScore +
                 ", studentAmount=" + studentAmount +
                 '}';

@@ -198,26 +198,6 @@ public class PersonRepository<T> {
         return false;
     }
 
-
-    /**
-     * 打印元素
-     *
-     * @return
-     */
-    public String listToString2() {
-        String string = "[";
-        LinkNode<T> p = head.next;
-        for (; p != null; p = p.next) {
-            string += p.data;
-            //不是最后一个结点时
-            if (p.next != null) {
-                string += ',';
-            }
-        }
-        string += ']';
-        return string;
-    }
-
     /**
      * 打印结点信息
      */
