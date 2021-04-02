@@ -38,6 +38,17 @@ public class TreeNodeBuilder {
     }
 
     /**
+     * @param treeNode
+     */
+    public void inOrderTree(TreeNode treeNode) {
+        if (treeNode != null) {
+            inOrderTree(treeNode.left);
+            System.out.println(treeNode.val);
+            inOrderTree(treeNode.right);
+        }
+    }
+
+    /**
      * 层次遍历构造
      * 构造结点方式2
      *
