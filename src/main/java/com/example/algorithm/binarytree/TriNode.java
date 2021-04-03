@@ -3,6 +3,7 @@ package com.example.algorithm.binarytree;
 /**
  * 三叉链表结点类
  * 二叉树的三叉链表结点类，T指定结点的元素类型
+ * @author yichuan
  */
 public class TriNode<T> {
     /**
@@ -29,7 +30,10 @@ public class TriNode<T> {
         this.right = right;
     }
 
-    //构造指定值的叶子结点
+    /****构造指定值的叶子结点
+     *
+     * @param data
+     */
     public TriNode(T data) {
         this(data, null, null, null);
     }
@@ -38,11 +42,15 @@ public class TriNode<T> {
         this(null, null, null, null);
     }
 
+    @Override
     public String toString() {
         return this.data.toString();
     }
 
-    //判断是否叶子结点
+    /***判断是否叶子结点
+     *
+     * @return
+     */
     public boolean isLeaf() {
         return this.left == null && this.right == null;
     }
