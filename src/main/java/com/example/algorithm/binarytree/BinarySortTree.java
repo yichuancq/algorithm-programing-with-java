@@ -141,9 +141,11 @@ public class BinarySortTree<T extends Comparable<? super T>> {
      * 在以p为根的子树中，返回中根次序下第一个访问结点，即是根的最左边的子孙结点，最小值
      */
     public TriNode<T> first(TriNode<T> p) {
-        if (p != null)
-            while (p.left != null)
+        if (p != null) {
+            while (p.left != null) {
                 p = p.left;
+            }
+        }
         return p;
     }
 
@@ -179,8 +181,9 @@ public class BinarySortTree<T extends Comparable<? super T>> {
      */
     public void inorderPrevious() {
         System.out.print("[");
-        for (TriNode<T> p = this.last(this.root); p != null; p = this.previous(p))
+        for (TriNode<T> p = this.last(this.root); p != null; p = this.previous(p)) {
             System.out.print(p.data.toString() + " ");
+        }
         System.out.println("]");
     }
 
@@ -303,8 +306,9 @@ public class BinarySortTree<T extends Comparable<? super T>> {
             } else {
                 //以p的右孩子顶替
                 p.parent.left = p.right;
-                if (p.right != null)
+                if (p.right != null) {
                     p.right.parent = p.parent;
+                }
             }
         }
         //p是1度或叶子结点，p是父母的右孩子
@@ -357,12 +361,14 @@ public class BinarySortTree<T extends Comparable<? super T>> {
                 level++;
                 n = 1;
             }
-            if (p.left != null)
-                //p的左孩子结点入队
+            //p的左孩子结点入队
+            if (p.left != null) {
                 que.add(p.left);
-            if (p.right != null)
-                //p的右孩子结点入队
+            }
+            //p的右孩子结点入队
+            if (p.right != null) {
                 que.add(p.right);
+            }
         }
         if (count == 0) {
             System.out.println(") = 0");
