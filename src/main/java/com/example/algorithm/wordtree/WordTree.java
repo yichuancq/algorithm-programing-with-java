@@ -11,7 +11,9 @@ import java.util.Random;
  * 3、思考其他实现和优化方案
  */
 public class WordTree {
-
+    //keyNode
+    private TreeNode keyNode;
+    //len
     private int len = 0;
 
     public WordTree() {
@@ -59,7 +61,7 @@ public class WordTree {
      */
     private void printNode(TreeNode treeNode) {
         if (treeNode != null) {
-            System.out.println("遍历打印结点:" + treeNode);
+            System.out.println("遍历打印结点:" + treeNode.val);
             for (TreeNode temp : treeNode.getChildren()) {
                 printNode(temp);
             }
@@ -90,21 +92,36 @@ public class WordTree {
     }
 
     /**
-     * todo fix bug
+     * 删除结点
+     *
+     * @param treeNode
+     * @param keyWord
+     */
+    private void delete(TreeNode treeNode, String keyWord) {
+
+    }
+
+    /**
+     * 查询
      *
      * @param treeNode
      * @param keyWord
      * @return
      */
-    private TreeNode search(TreeNode treeNode, String keyWord) {
-        TreeNode keyNode = null;
+    private TreeNode find(TreeNode treeNode, String keyWord) {
         if (treeNode != null) {
-            if (keyWord.equals(treeNode.val)) {
+            while (keyWord.compareTo(treeNode.val) == 0) {
+                System.out.println("find key...");
                 keyNode = treeNode;
                 return keyNode;
             }
-            for (TreeNode childNode : treeNode.getChildren()) {
-                search(childNode, keyWord);
+            for (TreeNode child : treeNode.getChildren()) {
+                if (keyNode == null) {
+                    find(child, keyWord);
+                } else {
+                    break;
+                }
+
             }
         }
         return keyNode;
@@ -121,7 +138,6 @@ public class WordTree {
     private String[] buildWords(int size) throws Exception {
         String[] words = new String[size];
         for (int i = 0; i < size; i++) {
-            Thread.sleep(10);
             Random random = new Random();
             int currentBall = random.ints(1, 20)
                     .limit(20).findAny().getAsInt();
@@ -153,39 +169,28 @@ public class WordTree {
 
     public static void main(String[] args) throws Exception {
 //
-//        String[] wordArrays = {"ail", "ailment", "aimless", "aircraft", "aircrew",
-//                "babble", "baby", "bachelor", "cabin", "allow", "ersatz", "zipper", "year"
-//                , "xerography", "neophyte", "wacky", "waffle", "wainscot", "waistcoat", "waitress",
-//                "ukulele", "ultraviolet", "sabbatical", "sacrificial", "quadrangular", "quarter"
-//                , "qualification", "macroscopic", "madonna", "magnificence", "manhattan", "marxist"
-//                , "massachusetts", "kindergarten", "kindly", "kleptomania", "knighthood", "knowledgeable"
-//                , "haberdashery", "habitation", "haggard", "hammer", "handwriting", "harangue", "harem"
-//                , "Catchment", "headsman", "healthful", "hearthstone", "hemorrhage", "hercules", "heroism",
-//                "hidalgo"};
+        String[] wordArrays = {"ail", "ailment", "aimless", "aircraft", "aircrew",
+                "babble", "baby", "bachelor", "cabin", "allow", "ersatz", "zipper", "year"
+                , "xerography", "neophyte", "wacky", "waffle", "wainscot", "waistcoat", "waitress",
+                "ukulele", "ultraviolet", "sabbatical", "sacrificial", "quadrangular", "quarter"
+                , "qualification", "macroscopic", "madonna", "magnificence", "manhattan", "marxist"
+                , "massachusetts", "kindergarten", "kindly", "kleptomania", "knighthood", "knowledgeable"
+                , "haberdashery", "habitation", "haggard", "hammer", "handwriting", "harangue", "harem"
+                , "Catchment", "headsman", "healthful", "hearthstone", "hemorrhage", "hercules", "heroism",
+                "hidalgo"};
         WordTree wordTree = new WordTree();
-//        String[] strings = wordTree.buildWords(50);
-//
-        int size = 100;
-        String[] strings = new String[size];
-        for (int i = 0; i < size; i++) {
-            strings[i] = "单词" + i;
-        }
-
+        String[] strings = wordTree.buildWords(500);
         //子节点最大个数
         int children = 26;
         TreeNode root = wordTree.buildWordTree(strings, 0, children, null);
-//        System.out.println(JSON.toJSON(root));
         wordTree.printNode(root);
-        TreeNode key = wordTree.search(root, "单词685");
         System.out.println("原始array大小:" + strings.length);
-        System.out.println(key);
         int len = wordTree.size(root);
         System.out.println("生成结点的大小:" + len);
-        // System.out.println("key=" + key.val);
-        // len = wordTree.size(root);
         System.out.println("生成结点的大小:" + len);
         System.out.println(root);
-
+        TreeNode treeNode = wordTree.find(root, "c");
+        System.out.println("find->" + treeNode);
     }
 
 }
