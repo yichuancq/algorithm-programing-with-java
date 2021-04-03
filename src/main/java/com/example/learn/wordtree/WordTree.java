@@ -60,10 +60,9 @@ public class WordTree {
      * @param treeNode
      */
     private void printNode(TreeNode treeNode) {
-        if (treeNode != null && !treeNode.getChildren().isEmpty()) {
-            // System.out.println("val:" + treeNode.val);
+        if (treeNode != null) {
+            System.out.println("遍历打印结点:" + treeNode.val);
             for (TreeNode temp : treeNode.getChildren()) {
-                System.out.println("val:" + temp.val);
                 printNode(temp);
             }
         }
@@ -153,16 +152,12 @@ public class WordTree {
         WordTree wordTree = new WordTree();
         // String[] strings = wordTree.buildWords(50);
         int size = 100;
-//        String[] strings = new String[size];
-//        for (int i = 0; i < size; i++) {
-//            strings[i] = "单词" + i;
-//        }
         //子节点最大个数
         int children = 26;
         TreeNode root = wordTree.buildWordTree(wordArrays, 0, children, wordTree.head);
 //        System.out.println(JSON.toJSON(root));
-//        wordTree.printNode(root);
-        TreeNode key = wordTree.search(root, "wacky");
+        wordTree.printNode(root);
+        TreeNode key = wordTree.search(root, "year");
         System.out.println("key=" + key.val);
         int len = wordTree.size(root);
         System.out.println("" + len);
