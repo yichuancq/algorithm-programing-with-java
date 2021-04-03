@@ -1,8 +1,11 @@
 package com.example.learn.wordtree;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 /**
  * 1、构建单词数组，按A-Z排序，构建树，实现查找和排序功能
  * 2、结果存入文件，读取文件实现存档
@@ -10,7 +13,7 @@ import java.util.List;
  */
 public class WordTree {
 
-    private TreeNode head = new TreeNode("root", new ArrayList<>());
+    private TreeNode head = new TreeNode("root");
 
     public WordTree() {
     }
@@ -21,7 +24,7 @@ public class WordTree {
      * @param arrays
      * @return
      */
-    public TreeNode buildWordTree(String[] arrays, int n, TreeNode parent) {
+    public TreeNode buildWordTree(String[] arrays, int n, int children, TreeNode parent) {
         TreeNode treeNode = null;
         if (arrays == null || arrays.length == 0) {
             return null;
@@ -32,10 +35,11 @@ public class WordTree {
                 List<TreeNode> treeNodeList = new ArrayList<>();
                 treeNode = new TreeNode(word, treeNodeList, parent);
                 //下一个索引
-                int index = 26 * n + 1;
-                for (int i = 0; i < arrays.length; i++) {
+                int index = children * n + 1;
+                for (int i = 0; i < children; i++) {
                     //递归调用
-                    TreeNode temp = this.buildWordTree(arrays, (index), new TreeNode(treeNode.val));
+                    TreeNode p = new TreeNode(treeNode.val);
+                    TreeNode temp = this.buildWordTree(arrays, index, children, p);
                     if (temp != null && temp.val != null) {
                         treeNodeList.add(temp);
                     }
@@ -52,11 +56,11 @@ public class WordTree {
      * @param treeNode
      */
     private void printNode(TreeNode treeNode) {
-        if (treeNode != null && treeNode.next != null) {
-            System.out.println("val:" + treeNode);
-            for (TreeNode children : treeNode.next) {
-                printNode(children);
-            }
+        if (treeNode != null) {
+            System.out.println("val:" + treeNode.toString());
+//            for (TreeNode node : treeNode.getChildren()) {
+//                printNode(node);
+//            }
         }
     }
 
@@ -68,8 +72,12 @@ public class WordTree {
         for (int i = 0; i < size; i++) {
             strings[i] = "单词" + i;
         }
-        TreeNode root = wordTree.buildWordTree(strings, 0, wordTree.head);
-        wordTree.printNode(root);
+        //子节点最大个数
+        int children = 26;
+        TreeNode root = wordTree.buildWordTree(strings, 0, children, wordTree.head);
+        System.out.println(JSON.toJSON(root));
+//        wordTree.printNode(root);
+//        wordTree.printNode(root);
     }
 
 }

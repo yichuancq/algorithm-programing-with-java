@@ -15,9 +15,9 @@ public class TreeNode extends Object {
      */
     public TreeNode parent;
     /**
-     * 下一个结点（目前设置为26个）
+     * 下一个结点集合（目前设置为26个）
      */
-    public List<TreeNode> next;
+    public List<TreeNode> children;
 
     public TreeNode() {
     }
@@ -25,23 +25,27 @@ public class TreeNode extends Object {
     public TreeNode(String val) {
         this.val = val;
     }
-    public TreeNode(String val, List<TreeNode> next) {
+
+    public TreeNode(String val, List<TreeNode> children) {
         this.val = val;
-        this.next = next;
+        this.children = children;
     }
-    public TreeNode(String val, List<TreeNode> next, TreeNode parent) {
+
+    public TreeNode(String val, List<TreeNode> children, TreeNode parent) {
         this.val = val;
-        this.next = next;
+        this.children = children;
         this.parent = parent;
     }
+
     @Override
     public String toString() {
         return "TreeNode{" +
                 "val='" + val + '\'' +
                 ", parent=" + parent +
-                ", next=" + next +
+                ", children=" + children +
                 '}';
     }
+
     public TreeNode getParent() {
         return parent;
     }
@@ -58,11 +62,11 @@ public class TreeNode extends Object {
         this.val = val;
     }
 
-    public List<TreeNode> getNext() {
-        return next;
+    public List<TreeNode> getChildren() {
+        return children;
     }
 
-    public void setNext(List<TreeNode> next) {
-        this.next = next;
+    public void setChildren(List<TreeNode> children) {
+        this.children = children;
     }
 }
