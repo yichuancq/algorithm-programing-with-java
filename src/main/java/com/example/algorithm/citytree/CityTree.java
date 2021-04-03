@@ -3,9 +3,9 @@ package com.example.algorithm.citytree;
 
 /**
  *
+ * @author yichuan
  */
 public class CityTree {
-
     /***以横向凹入表示构造树，prelist数组存储树（森林）的横向凹入表示字符串序列
      非递归算法，逐个结点添加方式，没有调用返回、插入结点方法
      ***/
