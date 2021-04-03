@@ -44,7 +44,6 @@ public class BinarySortTree<T extends Comparable<? super T>> {
     public TriNode<T> searchNode(T key) {
         TriNode<T> p = this.root;
         while (p != null && key.compareTo(p.data) != 0) {
-//            System.out.print(p.data+"? ");       //显示查找经过的结点值，可省略
             if (key.compareTo(p.data) < 0) {
                 //进入左子树
                 p = p.left;
