@@ -32,7 +32,8 @@ public class Solution {
         }
 
         ListNode midNode = slowHead.next;
-        slowHead.next = null;   // 将 两半链表 断开
+        slowHead.next = null;
+        // 将 两半链表 断开
         ListNode leftHead = sortList(head);
         ListNode rightHead = sortList(midNode);
         return merge(leftHead, rightHead);

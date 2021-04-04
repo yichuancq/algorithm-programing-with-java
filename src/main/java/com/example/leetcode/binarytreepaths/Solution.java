@@ -12,14 +12,6 @@ import java.util.*;
  */
 public class Solution {
     /**
-     * 存放中序遍历的结点值
-     */
-    List<Integer> inOrderList = new ArrayList<>();
-
-    List<Integer> preList = new ArrayList<>();
-
-    List<Integer> postList = new ArrayList<>();
-    /**
      * 存放所有路径
      */
     List<List<Integer>> res = new ArrayList<>();
@@ -116,11 +108,12 @@ public class Solution {
      * @param root
      * @return
      */
-    public List<Integer> inorderTraversal(TreeNode root) {
+    public List<Integer> inorderTraversal(TreeNode root, List<Integer> inOrderList) {
         if (root != null) {
-            inorderTraversal(root.left);
+            inorderTraversal(root.left, inOrderList);
+            //添加结点
             inOrderList.add(root.val);
-            inorderTraversal(root.right);
+            inorderTraversal(root.right, inOrderList);
         }
         return inOrderList;
     }
@@ -131,11 +124,11 @@ public class Solution {
      * @param root
      * @return
      */
-    public List<Integer> preorderTraversal(TreeNode root) {
+    public List<Integer> preorderTraversal(TreeNode root, List<Integer> preList) {
         if (root != null) {
             preList.add(root.val);
-            preorderTraversal(root.left);
-            preorderTraversal(root.right);
+            preorderTraversal(root.left, preList);
+            preorderTraversal(root.right, preList);
         }
         return preList;
     }
@@ -146,14 +139,15 @@ public class Solution {
      * @param root
      * @return
      */
-    public List<Integer> postorderTraversal(TreeNode root) {
+    public List<Integer> postorderTraversal(TreeNode root, List<Integer> postList) {
         if (root != null) {
-            postorderTraversal(root.left);
-            postorderTraversal(root.right);
+            postorderTraversal(root.left, postList);
+            postorderTraversal(root.right, postList);
             postList.add(root.val);
         }
         return postList;
     }
+
     /**
      * 计算深度
      *
@@ -188,13 +182,13 @@ public class Solution {
         solution.printBinaryTreeWidthFirst(treeNode);
         System.out.println();
         System.out.println("先序");
-        List<Integer> list = solution.preorderTraversal(treeNode);
+        List<Integer> list = solution.preorderTraversal(treeNode, new ArrayList<>());
         System.out.println(list);
         System.out.println("中序");
-        list = solution.inorderTraversal(treeNode);
+        list = solution.inorderTraversal(treeNode, new ArrayList<>());
         System.out.println(list);
         System.out.println("后序");
-        list = solution.postorderTraversal(treeNode);
+        list = solution.postorderTraversal(treeNode, new ArrayList<>());
         System.out.println(list);
     }
 
