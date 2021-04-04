@@ -68,39 +68,26 @@ public interface Stack<T> {
 
 ```java
 /**
- * 树的根节点
+ * 层次遍历构造
  *
- * @param <T>
+ * @param arrays
+ * @param n
+ * @return
  */
-public class Node<T> {
-    /**
-     * 结点的值
-     */
-    private T data;
-    /**
-     * 左子结点
-     */
-    private Node<T> rightChild;
-    /**
-     * 右子结点
-     */
-    private Node<T> leftChild;
-
-
-    public Node(T data) {
-        this.data = data;
-    }
-
-    /**
-     * @param data
-     * @param leftChild
-     * @param rightChild
-     */
-    public Node(T data, Node<T> leftChild, Node<T> rightChild) {
-        this.data = data;
-        this.leftChild = leftChild;
-        this.rightChild = rightChild;
-    }
+public TreeNode buildTree(int[] arrays, int n) {
+        TreeNode treeNode = null;
+        if (arrays.length == 0) {
+        return null;
+        }
+        if (n < arrays.length) {
+        int l = n * 2 + 1;
+        int r = n * 2 + 2;
+        treeNode = new TreeNode(arrays[n],
+        buildTree(arrays, l),
+        buildTree(arrays, r));
+        }
+        return treeNode;
+   }
 }
 ```
 > 图

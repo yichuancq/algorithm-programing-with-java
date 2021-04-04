@@ -16,8 +16,6 @@ public class TreeNodeBuilder {
         if (i < arrays.length) {
             int val = arrays[i];
             treeNode = new TreeNode(val);
-            //打印结点
-            //System.out.println("" + treeNode.toString());
             //设置左孩子
             treeNode.setLeft(buildTree1(arrays, 2 * i + 1));
             //设置右孩子
