@@ -54,4 +54,44 @@ public class StudentClasses {
                 ", stuName='" + stuName + '\'' +
                 '}';
     }
+
+    public String getScNumber() {
+        return scNumber;
+    }
+
+    public void setScNumber(String scNumber) {
+        this.scNumber = scNumber;
+    }
+
+    public String getClassesNumber() {
+        return classesNumber;
+    }
+
+    public void setClassesNumber(String classesNumber) {
+        this.classesNumber = classesNumber;
+    }
+
+    public String getClassesName() {
+        return classesName;
+    }
+
+    public void setClassesName(String classesName) {
+        this.classesName = classesName;
+    }
+
+    public String getStuNumber() {
+        return stuNumber;
+    }
+
+    public void setStuNumber(String stuNumber) {
+        this.stuNumber = stuNumber;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
 }

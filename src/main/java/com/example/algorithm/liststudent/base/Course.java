@@ -38,4 +38,28 @@ public class Course  extends BaseEntity{
                 ", curseName='" + curseName + '\'' +
                 '}';
     }
+
+    public String getCurseNumber() {
+        return curseNumber;
+    }
+
+    public void setCurseNumber(String curseNumber) {
+        this.curseNumber = curseNumber;
+    }
+
+    public String getCurseName() {
+        return curseName;
+    }
+
+    public void setCurseName(String curseName) {
+        this.curseName = curseName;
+    }
+
+    public float getGradePoint() {
+        return gradePoint;
+    }
+
+    public void setGradePoint(float gradePoint) {
+        this.gradePoint = gradePoint;
+    }
 }

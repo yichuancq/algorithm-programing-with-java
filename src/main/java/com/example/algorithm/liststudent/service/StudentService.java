@@ -244,7 +244,6 @@ public class StudentService {
      * @param classesNumber
      * @throws Exception
      */
-
     private void searchPerson(String personNumber, String classesNumber) throws Exception {
         StudentClasses studentClasses = null;
         //通过对象查找元素
@@ -265,15 +264,18 @@ public class StudentService {
             //返回上一层
             this.editStudent();
             return;
-        }//
-        Student student = (Student) personLinkNode.data;
-        //自定义编码
-        String scNumber = "";
-        studentClasses = new StudentClasses(scNumber, classes.classesNumber,
-                classes.classesName, student.getNumber(), student.getName());
-        this.saveStudentClassesInfoToDisk(studentClasses);
-        //返回上一层
-        this.editStudent();
+        }
+        if (personLinkNode.data != null) {
+            Student student = (Student) personLinkNode.data;
+            //自定义编码
+            String scNumber = "";
+            studentClasses = new StudentClasses(scNumber, classes.classesNumber,
+                    classes.classesName, student.getNumber(), student.getName());
+            this.saveStudentClassesInfoToDisk(studentClasses);
+            //返回上一层
+            this.editStudent();
+            return;
+        }
         return;
     }
 
@@ -344,7 +346,7 @@ public class StudentService {
     }
 
     /**
-     * 集合保存到磁盘
+     * 学生班级信息集合保存到磁盘
      *
      * @throws Exception
      */
@@ -460,6 +462,35 @@ public class StudentService {
         }
     }
 
+
+    /**
+     * 查询学生班级信息
+     *
+     * @param studentNumber
+     * @return
+     */
+    public StudentClasses findStudentClassesByStuNumber(String studentNumber) throws Exception {
+        // TODO: 2021/4/7
+        StudentClasses studentClasses = null;
+        if (studentNumber == null || studentNumber.isEmpty()) {
+            return studentClasses;
+        }
+
+        //加载文件内容到内存
+        StudentClasses[] studentClassesArrays = this.readStudentClassesInfoFromDisk();
+        if (studentClassesArrays == null || studentClassesArrays.length == 0) {
+            System.out.println("无信息，返回上一级");
+            return studentClasses;
+        }
+        //如果存在记录同时加载到内存里面，给链表赋值
+        baseService.setStudentClassesRepository(new StudentClassesRepository(studentClassesArrays));
+        StudentClasses studentClassesKey = new StudentClasses();
+        studentClassesKey.setStuNumber(studentNumber);
+
+        studentClasses = this.baseService.getStudentClassesLinkList().search(studentClassesKey);
+        return studentClasses;
+    }
+
     /**
      * 显示学生班级信息关系记录
      *
@@ -473,9 +504,7 @@ public class StudentService {
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        //如果存在记录同时加载到内存里面，给链表赋值
         baseService.setStudentClassesRepository(new StudentClassesRepository(studentClasses));
-        //
         int size = baseService.getStudentClassesLinkList().size();
         //print
         System.out.println("=====学生班级信息记录数如下=====");
@@ -524,6 +553,25 @@ public class StudentService {
             //返回上一步
         }
     }
+
+    /**
+     * @param studentNumber
+     * @return
+     */
+    public Student findStudentByNumber(String studentNumber) {
+        Student student = null;
+        if (studentNumber == null || studentNumber.isEmpty()) {
+            return student;
+        }
+        Student studentQuery = new Student();
+        studentQuery.setNumber(studentNumber);
+        LinkNode linkNode = baseService.getPersonRepository().search(studentQuery);
+        if (linkNode != null && linkNode.data != null) {
+            student = (Student) baseService.getPersonRepository().search(studentQuery).data;
+        }
+        return student;
+    }
+
 
     /**
      * @throws IOException

@@ -4,7 +4,7 @@ import com.example.algorithm.liststudent.base.LinkNode;
 import com.example.algorithm.liststudent.base.Score;
 
 /**
- *成绩信息
+ * 成绩信息
  */
 public class ScoreRepository<T> {
 
@@ -79,18 +79,21 @@ public class ScoreRepository<T> {
      * @param score
      * @return
      */
-    public LinkNode<T> search(Score score) {
+    public Score search(Score score) {
         LinkNode p = head;
         if (score == null) {
             return null;
         }
         while (p != null && p.next != null) {
             //课程对象
-            Score temp = (Score) p.data;
-            //学号相同
-            if (score.scNumber.equals(temp.scNumber)) {
-                return p;
+            if (p.data != null) {
+                Score temp = (Score) p.data;
+                //学号相同
+                if (score.scNumber.equals(temp.scNumber)) {
+                    return (Score) p.data;
+                }
             }
+
             p = p.next;
         }
         return null;

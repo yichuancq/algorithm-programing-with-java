@@ -89,12 +89,10 @@ public class CourseRepository<T> {
         }
         while (p != null && p.next != null) {
             //课程对象
-            if (p.data != null) {
-                Course temp = (Course) p.data;
-                //学号相同
-                if (course.curseNumber.equals(temp.curseNumber)) {
-                    return p;
-                }
+            Course temp = (Course) p.next.data;
+            //学号相同
+            if (course.curseNumber.equals(temp.curseNumber)) {
+                return p.next;
             }
             p = p.next;
         }

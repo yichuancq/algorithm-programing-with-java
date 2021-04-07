@@ -192,8 +192,9 @@ public class CourseService {
         LinkNode<Course> courseLinkNode = baseService.getCourseRepository().search(queryCourse);
         if (courseLinkNode == null) {
             return course;
+        } else {
+            return courseLinkNode.data;
         }
-        return courseLinkNode.data;
     }
 
 
@@ -260,7 +261,7 @@ public class CourseService {
         //
         studentService.loadStudentInfo();
         //文件系统内的教师信息是否存在
-        Student studentDb = this.findStudentByNumber(studentNumber);
+        Student studentDb = new StudentService(baseService).findStudentByNumber(studentNumber);
         if (studentDb == null) {
             System.out.println("学生信息不存在");
             return;
@@ -280,25 +281,6 @@ public class CourseService {
         //存在则添加教师选课信息
         //保存到磁盘
         studentService.saveStudentInfoToDisk();
-    }
-
-    /**
-     * @param studentNumber
-     * @return
-     */
-    private Student findStudentByNumber(String studentNumber) {
-        Student student = null;
-        if (studentNumber == null || studentNumber.isEmpty()) {
-            return student;
-        }
-        Student studentQuery = new Student();
-        studentQuery.setNumber(studentNumber);
-
-        LinkNode linkNode = baseService.getPersonRepository().search(studentQuery);
-        if (linkNode != null && linkNode.data != null) {
-            student = (Student) baseService.getPersonRepository().search(studentQuery).data;
-        }
-        return student;
     }
 
 

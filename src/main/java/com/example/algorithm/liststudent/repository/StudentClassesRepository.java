@@ -6,8 +6,8 @@ import com.example.algorithm.liststudent.base.StudentClasses;
 /**
  * 学生课程信息链表
  *
- * @author yichuan
  * @param <T>
+ * @author yichuan
  */
 public class StudentClassesRepository<T> {
 
@@ -75,6 +75,30 @@ public class StudentClassesRepository<T> {
             rear = rear.next;
         }
     }
+
+    /**
+     * 通过对象查找元素
+     *
+     * @param target
+     * @return
+     */
+    public StudentClasses search(StudentClasses target) {
+        LinkNode p = head;
+        if (target == null) {
+            return null;
+        }
+        while (p != null && p.next != null) {
+            //person
+            StudentClasses temp = (StudentClasses) p.next.data;
+            //学生编码相同
+            if (temp.stuNumber.equals(target.stuNumber)) {
+                return (StudentClasses) p.next.data;
+            }
+            p = p.next;
+        }
+        return null;
+    }
+
 
     /**
      * 链表结点生成对象数组

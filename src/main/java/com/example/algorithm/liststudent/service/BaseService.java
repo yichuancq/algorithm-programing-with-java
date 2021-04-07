@@ -15,19 +15,30 @@ public class BaseService<T> {
     public final String studentFilePath = "src/main/resources/student.txt";
 
     /**
-     * 保存文件的路径
+     * 学生班级关系
      */
     public final String studentClassesFilePath = "src/main/resources/studentClasses.txt";
 
     /**
-     * 保存文件的路径
+     * 班级
      */
     public final String classesFilePath = "src/main/resources/classes.txt";
 
+    /**
+     * 教师
+     */
     public final String teacherFilePath = "src/main/resources/teacher.txt";
-
+    /**
+     * 课程
+     */
     //course
     public final String courseFilePath = "src/main/resources/course.txt";
+
+    /**
+     * 成绩
+     */
+    //course
+    public final String scoreFilePath = "src/main/resources/score.txt";
 
     /**
      *
@@ -51,21 +62,26 @@ public class BaseService<T> {
 
     private CourseRepository courseRepository;
 
+    private  ScoreRepository scoreRepository;
+
     public BaseService() {
         studentClassesRepository = new StudentClassesRepository();
         studentRepository = new StudentRepository();
         classesRepository = new ClassesRepository();
         teacherRepository=new TeacherRepository();
         courseRepository=new CourseRepository();
+        scoreRepository=new ScoreRepository();
+
     }
 
-//    /**
-//     * @param arrays
-//     */
-//    public void init(T[] arrays) {
-//        studentClassesRepository = new StudentClassesRepository(arrays);
-//    }
 
+    public ScoreRepository getScoreRepository() {
+        return scoreRepository;
+    }
+
+    public void setScoreRepository(ScoreRepository scoreRepository) {
+        this.scoreRepository = scoreRepository;
+    }
 
     public StudentClassesRepository getStudentClassesLinkList() {
         return studentClassesRepository;

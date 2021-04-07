@@ -165,6 +165,8 @@ public class TeacherService {
         for (Teacher t : teachers) {
             String createTime = Utils.getStringFormatDate(t.getCreateTime());
             String updateTime = Utils.getStringFormatDate(t.getUpdateTime());
+            System.out.println("教师姓名：" + t.getName());
+            System.out.println("");
             //本教师选课
             for (Teacher.TeacherCourse teacherCourse : t.getTeacherCourses()) {
                 ++i;
@@ -218,6 +220,22 @@ public class TeacherService {
             //显示学生信息
             this.showTeacherInto();
         }
+    }
+
+
+    /**
+     * @param teacherNumber
+     * @return
+     */
+    public Teacher findTeacherByNumber(String teacherNumber) {
+        Teacher teacher = null;
+        if (teacherNumber == null || teacherNumber.isEmpty()) {
+            return teacher;
+        }
+        Teacher teacherQuery = new Teacher();
+        teacherQuery.setNumber(teacherNumber);
+        teacher = baseService.getTeacherRepository().search(teacherQuery);
+        return teacher;
     }
 
 
