@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * 教师实体
+ *
  * @author yichuan
  */
 public class Teacher extends Person {
@@ -15,10 +16,10 @@ public class Teacher extends Person {
 
     public Teacher() {
     }
+
     public Teacher(String number, String name) {
         super(number, name);
     }
-
 
     /**
      * 教师选课信息

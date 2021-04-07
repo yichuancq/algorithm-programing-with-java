@@ -7,10 +7,10 @@ import com.example.algorithm.liststudent.base.Student;
 /**
  * 数据链表
  *
- * @author yichuan
  * @param <T>
+ * @author yichuan
  */
-public class PersonRepository<T> {
+public class StudentRepository<T> {
     /**
      * 头结点
      */
@@ -19,7 +19,7 @@ public class PersonRepository<T> {
     /**
      * 构造函数
      */
-    public PersonRepository() {
+    public StudentRepository() {
         head = new LinkNode<>();
     }
 
@@ -29,7 +29,7 @@ public class PersonRepository<T> {
      * @param arrays
      * @return
      */
-    public PersonRepository(T[] arrays) {
+    public StudentRepository(T[] arrays) {
         //指向头结点
         this();
         LinkNode rear = head;
@@ -59,6 +59,7 @@ public class PersonRepository<T> {
             rear = rear.next;
         }
     }
+
     public T remove(int i) {
         //front指向头结点
         LinkNode<T> front = this.head;
@@ -170,6 +171,29 @@ public class PersonRepository<T> {
     }
 
     /**
+     * @param target
+     */
+    public void update(Student target) {
+        LinkNode p = head;
+        if (target == null) {
+            return;
+        }
+        while (p != null && p.next != null) {
+            //课程对象
+            if (p.data != null) {
+                Student temp = (Student) p.data;
+                //number相同
+                if (target.getNumber().equals(temp.getNumber())) {
+                    //修改课程信息
+                    p.data = target;
+                }
+            }
+            p = p.next;
+        }
+    }
+
+
+    /**
      * 链表的长度
      *
      * @return
@@ -225,5 +249,6 @@ public class PersonRepository<T> {
         }
         return arrays;
     }
+
 
 }

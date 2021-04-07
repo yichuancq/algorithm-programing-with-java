@@ -3,6 +3,7 @@ package com.example.algorithm.liststudent.service;
 import com.alibaba.fastjson.JSON;
 import com.example.algorithm.liststudent.base.Course;
 import com.example.algorithm.liststudent.base.LinkNode;
+import com.example.algorithm.liststudent.base.Student;
 import com.example.algorithm.liststudent.base.Teacher;
 import com.example.algorithm.liststudent.repository.CourseRepository;
 import com.example.algorithm.liststudent.utils.Utils;
@@ -206,6 +207,109 @@ public class CourseService {
         new TeacherService(baseService).showTeacherCourseInto();
     }
 
+
+    /**
+     * 查看学生选课信息
+     */
+    private void showStudentChooseCourse() throws Exception {
+        new StudentService(baseService).showStudentCourseInto();
+    }
+
+
+    /**
+     * 添加学生选课
+     * 1、显示学生信息
+     * 2、显示课程信息
+     * 3、保存学生选课记录到文件
+     */
+    private void addStudentChooseCourse() throws Exception {
+        // todo 添加学生选课
+        new StudentService(baseService).showStudentInto();
+        //2、显示课程信息
+        this.showCourseInto();
+        //请学生输入自己编号
+        System.out.println("请学生输入自己编号");
+        //教师编码
+        String studentNumber = "";
+        //课程编码
+        String courseNumber = "";
+        //用户输入
+        Scanner scanner = new Scanner(System.in);
+        studentNumber = scanner.nextLine();
+        System.out.println("输入：" + studentNumber);
+        System.out.println("输入选择课程编码");
+        scanner = new Scanner(System.in);
+        courseNumber = scanner.nextLine();
+        //输入合法性判断
+        if (studentNumber.isEmpty() || courseNumber.isEmpty()) {
+            System.out.println("录入不合法,请完善录入信息！");
+            return;
+        }
+        this.saveStudentCourseToDisk(studentNumber, courseNumber);
+    }
+
+    /**
+     * @param studentNumber
+     * @param courseNumber
+     * @throws Exception
+     */
+    private void saveStudentCourseToDisk(String studentNumber, String courseNumber) throws Exception {
+        // TODO: 2021/4/7
+        // 加载教师信息
+        StudentService studentService = new StudentService(baseService);
+        //
+        studentService.loadStudentInfo();
+        //文件系统内的教师信息是否存在
+        Student studentDb = this.findStudentByNumber(studentNumber);
+        if (studentDb == null) {
+            System.out.println("学生信息不存在");
+            return;
+        }
+        //是否已经存在选课记录？
+        //保存信息到磁盘存档
+        Student.StudentCourse studentCourseDb = new Student.StudentCourse(studentNumber, courseNumber);
+        //get and add to list
+        if (studentDb.getStudentCourses() != null) {
+            studentDb.getStudentCourses().clear();
+            studentDb.getStudentCourses().add(studentCourseDb);
+            //修改最后时间
+            studentDb.setUpdateTime(new Date());
+        }
+        //修改学生选课信息
+        this.modStudentInfo(studentDb);
+        //存在则添加教师选课信息
+        //保存到磁盘
+        studentService.saveStudentInfoToDisk();
+    }
+
+    /**
+     * @param studentNumber
+     * @return
+     */
+    private Student findStudentByNumber(String studentNumber) {
+        Student student = null;
+        if (studentNumber == null || studentNumber.isEmpty()) {
+            return student;
+        }
+        Student studentQuery = new Student();
+        studentQuery.setNumber(studentNumber);
+
+        LinkNode linkNode = baseService.getPersonRepository().search(studentQuery);
+        if (linkNode != null && linkNode.data != null) {
+            student = (Student) baseService.getPersonRepository().search(studentQuery).data;
+        }
+        return student;
+    }
+
+
+    /**
+     * @param student
+     */
+    private void modStudentInfo(Student student) throws Exception {
+        baseService.getPersonRepository().update(student);
+    }
+
+
     /**
      * 添加教师选课
      * 1、显示教师信息
@@ -299,15 +403,6 @@ public class CourseService {
         return baseService.getTeacherRepository().search(teacherQuery);
     }
 
-    /**
-     * 添加学生选课
-     * 1、显示学生信息
-     * 2、显示课程信息
-     * 3、保存学生选课记录到文件
-     */
-    private void addStudentChooseCourse() throws Exception {
-        // TODO: 2021/4/7 修改学生选课
-    }
 
     /**
      * 显示课程信息菜单
@@ -322,6 +417,7 @@ public class CourseService {
         stringBuilder.append("5.添加教师选课\r\n");
         stringBuilder.append("6.查看教师选课\r\n");
         stringBuilder.append("7.添加学生选课\r\n");
+        stringBuilder.append("8.查看学生选课\r\n");
         stringBuilder.append("0.返回上一层\r\n");
         stringBuilder.append("请选择?(0-4)\r\n");
         stringBuilder.append("===================\r\n");
@@ -355,7 +451,7 @@ public class CourseService {
                     System.out.println(disInfo);
                     break;
                 case 4:
-                    System.out.println("添加学生选课");
+                    System.out.println("修改课程信息");
                     break;
                 case 5:
                     System.out.println("添加教师选课");
@@ -365,6 +461,16 @@ public class CourseService {
                 case 6:
                     System.out.println("查看教师选课");
                     this.showTeacherChooseCourse();
+                    System.out.println(disInfo);
+                    break;
+                case 7:
+                    System.out.println("添加学生选课");
+                    this.addStudentChooseCourse();
+                    System.out.println(disInfo);
+                    break;
+                case 8:
+                    System.out.println("查看学生选课");
+                    this.showStudentChooseCourse();
                     System.out.println(disInfo);
                     break;
                 default:

@@ -2,7 +2,8 @@ package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
 import com.example.algorithm.liststudent.base.*;
-import com.example.algorithm.liststudent.repository.PersonRepository;
+import com.example.algorithm.liststudent.repository.StudentClassesRepository;
+import com.example.algorithm.liststudent.repository.StudentRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
 import java.io.FileReader;
@@ -55,19 +56,31 @@ public class StudentService {
         return null;
     }
 
-    /**
-     * 显示学生基本信息
-     */
-    public void showStudentInto() throws Exception {
+    public Student[] loadStudentInfo() throws Exception {
+
         Student[] students = this.readStudentInfoFromDisk();
         if (students == null || students.length == 0) {
             System.out.println("无信息，返回上一级");
             System.out.println("");
             this.showPersonMenu();
-            return;
+            return students;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        baseService.setPersonLinkList(new PersonRepository(students));
+        baseService.setPersonRepository(new StudentRepository(students));
+        return students;
+
+    }
+
+    /**
+     * 显示学生基本信息
+     */
+    public void showStudentInto() throws Exception {
+        Student[] students = this.loadStudentInfo();
+        if (students == null || students.length == 0) {
+            System.out.println("无信息，返回上一级");
+            System.out.println("");
+            this.showPersonMenu();
+        }
         //print
         System.out.println("=====学生总人数如下=====");
         System.out.println("学生总人数：" + students.length);
@@ -82,6 +95,49 @@ public class StudentService {
         return;
 
     }
+
+    /**
+     * 显示学生选课信息
+     */
+    public void showStudentCourseInto() throws Exception {
+        Student[] students = this.loadStudentInfo();
+        if (students == null || students.length == 0) {
+            System.out.println("无信息，返回上一级");
+            System.out.println("");
+            this.showPersonMenu();
+        }
+        System.out.println("=====学生总人数如下=====");
+        System.out.println("学生总人数：" + students.length);
+        System.out.println("=====学生信息如下=====");
+        CourseService courseService = new CourseService(baseService);
+        //加载信息
+        courseService.loadData();
+        int i = 0;
+        for (Student student : students) {
+            //本学生选课
+            String createTime = Utils.getStringFormatDate(student.getCreateTime());
+            String updateTime = Utils.getStringFormatDate(student.getUpdateTime());
+            for (Student.StudentCourse studentCourse : student.getStudentCourses()) {
+                ++i;
+                System.out.println("===row :" + i + "===");
+                System.out.println("学号：" + student.getNumber() + "\t姓名：" + student.getName() + "\t" + "添加日期：" + createTime + "\t修改日期：" + updateTime);
+                System.out.println("本学生选课信息如下：");
+                System.out.println("课程编码:" + studentCourse.courseNumber);
+                Course queryKey = new Course();
+                //查询课程服务类
+                queryKey.curseNumber = studentCourse.courseNumber;
+                //find course info
+                Course course = courseService.searchByKey(queryKey);
+                if (course != null) {
+                    System.out.println("课程名称:" + course.curseName + "\t 课程学分:" + course.gradePoint);
+                }
+            }
+        }
+        System.out.println("======end =====");
+        return;
+
+    }
+
 
     /**
      * 添加学生
@@ -106,9 +162,9 @@ public class StudentService {
             return;
         }
         //添加到内存链表
-        this.baseService.getPersonLinkList().add(student);
-        PersonRepository personRepository = this.baseService.getPersonLinkList();
-        System.out.println("学生集合长度：" + personRepository.size());
+        this.baseService.getPersonRepository().add(student);
+        StudentRepository studentRepository = this.baseService.getPersonRepository();
+        System.out.println("学生集合长度：" + studentRepository.size());
         //保存学生信息到文件
         this.saveStudentInfoToDisk();
         //返回上一步
@@ -117,8 +173,8 @@ public class StudentService {
     /**
      * 保存学生信息到文件
      */
-    private void saveStudentInfoToDisk() throws Exception {
-        Student[] students = this.baseService.getPersonLinkList().listToArrays();
+    public void saveStudentInfoToDisk() throws Exception {
+        Student[] students = this.baseService.getPersonRepository().listToArrays();
         if (students == null || students.length == 0) {
             System.out.println("无写入内容到磁盘!");
             return;
@@ -194,7 +250,7 @@ public class StudentService {
         //通过对象查找元素
         Person personKey = new Person(personNumber, "");
         //查询学生信息
-        LinkNode<Person> personLinkNode = baseService.getPersonLinkList().search(personKey);
+        LinkNode<Person> personLinkNode = baseService.getPersonRepository().search(personKey);
         if (personLinkNode == null) {
             System.out.println("查询失败， 无此记录~");
             //返回上一层
@@ -259,7 +315,8 @@ public class StudentService {
             System.out.println("文件无数据，请继续操作~");
             return;
         }
-        baseService.init(arrays);
+        //如果存在记录同时加载到内存里面，给链表赋值
+        baseService.setPersonRepository(new StudentRepository(arrays));
     }
 
     /**
@@ -291,7 +348,7 @@ public class StudentService {
      *
      * @throws Exception
      */
-    private void saveStudentClassesLinkNodesInfoToDisk() throws Exception {
+    public void saveStudentClassesLinkNodesInfoToDisk() throws Exception {
         StudentClasses[] classes = baseService.getStudentClassesLinkList().listToArrays();
         if (classes == null || classes.length == 0) {
             System.out.println("无写入内容到磁盘!");
@@ -416,7 +473,9 @@ public class StudentService {
             return;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
-        baseService.init(studentClasses);
+        //如果存在记录同时加载到内存里面，给链表赋值
+        baseService.setStudentClassesRepository(new StudentClassesRepository(studentClasses));
+        //
         int size = baseService.getStudentClassesLinkList().size();
         //print
         System.out.println("=====学生班级信息记录数如下=====");
@@ -454,10 +513,10 @@ public class StudentService {
             this.showPersonMenu();
             return;
         }
-        PersonRepository personRepository = this.baseService.getPersonLinkList();
-        if (!stuNumber.isEmpty() && personRepository != null && personRepository.size() > 0) {
+        StudentRepository studentRepository = this.baseService.getPersonRepository();
+        if (!stuNumber.isEmpty() && studentRepository != null && studentRepository.size() > 0) {
             //执行删除动作
-            personRepository.delete(new Student(stuNumber, ""));
+            studentRepository.delete(new Student(stuNumber, ""));
             // 把内存数据删除的写入文件
             this.saveStudentInfoToDisk();
             //显示学生信息
@@ -515,4 +574,6 @@ public class StudentService {
             }
         }
     }
+
+
 }

@@ -12,8 +12,6 @@ public class TreeNode {
         this.val = val;
     }
 
-    public TreeNode() {
-    }
 
     public TreeNode(int val, TreeNode left, TreeNode right) {
         this.val = val;

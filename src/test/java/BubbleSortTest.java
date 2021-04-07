@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+
 /**
  * 冒泡排序
  */
@@ -34,13 +35,7 @@ public class BubbleSortTest {
                     this.swap(arrays, j, j + 1);
                 }
             }
-//            for (int j = 0; j < arrays.length - 1 - i; j++) {
-//                //排序方式
-//                if (ascFlag ? (arrays[j + 1] < arrays[j]) : (arrays[j + 1] > arrays[j])) {
-//                    //交换元素
-//                    this.swap(arrays, j, j + 1);
-//                }
-//            }
+
         }
         return arrays;
     }
@@ -61,7 +56,8 @@ public class BubbleSortTest {
     @Test
     public void test() {
         BubbleSortTest bubbleSortTest = new BubbleSortTest();
-        Integer[] arrays = {2, 5, 4, 3, 1, 6, 9, 8, 7};
+        // Integer[] arrays = {1, 2, 3, 4, 5, 6, 7};
+        Integer[] arrays = {1, 2, 3};
         bubbleSortTest.showData(arrays);
         //排序
         System.out.println("开始排序");

@@ -37,7 +37,7 @@ public class BaseService<T> {
     /**
      * 学生信息链表
      */
-    private PersonRepository personRepository;
+    private StudentRepository studentRepository;
 
     /**
      * 班级
@@ -53,18 +53,18 @@ public class BaseService<T> {
 
     public BaseService() {
         studentClassesRepository = new StudentClassesRepository();
-        personRepository = new PersonRepository();
+        studentRepository = new StudentRepository();
         classesRepository = new ClassesRepository();
         teacherRepository=new TeacherRepository();
         courseRepository=new CourseRepository();
     }
 
-    /**
-     * @param arrays
-     */
-    public void init(T[] arrays) {
-        studentClassesRepository = new StudentClassesRepository(arrays);
-    }
+//    /**
+//     * @param arrays
+//     */
+//    public void init(T[] arrays) {
+//        studentClassesRepository = new StudentClassesRepository(arrays);
+//    }
 
 
     public StudentClassesRepository getStudentClassesLinkList() {
@@ -79,12 +79,12 @@ public class BaseService<T> {
         return studentFilePath;
     }
 
-    public PersonRepository getPersonLinkList() {
-        return personRepository;
+    public StudentRepository getPersonRepository() {
+        return studentRepository;
     }
 
-    public void setPersonLinkList(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public void setPersonRepository(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     public ClassesRepository getClassesRepository() {
