@@ -81,21 +81,45 @@ public class TeacherRepository<T> {
      * @param target
      * @return
      */
-    public LinkNode<T> search(Teacher target) {
+    public Teacher search(Teacher target) {
         LinkNode p = head;
         if (target == null) {
             return null;
         }
         while (p != null && p.next != null) {
             //课程对象
-            Teacher temp = (Teacher) p.data;
-            //number相同
-            if (target.getNumber().equals(temp.getNumber())) {
-                return p;
+            if (p.data != null) {
+                Teacher temp = (Teacher) p.data;
+                //number相同
+                if (target.getNumber().equals(temp.getNumber())) {
+                    return (Teacher) p.data;
+                }
             }
             p = p.next;
         }
         return null;
+    }
+
+    /**
+     * 修改数据
+     */
+    public void update(Teacher target) {
+        LinkNode p = head;
+        if (target == null) {
+            return;
+        }
+        while (p != null && p.next != null) {
+            //课程对象
+            if (p.data != null) {
+                Teacher temp = (Teacher) p.data;
+                //number相同
+                if (target.getNumber().equals(temp.getNumber())) {
+                    //修改课程信息
+                    p.data = target;
+                }
+            }
+            p = p.next;
+        }
     }
 
 

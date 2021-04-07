@@ -1,6 +1,7 @@
 package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
+import com.example.algorithm.liststudent.base.Course;
 import com.example.algorithm.liststudent.base.Teacher;
 import com.example.algorithm.liststudent.repository.TeacherRepository;
 import com.example.algorithm.liststudent.utils.Utils;
@@ -54,7 +55,7 @@ public class TeacherService {
     /**
      * 保存信息到文件
      */
-    private void saveTeacherInfoToDisk() throws Exception {
+    public void saveTeacherInfoToDisk() throws Exception {
         Teacher[] teachers = this.baseService.getTeacherRepository().listToArrays();
         if (teachers == null || teachers.length == 0) {
             System.out.println("无写入内容到磁盘!");
@@ -102,18 +103,33 @@ public class TeacherService {
     /**
      * 1、先加载磁盘数据
      * 2、如果存在记录同时加载到内存里面，给链表赋值
-     * 3、显示到用户界面
+     *
+     * @throws Exception
      */
-    private void showTeacherInto() throws Exception {
+    public Teacher[] LoadTeacherInfo() throws Exception {
         Teacher[] teachers = this.readInfoFromDisk();
         if (teachers == null || teachers.length == 0) {
             System.out.println("无信息，返回上一级");
             System.out.println("");
-            return;
+            return teachers;
         }
         //如果存在记录同时加载到内存里面，给链表赋值
         baseService.setTeacherRepository(new TeacherRepository(teachers));
+        return teachers;
+    }
+
+    /**
+     * 1、先加载磁盘数据
+     * 2、如果存在记录同时加载到内存里面，给链表赋值
+     * 3、显示到用户界面
+     */
+    public void showTeacherInto() throws Exception {
+        Teacher[] teachers = LoadTeacherInfo();
         //print
+        if (teachers == null || teachers.length == 0) {
+            System.out.println("无信息，返回上一级");
+            return;
+        }
         System.out.println("=====教师人数如下=====");
         System.out.println("教师数目：" + teachers.length);
         System.out.println("=====教师信息如下=====");
@@ -123,6 +139,49 @@ public class TeacherService {
             String updateTime = Utils.getStringFormatDate(t.getUpdateTime());
             System.out.println("教师编号：" + t.getNumber() + "\t教师姓名：" + t.getName() + "\t"
                     + "添加日期：" + createTime + "\t修改日期：" + updateTime);
+        }
+        System.out.println("======end=====");
+    }
+
+    /**
+     * 教师选课信息
+     *
+     * @throws Exception
+     */
+    public void showTeacherCourseInto() throws Exception {
+        Teacher[] teachers = LoadTeacherInfo();
+        //print
+        if (teachers == null || teachers.length == 0) {
+            System.out.println("无信息，返回上一级");
+            return;
+        }
+        System.out.println("=====教师人数如下=====");
+        System.out.println("教师数目：" + teachers.length);
+        System.out.println("=====教师信息如下=====");
+        CourseService courseService = new CourseService(baseService);
+        //加载信息
+        courseService.loadData();
+        int i = 0;
+        for (Teacher t : teachers) {
+            String createTime = Utils.getStringFormatDate(t.getCreateTime());
+            String updateTime = Utils.getStringFormatDate(t.getUpdateTime());
+            //本教师选课
+            for (Teacher.TeacherCourse teacherCourse : t.getTeacherCourses()) {
+                ++i;
+                System.out.println("===row :" + i + "===");
+                System.out.println("教师编号：" + t.getNumber() + "\t教师姓名：" + t.getName() + "\t" + "添加日期：" + createTime + "\t修改日期：" + updateTime);
+                System.out.println("本教师选课信息如下：");
+                System.out.println("课程编码:" + teacherCourse.courseNumber);
+                Course queryKey = new Course();
+                //查询课程服务类
+                queryKey.curseNumber = teacherCourse.courseNumber;
+                //find course info
+                Course course = courseService.searchByKey(queryKey);
+                if (course != null) {
+                    System.out.println("课程名称:" + course.curseName + "\t 课程学分:" + course.gradePoint);
+                }
+
+            }
         }
         System.out.println("======end=====");
     }
@@ -160,6 +219,7 @@ public class TeacherService {
             this.showTeacherInto();
         }
     }
+
 
     /**
      * 显示教师信息菜单
