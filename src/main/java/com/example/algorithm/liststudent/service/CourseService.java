@@ -69,6 +69,9 @@ public class CourseService {
      * @throws Exception
      */
     private void addCourse() throws Exception {
+        //添加课程信息
+        loadData();
+        //
         System.out.println("=====显示信息====");
         String curseNumber = Utils.getInnerId("CRS");
         System.out.println("系统生成的课程编号:" + curseNumber);
@@ -157,7 +160,7 @@ public class CourseService {
         //print
         System.out.println("=====课程数如下=====");
         System.out.println("课程数目：" + courses.length);
-        System.out.println("=====教师信息如下=====");
+        System.out.println("=====课程信息=====");
         for (Course course : courses) {
             String createTime = Utils.getStringFormatDate(course.getCreateTime());
             String updateTime = Utils.getStringFormatDate(course.getUpdateTime());
@@ -271,10 +274,12 @@ public class CourseService {
         Student.StudentCourse studentCourseDb = new Student.StudentCourse(studentNumber, courseNumber);
         //get and add to list
         if (studentDb.getStudentCourses() != null) {
-            studentDb.getStudentCourses().clear();
-            studentDb.getStudentCourses().add(studentCourseDb);
-            //修改最后时间
-            studentDb.setUpdateTime(new Date());
+            //保留历史数据
+            if (!studentDb.getStudentCourses().contains(studentCourseDb)) {
+                studentDb.getStudentCourses().add(studentCourseDb);
+                //修改最后时间
+                studentDb.setUpdateTime(new Date());
+            }
         }
         //修改学生选课信息
         this.modStudentInfo(studentDb);
@@ -347,10 +352,12 @@ public class CourseService {
         Teacher.TeacherCourse teacherCourse = new Teacher.TeacherCourse(teacherNumber, courseNumber);
         //get and add to list
         if (teacherDb.getTeacherCourses() != null) {
-            teacherDb.getTeacherCourses().clear();
-            teacherDb.getTeacherCourses().add(teacherCourse);
-            //修改最后时间
-            teacherDb.setUpdateTime(new Date());
+            if (!teacherDb.getTeacherCourses().contains(teacherCourse)) {
+                teacherDb.getTeacherCourses().add(teacherCourse);
+                //修改最后时间
+                teacherDb.setUpdateTime(new Date());
+            }
+
         }
         //修改教师选课信息
         this.modTeacherInfo(teacherDb);
