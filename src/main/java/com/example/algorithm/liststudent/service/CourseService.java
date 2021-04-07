@@ -285,7 +285,7 @@ public class CourseService {
         this.modStudentInfo(studentDb);
         //存在则添加教师选课信息
         //保存到磁盘
-        studentService.saveStudentInfoToDisk();
+      //todo   studentService.saveStudentInfoToDisk(null);
     }
 
 

@@ -1,14 +1,14 @@
 package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.algorithm.liststudent.base.*;
 import com.example.algorithm.liststudent.repository.StudentClassesRepository;
 import com.example.algorithm.liststudent.repository.StudentRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -56,9 +56,45 @@ public class StudentService {
         return null;
     }
 
-    public Student[] loadStudentInfo() throws Exception {
+    /**
+     * @return
+     * @throws Exception
+     */
+    public Student[] readLineStudentInfoFromDisk() throws Exception {
+        //文件路径检查
+        boolean flag = Utils.checkFile(baseService.studentFilePath);
+        if (!flag) {
+            return null;
+        }
+        FileReader fileReader = new FileReader(baseService.studentFilePath);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<Student> studentList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                Student student = JSON.toJavaObject(jsonObject, Student.class);
+                System.out.println(student.getName());
+                studentList.add(student);
+            }
 
-        Student[] students = this.readStudentInfoFromDisk();
+        }
+        fileReader.close();
+        if (studentList.size() > 0) {
+            Student[] students = new Student[studentList.size()];
+            for (int i = 0; i < studentList.size(); i++) {
+                students[i] = studentList.get(i);
+            }
+            return students;
+        }
+        return null;
+    }
+
+    public Student[] loadStudentInfo() throws Exception {
+        Student[] students = this.readLineStudentInfoFromDisk();
         if (students == null || students.length == 0) {
             System.out.println("无信息，返回上一级");
             System.out.println("");
@@ -75,7 +111,7 @@ public class StudentService {
      * 显示学生基本信息
      */
     public void showStudentInto() throws Exception {
-        Student[] students = this.loadStudentInfo();
+        Student[] students = this.readLineStudentInfoFromDisk();
         if (students == null || students.length == 0) {
             System.out.println("无信息，返回上一级");
             System.out.println("");
@@ -161,27 +197,34 @@ public class StudentService {
             System.out.println("录入不合法");
             return;
         }
+        //是否提示名称重复？
         //添加到内存链表
         this.baseService.getPersonRepository().add(student);
         StudentRepository studentRepository = this.baseService.getPersonRepository();
         System.out.println("学生集合长度：" + studentRepository.size());
         //保存学生信息到文件
-        this.saveStudentInfoToDisk();
+        this.saveStudentInfoToDisk(student);
         //返回上一步
+        //保存后重新加载到内存链表
     }
 
     /**
      * 保存学生信息到文件
      */
-    public void saveStudentInfoToDisk() throws Exception {
-        Student[] students = this.baseService.getPersonRepository().listToArrays();
-        if (students == null || students.length == 0) {
+    public void saveStudentInfoToDisk(Student student) throws Exception {
+        if (student == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
-        String fileContent = JSON.toJSONString(students);
-        FileWriter fileWriter = new FileWriter(baseService.studentFilePath);
-        fileWriter.write(fileContent);
+        //
+        FileWriter fileWriter = new FileWriter(baseService.studentFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        String fileContent = JSON.toJSONString(student);
+        //
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -399,7 +442,7 @@ public class StudentService {
         if (stuNumber.isEmpty() || classesNumber.isEmpty()) {
             System.out.println("输入信息不完整！");
             //返回上一层
-            this.editStudent();
+            return;
         }
         //查询学生信息
         this.searchPerson(stuNumber, classesNumber);
@@ -539,7 +582,6 @@ public class StudentService {
         }
         if ("0".equals(stuNumber)) {
             //返回上一步
-            this.showPersonMenu();
             return;
         }
         StudentRepository studentRepository = this.baseService.getPersonRepository();
@@ -547,7 +589,7 @@ public class StudentService {
             //执行删除动作
             studentRepository.delete(new Student(stuNumber, ""));
             // 把内存数据删除的写入文件
-            this.saveStudentInfoToDisk();
+            Utils.removeLineForLineContent(this.baseService.studentFilePath, "number", stuNumber, false);
             //显示学生信息
             this.showStudentInto();
             //返回上一步
