@@ -1,13 +1,17 @@
 package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.algorithm.liststudent.base.Course;
 import com.example.algorithm.liststudent.base.Teacher;
 import com.example.algorithm.liststudent.repository.TeacherRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -48,22 +52,25 @@ public class TeacherService {
         Teacher teacher = new Teacher(teacherNumber, teacherName);
         this.baseService.getTeacherRepository().add(teacher);
         System.out.println("集合长度：" + this.baseService.getTeacherRepository().size());
-        this.saveTeacherInfoToDisk();
+        this.saveTeacherInfoToDisk(teacher);
 
     }
 
     /**
      * 保存信息到文件
      */
-    public void saveTeacherInfoToDisk() throws Exception {
-        Teacher[] teachers = this.baseService.getTeacherRepository().listToArrays();
-        if (teachers == null || teachers.length == 0) {
+    public void saveTeacherInfoToDisk(final Teacher teacher) throws Exception {
+        if (teacher == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
-        String fileContent = JSON.toJSONString(teachers);
-        FileWriter fileWriter = new FileWriter(baseService.teacherFilePath);
-        fileWriter.write(fileContent);
+        FileWriter fileWriter = new FileWriter(baseService.teacherFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        String fileContent = JSON.toJSONString(teacher);
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -79,18 +86,21 @@ public class TeacherService {
             return null;
         }
         FileReader fileReader = new FileReader(baseService.teacherFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<Teacher> teacherList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                Teacher temp = JSON.toJavaObject(jsonObject, Teacher.class);
+                teacherList.add(temp);
+            }
+
         }
         fileReader.close();
-        // JSON串转用户对象列表
-        List<Teacher> teacherList = JSON.parseArray(context, Teacher.class);
-        // list to array
-        if (teacherList == null || teacherList.size() == 0) {
-            return null;
-        }
         Teacher[] teachers = new Teacher[teacherList.size()];
         for (int i = 0; i < teacherList.size(); i++) {
             teachers[i] = teacherList.get(i);
@@ -133,7 +143,6 @@ public class TeacherService {
         System.out.println("=====教师人数如下=====");
         System.out.println("教师数目：" + teachers.length);
         System.out.println("=====教师信息如下=====");
-
         for (Teacher t : teachers) {
             String createTime = Utils.getStringFormatDate(t.getCreateTime());
             String updateTime = Utils.getStringFormatDate(t.getUpdateTime());
@@ -208,18 +217,16 @@ public class TeacherService {
         }
         if ("0".equals(teacherNumber)) {
             //返回上一步
-            this.showTeacherMenu();
             return;
         }
-        TeacherRepository teacherRepository = this.baseService.getTeacherRepository();
-        if (!teacherNumber.isEmpty() && teacherRepository != null && teacherRepository.size() > 0) {
-            //执行删除动作
-            teacherRepository.delete(new Teacher(teacherNumber, ""));
-            // 把内存数据删除的写入文件
-            this.saveTeacherInfoToDisk();
-            //显示学生信息
-            this.showTeacherInto();
+        if (teacherNumber.isEmpty()) {
+            System.out.println("教师编号信息不存在");
+            return;
         }
+        //执行删除动作
+        Utils.removeLineForLineContent(this.baseService.teacherFilePath, "number", teacherNumber, true);
+        //显示信息
+        this.showTeacherInto();
     }
 
 

@@ -27,34 +27,6 @@ public class StudentService {
         this.baseService = baseService;
     }
 
-    /**
-     * @return
-     * @throws Exception
-     */
-    public Student[] readStudentInfoFromDisk() throws Exception {
-        //文件路径检查
-        boolean flag = Utils.checkFile(baseService.studentFilePath);
-        if (!flag) {
-            return null;
-        }
-        FileReader fileReader = new FileReader(baseService.studentFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
-        }
-        fileReader.close();
-        // JSON串转用户对象列表
-        List<Student> studentList = JSON.parseArray(context, Student.class);
-        if (studentList != null && studentList.size() > 0) {
-            Student[] students = new Student[studentList.size()];
-            for (int i = 0; i < studentList.size(); i++) {
-                students[i] = studentList.get(i);
-            }
-            return students;
-        }
-        return null;
-    }
 
     /**
      * @return
@@ -233,16 +205,16 @@ public class StudentService {
      */
     public void showPersonMenu() throws Exception {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\r\n=====显示系统菜单====");
-        stringBuilder.append("\r\n1.添加学生信息");
-        stringBuilder.append("\r\n2.删除学生信息");
-        stringBuilder.append("\r\n3.查看学生信息");
-        stringBuilder.append("\r\n4.修改(编辑)学生信息");
-        stringBuilder.append("\r\n0.返回上一层");
-        stringBuilder.append("\r\n===================");
-        stringBuilder.append("\r\n请选择?(0-4)\r\n");
-        String inflows = stringBuilder.toString();
+        StringBuilder menuInfo = new StringBuilder();
+        menuInfo.append("\r\n=====显示系统菜单====");
+        menuInfo.append("\r\n1.添加学生信息");
+        menuInfo.append("\r\n2.删除学生信息");
+        menuInfo.append("\r\n3.查看学生信息");
+        menuInfo.append("\r\n4.修改(编辑)学生信息");
+        menuInfo.append("\r\n0.返回上一层");
+        menuInfo.append("\r\n===================");
+        menuInfo.append("\r\n请选择?(0-4)\r\n");
+        String inflows = menuInfo.toString();
         System.out.println(inflows);
         //用户输入信息
         Scanner scanner = new Scanner(System.in);
@@ -270,7 +242,7 @@ public class StudentService {
                     break;
                 case 4:
                     System.out.println("修改学生信息.");
-                    editStudent();
+                    this.editStudent();
                     System.out.println(inflows);
                     break;
                 default:
@@ -288,6 +260,10 @@ public class StudentService {
      * @throws Exception
      */
     private void searchPerson(String personNumber, String classesNumber) throws Exception {
+
+        //加载信息到内存
+        this.loadStudentInfo();
+        //
         StudentClasses studentClasses = null;
         //通过对象查找元素
         Person personKey = new Person(personNumber, "");
@@ -296,7 +272,6 @@ public class StudentService {
         if (personLinkNode == null) {
             System.out.println("查询失败， 无此记录~");
             //返回上一层
-            this.editStudent();
             return;
         }
         Classes classesKey = new Classes(classesNumber, "");
@@ -305,18 +280,15 @@ public class StudentService {
         if (classes == null) {
             System.out.println("查询失败， 无此记录~");
             //返回上一层
-            this.editStudent();
             return;
         }
         if (personLinkNode.data != null) {
             Student student = (Student) personLinkNode.data;
             //自定义编码
             String scNumber = "";
-            studentClasses = new StudentClasses(scNumber, classes.classesNumber,
-                    classes.classesName, student.getNumber(), student.getName());
+            studentClasses = new StudentClasses(scNumber, classes.classesNumber, classes.classesName, student.getNumber(), student.getName());
             this.saveStudentClassesInfoToDisk(studentClasses);
             //返回上一层
-            this.editStudent();
             return;
         }
         return;
@@ -333,19 +305,26 @@ public class StudentService {
         if (!flag) {
             return null;
         }
-        //注意文件路径
         FileReader fileReader = new FileReader(baseService.studentClassesFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<StudentClasses> studentClassesList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                StudentClasses temp = JSON.toJavaObject(jsonObject, StudentClasses.class);
+                studentClassesList.add(temp);
+            }
+
         }
         fileReader.close();
         // JSON串转用户对象列表
-        List<StudentClasses> studentClasses = JSON.parseArray(context, StudentClasses.class);
-        StudentClasses[] sClasses = new StudentClasses[studentClasses.size()];
-        for (int i = 0; i < studentClasses.size(); i++) {
-            sClasses[i] = studentClasses.get(i);
+        StudentClasses[] sClasses = new StudentClasses[studentClassesList.size()];
+        for (int i = 0; i < studentClassesList.size(); i++) {
+            sClasses[i] = studentClassesList.get(i);
         }
         return sClasses;
     }
@@ -385,7 +364,7 @@ public class StudentService {
         int size = baseService.getStudentClassesLinkList().size();
         System.out.println("集合长度：" + size);
         //保存学生信息到文件
-        this.saveStudentClassesLinkNodesInfoToDisk();
+        this.saveStudentClassesLinkNodesInfoToDisk(studentClasses);
     }
 
     /**
@@ -393,15 +372,21 @@ public class StudentService {
      *
      * @throws Exception
      */
-    public void saveStudentClassesLinkNodesInfoToDisk() throws Exception {
-        StudentClasses[] classes = baseService.getStudentClassesLinkList().listToArrays();
-        if (classes == null || classes.length == 0) {
+    public void saveStudentClassesLinkNodesInfoToDisk(StudentClasses studentClasses) throws Exception {
+
+        if (studentClasses == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
-        String fileContent = JSON.toJSONString(classes);
-        FileWriter fileWriter = new FileWriter(baseService.studentClassesFilePath);
-        fileWriter.write(fileContent);
+        //
+        FileWriter fileWriter = new FileWriter(baseService.studentClassesFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        String fileContent = JSON.toJSONString(studentClasses);
+        //
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -462,12 +447,14 @@ public class StudentService {
      *3、显示成功记录到用户界面
      */
     private void editStudent() throws Exception {
-        System.out.println("=====显示修改学生信息菜单====");
-        System.out.println("\t1 修改学生姓名信息");
-        System.out.println("\t2 编辑学生班级信息");
-        System.out.println("\t3 显示学生班级信息");
-        System.out.println("\t0 返回上一层");
-        System.out.println("===================");
+        StringBuilder menuInfo = new StringBuilder();
+        menuInfo.append("=====显示修改学生信息菜单====\r\n");
+        menuInfo.append("\t1 修改学生姓名信息\r\n");
+        menuInfo.append("\t2 编辑学生班级信息\r\n");
+        menuInfo.append("\t3 显示学生班级信息\r\n");
+        menuInfo.append("\t0 返回上一层\r\n");
+        menuInfo.append("===================");
+        System.out.println(menuInfo.toString());
         /**
          * 1 加载班级信息
          * 2 通过学号编辑姓名，如果不存在学生返回失败
@@ -476,10 +463,6 @@ public class StudentService {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextInt()) {
             int orderNumber = scanner.nextInt();
-            if (orderNumber < 0 || orderNumber > 3) {
-                System.out.println("录入非法.");
-                break;
-            }
             switch (orderNumber) {
                 case 0:
                     System.out.println("返回上一层");
@@ -490,14 +473,17 @@ public class StudentService {
                     //编辑前显示已经有的数据
                     this.showStudentClassesInfo();
                     //修改学生姓名信息
+                    System.out.println(menuInfo.toString());
                     break;
                 case 2:
                     System.out.println("编辑学生班级信息");
                     this.editStudentClass();
+                    System.out.println(menuInfo.toString());
                     break;
                 case 3:
                     System.out.println("显示学生班级信息");
                     this.showStudentClassesInfo();
+                    System.out.println(menuInfo.toString());
                     break;
                 default:
                     break;
@@ -513,12 +499,10 @@ public class StudentService {
      * @return
      */
     public StudentClasses findStudentClassesByStuNumber(String studentNumber) throws Exception {
-        // TODO: 2021/4/7
         StudentClasses studentClasses = null;
         if (studentNumber == null || studentNumber.isEmpty()) {
             return studentClasses;
         }
-
         //加载文件内容到内存
         StudentClasses[] studentClassesArrays = this.readStudentClassesInfoFromDisk();
         if (studentClassesArrays == null || studentClassesArrays.length == 0) {
@@ -566,15 +550,16 @@ public class StudentService {
      * 删除学生信息
      */
     private void delStudent() throws Exception {
-        System.out.println("=====显示系统菜单====");
-        System.out.println("\t 删除学生信息");
-        System.out.println("\t 输入删除的学生编号");
-        System.out.println("\t 输入0返回");
-        System.out.println("===================");
+        StringBuilder menuInfo = new StringBuilder();
+        menuInfo.append("\r\n=====显示系统菜单====");
+        menuInfo.append("\r\n 删除学生信息");
+        menuInfo.append("\r\n 输入0返回");
+        menuInfo.append("===================");
         //显示学生信息
         showStudentInto();
+        System.out.println(menuInfo.toString());
         //用户输入
-        System.out.println("录入学号:");
+        System.out.println("输入删除的学生编号:");
         Scanner scanner = new Scanner(System.in);
         String stuNumber = "";
         if (scanner.hasNext()) {
@@ -584,16 +569,16 @@ public class StudentService {
             //返回上一步
             return;
         }
-        StudentRepository studentRepository = this.baseService.getPersonRepository();
-        if (!stuNumber.isEmpty() && studentRepository != null && studentRepository.size() > 0) {
-            //执行删除动作
-            studentRepository.delete(new Student(stuNumber, ""));
-            // 把内存数据删除的写入文件
-            Utils.removeLineForLineContent(this.baseService.studentFilePath, "number", stuNumber, false);
-            //显示学生信息
-            this.showStudentInto();
-            //返回上一步
+        if (stuNumber.isEmpty()) {
+            System.out.println("学号无效~");
+            //返回上一层
+            return;
         }
+        // 把内存数据删除的写入文件
+        Utils.removeLineForLineContent(this.baseService.studentFilePath, "number", stuNumber, false);
+        //显示学生信息
+        this.showStudentInto();
+        return;
     }
 
     /**

@@ -1,12 +1,16 @@
 package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.algorithm.liststudent.base.*;
 import com.example.algorithm.liststudent.repository.ScoreRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -92,8 +96,18 @@ public class ScoreService {
                                  float scoreValue) throws Exception {
 
         CourseService courseService = new CourseService(baseService);
+
+        StudentService studentService=new StudentService(baseService);
+
+        TeacherService teacherService=new TeacherService(baseService);
+
         //加载信息
         courseService.loadData();
+        //studentService
+        studentService.loadStudentInfo();
+
+        //
+        teacherService.LoadTeacherInfo();
 
         //课程成绩编码系统自动生成
         String scNumber = Utils.getInnerId("SC");
@@ -110,12 +124,12 @@ public class ScoreService {
         String className = "";
         float scoreVal = scoreValue;
         //学生信息
-        Student studentDb = new StudentService(baseService).findStudentByNumber(studentNumber);
+        Student studentDb =studentService.findStudentByNumber(studentNumber);
         if (studentDb == null) {
             System.out.println("学生信息不存在");
             return;
         }
-        Teacher teacherDb = new TeacherService(baseService).findTeacherByNumber(teacherNumber);
+        Teacher teacherDb =teacherService.findTeacherByNumber(teacherNumber);
         if (teacherDb == null) {
             System.out.println("教师信息不存在");
             return;
@@ -130,7 +144,6 @@ public class ScoreService {
             System.out.println("课程信息不存在");
             return;
         }
-
         StudentClasses studentClassesDB = new StudentService(baseService).findStudentClassesByStuNumber(studentNumber);
         if (studentClassesDB == null) {
             System.out.println("学生班级信息不存在");
@@ -154,22 +167,29 @@ public class ScoreService {
         ScoreRepository scoreRepository = this.baseService.getScoreRepository();
         System.out.println("成绩信息集合长度：" + scoreRepository.size());
         //保存学生信息到文件
-        this.saveStudentScoreInfoToDisk();
+        this.saveStudentScoreInfoToDisk(score);
+        //show info
+        this.showScoreInto();
         //返回上一步
+        return;
     }
 
     /**
      * @throws Exception
      */
-    public void saveStudentScoreInfoToDisk() throws Exception {
-        Score[] scores = this.baseService.getScoreRepository().listToArrays();
-        if (scores == null || scores.length == 0) {
+    public void saveStudentScoreInfoToDisk(final Score score) throws Exception {
+        if (score == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
-        String fileContent = JSON.toJSONString(scores);
-        FileWriter fileWriter = new FileWriter(baseService.scoreFilePath);
-        fileWriter.write(fileContent);
+
+        FileWriter fileWriter = new FileWriter(baseService.scoreFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        String fileContent = JSON.toJSONString(score);
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -232,24 +252,26 @@ public class ScoreService {
      * @throws Exception
      */
     private Score[] readInfoFromDisk() throws Exception {
-
         boolean flag = Utils.checkFile(baseService.scoreFilePath);
         if (!flag) {
             return null;
         }
         FileReader fileReader = new FileReader(baseService.scoreFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<Score> scoreList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                Score temp = JSON.toJavaObject(jsonObject, Score.class);
+                scoreList.add(temp);
+            }
+
         }
         fileReader.close();
-        // JSON串转用户对象列表
-        List<Score> scoreList = JSON.parseArray(context, Score.class);
-        // list to array
-        if (scoreList == null || scoreList.size() == 0) {
-            return null;
-        }
         Score[] scores = new Score[scoreList.size()];
         for (int i = 0; i < scoreList.size(); i++) {
             scores[i] = scoreList.get(i);

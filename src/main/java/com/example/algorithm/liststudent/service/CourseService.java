@@ -1,6 +1,7 @@
 package com.example.algorithm.liststudent.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.algorithm.liststudent.base.Course;
 import com.example.algorithm.liststudent.base.LinkNode;
 import com.example.algorithm.liststudent.base.Student;
@@ -8,8 +9,11 @@ import com.example.algorithm.liststudent.base.Teacher;
 import com.example.algorithm.liststudent.repository.CourseRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -53,12 +57,15 @@ public class CourseService {
         }
         CourseRepository courseRepository = this.baseService.getCourseRepository();
         if (!courseNumber.isEmpty() && courseRepository != null && courseRepository.size() > 0) {
+
             //执行删除动作
             courseRepository.delete(new Course(courseNumber, "", 0.0f));
             // 把内存数据删除的写入文件
-            this.saveCourseInfoToDisk();
             //显示学生信息
             this.showCourseInto();
+            //删除本行文件内容
+            Utils.removeLineForLineContent(this.baseService.courseFilePath, "courseNumber",
+                    courseNumber, true);
         }
 
     }
@@ -92,21 +99,24 @@ public class CourseService {
         Course course = new Course(curseNumber, curseName, point);
         baseService.getCourseRepository().add(course);
         System.out.println("集合长度：" + baseService.getCourseRepository().size());
-        this.saveCourseInfoToDisk();
+        this.saveCourseInfoToDisk(course);
     }
 
     /**
      * @throws Exception
      */
-    private void saveCourseInfoToDisk() throws Exception {
-        Course[] courses = this.baseService.getCourseRepository().listToArrays();
-        if (courses == null || courses.length == 0) {
+    private void saveCourseInfoToDisk(final Course course) throws Exception {
+        if (course == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
-        String fileContent = JSON.toJSONString(courses);
-        FileWriter fileWriter = new FileWriter(baseService.courseFilePath);
-        fileWriter.write(fileContent);
+        FileWriter fileWriter = new FileWriter(baseService.courseFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        String fileContent = JSON.toJSONString(course);
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -122,21 +132,24 @@ public class CourseService {
             return null;
         }
         FileReader fileReader = new FileReader(baseService.courseFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<Course> courseArrayList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                Course temp = JSON.toJavaObject(jsonObject, Course.class);
+                courseArrayList.add(temp);
+            }
+
         }
         fileReader.close();
-        // JSON串转用户对象列表
-        List<Course> courseList = JSON.parseArray(context, Course.class);
-        // list to array
-        if (courseList == null || courseList.size() == 0) {
-            return null;
-        }
-        Course[] courses = new Course[courseList.size()];
-        for (int i = 0; i < courseList.size(); i++) {
-            courses[i] = courseList.get(i);
+        Course[] courses = new Course[courseArrayList.size()];
+        for (int i = 0; i < courseArrayList.size(); i++) {
+            courses[i] = courseArrayList.get(i);
         }
         return courses;
 
@@ -196,7 +209,7 @@ public class CourseService {
         if (courseLinkNode == null) {
             return course;
         } else {
-            return courseLinkNode.data;
+            return (Course) courseLinkNode.data;
         }
     }
 
@@ -227,7 +240,6 @@ public class CourseService {
      * 3、保存学生选课记录到文件
      */
     private void addStudentChooseCourse() throws Exception {
-        // todo 添加学生选课
         new StudentService(baseService).showStudentInto();
         //2、显示课程信息
         this.showCourseInto();
@@ -258,7 +270,6 @@ public class CourseService {
      * @throws Exception
      */
     private void saveStudentCourseToDisk(String studentNumber, String courseNumber) throws Exception {
-        // TODO: 2021/4/7
         // 加载教师信息
         StudentService studentService = new StudentService(baseService);
         //
@@ -269,7 +280,6 @@ public class CourseService {
             System.out.println("学生信息不存在");
             return;
         }
-        //是否已经存在选课记录？
         //保存信息到磁盘存档
         Student.StudentCourse studentCourseDb = new Student.StudentCourse(studentNumber, courseNumber);
         //get and add to list
@@ -283,9 +293,10 @@ public class CourseService {
         }
         //修改学生选课信息
         this.modStudentInfo(studentDb);
-        //存在则添加教师选课信息
+        //remove
+        Utils.removeLineForLineContent(baseService.studentFilePath, "number", studentDb.getNumber(), true);
         //保存到磁盘
-      //todo   studentService.saveStudentInfoToDisk(null);
+        studentService.saveStudentInfoToDisk(studentDb);
     }
 
 
@@ -361,9 +372,11 @@ public class CourseService {
         }
         //修改教师选课信息
         this.modTeacherInfo(teacherDb);
-        //存在则添加教师选课信息
+        //先删除再添加
+        Utils.removeLineForLineContent(baseService.teacherFilePath, "number", teacherDb.getNumber(), true);
         //保存到磁盘
-        new TeacherService(baseService).saveTeacherInfoToDisk();
+        new TeacherService(baseService).saveTeacherInfoToDisk(teacherDb);
+
     }
 
     /**

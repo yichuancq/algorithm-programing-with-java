@@ -88,12 +88,10 @@ public class TeacherRepository<T> {
         }
         while (p != null && p.next != null) {
             //课程对象
-            if (p.data != null) {
-                Teacher temp = (Teacher) p.data;
-                //number相同
-                if (target.getNumber().equals(temp.getNumber())) {
-                    return (Teacher) p.data;
-                }
+            Teacher temp = (Teacher) p.next.data;
+            //number相同
+            if (target.getNumber().equals(temp.getNumber())) {
+                return (Teacher) p.next.data;
             }
             p = p.next;
         }

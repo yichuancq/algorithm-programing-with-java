@@ -4,7 +4,6 @@ import com.example.algorithm.liststudent.repository.*;
 
 /**
  * 全局基础服务
- *
  * @author yichuan
  */
 public class BaseService<T> {
@@ -31,13 +30,11 @@ public class BaseService<T> {
     /**
      * 课程
      */
-    //course
     public final String courseFilePath = "src/main/resources/course.txt";
 
     /**
      * 成绩
      */
-    //course
     public final String scoreFilePath = "src/main/resources/score.txt";
 
     /**

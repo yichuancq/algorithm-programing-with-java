@@ -2,13 +2,17 @@ package com.example.algorithm.liststudent.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.algorithm.liststudent.base.Classes;
 import com.example.algorithm.liststudent.base.LinkNode;
 import com.example.algorithm.liststudent.repository.ClassesRepository;
 import com.example.algorithm.liststudent.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,7 +47,7 @@ public class ClassesService<T> {
         System.out.println("输入班级名（字符如:计算机01）");
         System.out.println("");
         //用户输入
-        Scanner  scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         classesName = scanner.nextLine();
         System.out.println("输入：" + classesName);
         if (classesName.isEmpty()) {
@@ -54,22 +58,25 @@ public class ClassesService<T> {
         this.baseService.getClassesRepository().add(classes);
         System.out.println("班级集合长度：" + this.baseService.getClassesRepository().size());
 //      保存信息到文件
-        this.saveClassInfoToDisk();
+        this.saveClassInfoToDisk(classes);
 
     }
 
     /**
      * 保存信息到文件
      */
-    private void saveClassInfoToDisk() throws Exception {
-        Classes[] classes = this.baseService.getClassesRepository().listToArrays();
-        if (classes == null || classes.length == 0) {
+    private void saveClassInfoToDisk(final Classes classes) throws Exception {
+        if (classes == null) {
             System.out.println("无写入内容到磁盘!");
             return;
         }
+        FileWriter fileWriter = new FileWriter(baseService.classesFilePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         String fileContent = JSON.toJSONString(classes);
-        FileWriter fileWriter = new FileWriter(baseService.classesFilePath);
-        fileWriter.write(fileContent);
+        bufferedWriter.write(fileContent);
+        bufferedWriter.newLine();
+        bufferedWriter.flush(); //将数据更新至文件
+        bufferedWriter.close();
         fileWriter.close();
     }
 
@@ -128,7 +135,7 @@ public class ClassesService<T> {
         for (Classes temp : classes) {
             String createTime = Utils.getStringFormatDate(temp.getCreateTime());
             String updateTime = Utils.getStringFormatDate(temp.getUpdateTime());
-            System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName+
+            System.out.println("班级编号：" + temp.classesNumber + "\t班级名称：" + temp.classesName +
                     "\t" + "添加日期：" + createTime + "\t修改日期：" + updateTime);
         }
         System.out.println("======end=====");
@@ -146,15 +153,23 @@ public class ClassesService<T> {
         if (!flag) {
             return null;
         }
+
         FileReader fileReader = new FileReader(baseService.classesFilePath);
-        int ch = 0;
-        String context = "";
-        while ((ch = fileReader.read()) != -1) {
-            context += String.valueOf((char) ch);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String content = null;
+        //按行读取
+        List<Classes> classesList = new ArrayList<>();
+        while ((content = bufferedReader.readLine()) != null) {
+            //判断为空
+            if (!content.isEmpty()) {
+                JSONObject jsonObject = JSONObject.parseObject(content);
+                //将JSONObject对象转为Bean实体对象
+                Classes temp = JSON.toJavaObject(jsonObject, Classes.class);
+                classesList.add(temp);
+            }
+
         }
         fileReader.close();
-        // JSON串转用户对象列表
-        List<Classes> classesList = JSON.parseArray(context, Classes.class);
         Classes[] classes = new Classes[classesList.size()];
         for (int i = 0; i < classesList.size(); i++) {
             classes[i] = classesList.get(i);
@@ -193,8 +208,6 @@ public class ClassesService<T> {
                     break;
                 case 1:
                     System.out.println("添加班级信息.");
-                   // this.showClassesInto();
-                    //
                     this.addClasses();
                     //show menu
                     System.out.println(disInfo);
