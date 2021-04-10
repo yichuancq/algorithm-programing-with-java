@@ -21,16 +21,16 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
     /**
      * 度
      */
-    private final int degree;
+    public final int degree;
 
-    private final int minKeys;
+    public final int minKeys;
 
-    private final int maxKeys;
+    public final int maxKeys;
 
     /**
      * 根节点
      */
-    private Node<K, V> root;
+    public Node<K, V> root;
 
     public BTree() {
         this(DEFAULT_DEGREE);
@@ -53,6 +53,28 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         return this.search(this.root, key);
     }
 
+    /**
+     * 打印树结点
+     *
+     * @param node
+     */
+    public void printTree(Node node) {
+        if (node != null && !node.isLeaf()) {
+            //获取孩子结点
+            List<Node<K, V>> children = node.getChildren();
+            //循环孩子结点
+            for (Node tempNode : children) {
+                //孩子结点集合的值
+                List<Entry<K, V>> entryList = tempNode.getKeys();
+                System.out.println(entryList);
+                for (Entry entry : entryList) {
+                    System.out.println("结点值:" + entry.value);
+                }
+                //递归
+                printTree(tempNode);
+            }
+        }
+    }
 
     /**
      * 检索节点
@@ -153,6 +175,10 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         }
     }
 
+    /**
+     * @param parent
+     * @param child
+     */
     private void split(Node<K, V> parent, Node<K, V> child) {
         final int keySize = child.keySize();
         final int childSize = child.childSize();
@@ -183,6 +209,10 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         parent.addChild(rightSon);
     }
 
+    /**
+     * @param key
+     * @return
+     */
     public boolean remove(K key) {
         if (key == null) {
             return false;
@@ -194,6 +224,12 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         return out != null;
     }
 
+    /**
+     * @param curNode
+     * @param key
+     * @param type
+     * @return
+     */
     private Entry<K, V> remove(Node<K, V> curNode, K key, RmType type) {
         if (curNode == null) {
             return null;
@@ -243,6 +279,13 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         return remove(child, key, type);
     }
 
+    /**
+     * @param curNode
+     * @param key
+     * @param i
+     * @param type
+     * @return
+     */
     private Entry<K, V> growChildAndRemove(Node<K, V> curNode, K key, int i, RmType type) {
         if (i > 0 && curNode.getChild(i - 1).keySize() > minKeys) {
             Node<K, V> child = curNode.getChild(i);
@@ -288,6 +331,12 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         return remove(curNode, key, type);
     }
 
+    /***
+     *
+     * @param keys
+     * @param key
+     * @return
+     */
     private FindResult find(List<Entry<K, V>> keys, K key) {
         if (keys == null || keys.size() == 0 || key == null) {
             return new FindResult(0, false);
@@ -306,26 +355,6 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         return new FindResult(i, false);
     }
 
-    /**
-     * 打印树结点
-     *
-     * @param node
-     */
-    private void printTree(Node node) {
-        if (node != null && !node.isLeaf()) {
-            //获取孩子结点
-            List<Node<K, V>> children = node.getChildren();
-            for (Node tempNode : children) {
-                //孩子结点集合的值
-                List<Entry<K, V>> entryList = tempNode.getKeys();
-                System.out.println(entryList);
-                for (Entry entry : entryList) {
-                    System.out.println("结点值:" + entry.value);
-                }
-                printTree(tempNode);
-            }
-        }
-    }
 
     /**
      * B树节点
@@ -656,7 +685,6 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
      * </p>
      */
     private class BPair<K extends Comparable<K>, V> {
-
         private Node<K, V> node;
         private Entry<K, V> key;
 
@@ -685,77 +713,5 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
         }
     }
 
-    /**
-     * <p>
-     * 查找结果
-     * </p>
-     */
-    private class FindResult {
 
-        /**
-         * 大于前驱关键字小于后继关键字，此时后继的下标
-         */
-        private int index;
-        private boolean found;
-
-        public FindResult() {
-        }
-
-        public FindResult(int index, boolean found) {
-            this.index = index;
-            this.found = found;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public boolean getFound() {
-            return found;
-        }
-
-        public void setFound(boolean found) {
-            this.found = found;
-        }
-
-        @Override
-        public String toString() {
-            return "FindResult{" +
-                    "index=" + index +
-                    ", found=" + found +
-                    '}';
-        }
-    }
-
-    /**
-     * <p>
-     * 删除类型
-     * </p>
-     */
-    public enum RmType {
-        REMOVE_MAX,
-        REMOVE_MIN,
-        REMOVE_KEY
-    }
-
-    public static void main(String[] args) {
-        BTree<Integer, String> tree = new BTree<>();
-        for (int i = 0; i < 100; i++) {
-            tree.put(i, "" + i);
-        }
-
-        tree.remove(21);
-        tree.remove(21);
-        System.out.println(tree.get(50));
-        System.out.println(tree.get(100));
-        System.out.println(tree.degree);
-        System.out.println(tree.maxKeys);
-        System.out.println(tree.toString());
-        //打印结点
-        tree.printTree(tree.root);
-    }
 }
