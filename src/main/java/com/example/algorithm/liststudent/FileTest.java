@@ -21,7 +21,6 @@ public class FileTest {
      * @param retainRemoveLine 是否保留删除的行（保留：留下一个空白行，不保留：下面的行自动上移）
      */
     public static void removeLineForLineContent(String file, String lineContent, boolean retainRemoveLine) throws Exception {
-
         //获取原文件
         File oldFile = new File(file);
         if (!oldFile.isFile()) {
@@ -58,19 +57,14 @@ public class FileTest {
         }
     }
 
-
     @Test
     public void testWriteLine() throws Exception {
-        int size = 10;
         FileWriter fileWriter = new FileWriter(studentFilePath, true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        //  for (int i = 0; i < size; i++) {
         Student student = new Student("aa", "sss");
-        //  Student student = new Student("Stu" + i, "name" + i);
         String line = JSON.toJSONString(student);
         bufferedWriter.write(line);
         bufferedWriter.newLine();
-        //  }
         bufferedWriter.flush(); //将数据更新至文件
         bufferedWriter.close();
         fileWriter.close();

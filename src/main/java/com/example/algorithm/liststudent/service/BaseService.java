@@ -4,10 +4,10 @@ import com.example.algorithm.liststudent.repository.*;
 
 /**
  * 全局基础服务
+ *
  * @author yichuan
  */
 public class BaseService<T> {
-
     /**
      * 保存文件的路径
      */
@@ -59,15 +59,15 @@ public class BaseService<T> {
 
     private CourseRepository courseRepository;
 
-    private  ScoreRepository scoreRepository;
+    private ScoreRepository scoreRepository;
 
     public BaseService() {
         studentClassesRepository = new StudentClassesRepository();
         studentRepository = new StudentRepository();
         classesRepository = new ClassesRepository();
-        teacherRepository=new TeacherRepository();
-        courseRepository=new CourseRepository();
-        scoreRepository=new ScoreRepository();
+        teacherRepository = new TeacherRepository();
+        courseRepository = new CourseRepository();
+        scoreRepository = new ScoreRepository();
 
     }
 

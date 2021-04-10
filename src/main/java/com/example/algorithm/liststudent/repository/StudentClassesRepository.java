@@ -84,6 +84,7 @@ public class StudentClassesRepository<T> {
      */
     public StudentClasses search(StudentClasses target) {
         LinkNode p = head;
+        StudentClasses studentClasses = null;
         if (target == null) {
             return null;
         }
@@ -92,11 +93,12 @@ public class StudentClassesRepository<T> {
             StudentClasses temp = (StudentClasses) p.next.data;
             //学生编码相同
             if (temp.stuNumber.equals(target.stuNumber)) {
-                return (StudentClasses) p.next.data;
+                studentClasses = (StudentClasses) p.next.data;
+                break;
             }
             p = p.next;
         }
-        return null;
+        return studentClasses;
     }
 
 

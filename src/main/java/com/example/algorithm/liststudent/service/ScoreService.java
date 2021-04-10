@@ -94,21 +94,15 @@ public class ScoreService {
      */
     private void addStudentScore(final String courseNumber, final String teacherNumber, final String studentNumber,
                                  float scoreValue) throws Exception {
-
         CourseService courseService = new CourseService(baseService);
-
-        StudentService studentService=new StudentService(baseService);
-
-        TeacherService teacherService=new TeacherService(baseService);
-
+        StudentService studentService = new StudentService(baseService);
+        TeacherService teacherService = new TeacherService(baseService);
         //加载信息
         courseService.loadData();
         //studentService
         studentService.loadStudentInfo();
-
         //
         teacherService.LoadTeacherInfo();
-
         //课程成绩编码系统自动生成
         String scNumber = Utils.getInnerId("SC");
         System.out.println("系统生成的课程成绩编号:" + scNumber);
@@ -124,17 +118,16 @@ public class ScoreService {
         String className = "";
         float scoreVal = scoreValue;
         //学生信息
-        Student studentDb =studentService.findStudentByNumber(studentNumber);
+        Student studentDb = studentService.findStudentByNumber(studentNumber);
         if (studentDb == null) {
             System.out.println("学生信息不存在");
             return;
         }
-        Teacher teacherDb =teacherService.findTeacherByNumber(teacherNumber);
+        Teacher teacherDb = teacherService.findTeacherByNumber(teacherNumber);
         if (teacherDb == null) {
             System.out.println("教师信息不存在");
             return;
         }//
-
         Course queryKey = new Course();
         //查询课程服务类
         queryKey.setCurseNumber(courseNumber);
@@ -144,7 +137,7 @@ public class ScoreService {
             System.out.println("课程信息不存在");
             return;
         }
-        StudentClasses studentClassesDB = new StudentService(baseService).findStudentClassesByStuNumber(studentNumber);
+        StudentClasses studentClassesDB = studentService.findStudentClassesByStuNumber(studentNumber);
         if (studentClassesDB == null) {
             System.out.println("学生班级信息不存在");
             return;
@@ -164,6 +157,7 @@ public class ScoreService {
         // TODO: 2021/4/7  添加课程信息
         //添加到内存链表
         this.baseService.getScoreRepository().add(score);
+        //
         ScoreRepository scoreRepository = this.baseService.getScoreRepository();
         System.out.println("成绩信息集合长度：" + scoreRepository.size());
         //保存学生信息到文件
@@ -193,6 +187,12 @@ public class ScoreService {
         fileWriter.close();
     }
 
+    /**
+     * 载入信息
+     *
+     * @return
+     * @throws Exception
+     */
     private Score[] LoadScoreInfo() throws Exception {
         Score[] scores = this.readInfoFromDisk();
         if (scores == null || scores.length == 0) {
@@ -212,9 +212,7 @@ public class ScoreService {
      * @throws Exception
      */
     private void showScoreInto() throws Exception {
-        // TODO: 2021/4/7  显示成绩信息
         Score[] scores = LoadScoreInfo();
-        //print
         if (scores == null || scores.length == 0) {
             System.out.println("无信息，返回上一级");
             return;
@@ -239,7 +237,7 @@ public class ScoreService {
             stringBuilder.append("教师编码:" + t.getTeacherNumber());
             stringBuilder.append("\t教师名称：" + t.getTeacherName() + "\r\n");
             stringBuilder.append("添加日期:" + createTime + "\t修改日期：" + updateTime);
-            System.out.println(stringBuilder.toString());
+            System.out.println(stringBuilder);
         }
         System.out.println("======end=====");
     }

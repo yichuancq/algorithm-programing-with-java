@@ -209,7 +209,7 @@ public class CourseService {
         if (courseLinkNode == null) {
             return course;
         } else {
-            return (Course) courseLinkNode.data;
+            return courseLinkNode.data;
         }
     }
 

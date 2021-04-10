@@ -49,7 +49,6 @@ public class StudentService {
                 JSONObject jsonObject = JSONObject.parseObject(content);
                 //将JSONObject对象转为Bean实体对象
                 Student student = JSON.toJavaObject(jsonObject, Student.class);
-                System.out.println(student.getName());
                 studentList.add(student);
             }
 
@@ -69,7 +68,6 @@ public class StudentService {
         Student[] students = this.readLineStudentInfoFromDisk();
         if (students == null || students.length == 0) {
             System.out.println("无信息，返回上一级");
-            System.out.println("");
             this.showPersonMenu();
             return students;
         }
@@ -285,8 +283,9 @@ public class StudentService {
         if (personLinkNode.data != null) {
             Student student = (Student) personLinkNode.data;
             //自定义编码
-            String scNumber = "";
-            studentClasses = new StudentClasses(scNumber, classes.classesNumber, classes.classesName, student.getNumber(), student.getName());
+            String scNumber = Utils.getInnerId("SCS");
+            studentClasses = new StudentClasses(scNumber, classes.classesNumber, classes.classesName, student.getNumber(),
+                    student.getName());
             this.saveStudentClassesInfoToDisk(studentClasses);
             //返回上一层
             return;
@@ -513,7 +512,7 @@ public class StudentService {
         baseService.setStudentClassesRepository(new StudentClassesRepository(studentClassesArrays));
         StudentClasses studentClassesKey = new StudentClasses();
         studentClassesKey.setStuNumber(studentNumber);
-
+        //
         studentClasses = this.baseService.getStudentClassesLinkList().search(studentClassesKey);
         return studentClasses;
     }
@@ -538,7 +537,8 @@ public class StudentService {
         System.out.println("记录数：" + size);
         System.out.println("=====学生班级信息如下=====");
         for (StudentClasses sClasses : studentClasses) {
-            System.out.println("班级号：" + sClasses.classesNumber +
+            System.out.println("编码:" + sClasses.getScNumber()
+                    + "\t班级号：" + sClasses.classesNumber +
                     "\t班级名称：" + sClasses.classesName
                     + "\t学号: " + sClasses.stuNumber +
                     "\t学生姓名:" + sClasses.stuName);
