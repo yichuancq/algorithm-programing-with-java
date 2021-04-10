@@ -1,1 +1,7 @@
-[{"classesName":"计算机科学001","classesNumber":"CLS860844000653869056","createTime":1617356610776,"updateTime":1617356610776},{"classesName":"会计001","classesNumber":"CLS860844109655441408","createTime":1617356618979,"updateTime":1617356618979},{"classesName":"商务英语001","classesNumber":"CLS860844155323023360","createTime":1617356631716,"updateTime":1617356631716},{"classesName":"自动化001","classesNumber":"CLS860844291302359040","createTime":1617356642362,"updateTime":1617356642362}]
+{"classesName":"班级01","classesNumber":"CLS866514348925779968","createTime":1618032564378,"updateTime":1618032564378}
+{"classesName":"班级02","classesNumber":"CLS866514413014745088","createTime":1618032572765,"updateTime":1618032572765}
+{"classesName":"班级03","classesNumber":"CLS866514492496805888","createTime":1618032596083,"updateTime":1618032596083}
+{"classesName":"班级04","classesNumber":"CLS866514662584221696","createTime":1618032601350,"updateTime":1618032601350}
+{"classesName":"bj001","classesNumber":"CLS866518470576046080","createTime":1618033055259,"updateTime":1618033055259}
+{"classesName":"bj002","classesNumber":"CLS866518514918227968","createTime":1618033058668,"updateTime":1618033058668}
+{"classesName":"jsj01","classesNumber":"CLS866520705427046400","createTime":1618033321380,"updateTime":1618033321380}

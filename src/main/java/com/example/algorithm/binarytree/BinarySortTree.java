@@ -77,7 +77,8 @@ public class BinarySortTree<T extends Comparable<? super T>> {
         if (this.root == null) {
             //创建根结点
             this.root = new TriNode<T>(x);
-        } else {    //将x插入到以root为根的二叉排序树中
+        } else {
+            //将x插入到以root为根的二叉排序树中
             TriNode<T> p = this.root, parent = null;
             //查找确定插入位置
             while (p != null) {
@@ -261,9 +262,11 @@ public class BinarySortTree<T extends Comparable<? super T>> {
         return 0;//??this.set.size();
     }
 
-    /***【例8.4】  使用二叉排序树表示互异的排序集合。
-     6.删除操作
-     删除关键字为key结点，返回被删除元素；若没找到则不删除，返回null。//非递归算法，若key==null，Java抛出空对象异常
+    /**
+     * 使用二叉排序树表示互异的排序集合。
+     * 6.删除操作
+     * 删除关键字为key结点，返回被删除元素；若没找到则不删除，返回null。
+     * 非递归算法，若key==null，Java抛出空对象异常
      **/
     public T remove(T key) {
         TriNode<T> p = this.searchNode(key);

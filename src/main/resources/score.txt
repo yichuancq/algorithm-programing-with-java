@@ -1,0 +1,1 @@
+{"className":"班级01","classNumber":"CLS866514348925779968","createTime":1618034274994,"curseName":"课程01","curseNumber":"CRS866514775016734720","scNumber":"SC866528735925370880","score":99.0,"stuName":"aaa","stuNumber":"STU866514071120248832","teacherName":"aaaa","teacherNumber":"TEA866514194525061120","updateTime":1618034274994}

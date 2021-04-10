@@ -1,1 +1,3 @@
-[{"createTime":1617360760414,"curseName":"物联网","curseNumber":"CRS860878686725865472","gradePoint":4.0,"updateTime":1617360760414},{"createTime":1617360802429,"curseName":"asd","curseNumber":"CRS860879217875746816","gradePoint":4.0,"updateTime":1617360802429}]
+{"createTime":1618032616296,"curseName":"课程01","curseNumber":"CRS866514775016734720","gradePoint":4.0,"updateTime":1618032616296}
+{"createTime":1618032620261,"curseName":"课程02","curseNumber":"CRS866514837235040256","gradePoint":4.0,"updateTime":1618032620261}
+{"createTime":1618033074101,"curseName":"bjj01","curseNumber":"CRS866518609843716096","gradePoint":4.0,"updateTime":1618033074101}
