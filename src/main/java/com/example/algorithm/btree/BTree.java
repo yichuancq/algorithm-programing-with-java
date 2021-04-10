@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
+/***
+ * btree
  * @param <K>
  * @param <V>
  */
@@ -73,9 +74,6 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
 
     /**
      * 检索节点
-     *
-     * @param curNode curNode
-     * @param key     key
      */
     private BPair<K, V> search(Node<K, V> curNode, K key) {
         if (curNode == null || key == null) {
