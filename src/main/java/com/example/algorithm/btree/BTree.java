@@ -9,24 +9,20 @@ import java.util.stream.Collectors;
  * @param <V>
  */
 public class BTree<K extends Comparable<K>, V> implements Serializable {
-
-
+    //
     private static final long serialVersionUID = -6952311794625138776L;
-
     /**
      * 默认B-Tree度
      */
     private static final int DEFAULT_DEGREE = 3;
-
     /**
      * 度
      */
     public final int degree;
-
+    //min Key
     public final int minKeys;
-
+    //最大key
     public final int maxKeys;
-
     /**
      * 根节点
      */
@@ -45,8 +41,7 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
 
     public V get(K key) {
         BPair<K, V> pair = this.search(key);
-        return Optional.ofNullable(pair).map(BPair::getKey)
-                .map(Entry::getValue).orElse(null);
+        return Optional.ofNullable(pair).map(BPair::getKey).map(Entry::getValue).orElse(null);
     }
 
     private BPair<K, V> search(K key) {
@@ -203,7 +198,6 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
 
         Entry<K, V> middleKey = child.getKey(keySize / 2);
         int indexOfChild = parent.indexOfNode(child);
-
         parent.addKey(middleKey);
         parent.setNode(indexOfChild, leftSon);
         parent.addChild(rightSon);
@@ -361,7 +355,7 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
      *
      * @since 1.0.0
      */
-    private class Node<K extends Comparable<K>, V> {
+    public class Node<K extends Comparable<K>, V> {
 
         private List<Entry<K, V>> keys;
         private List<Node<K, V>> children;
@@ -617,100 +611,6 @@ public class BTree<K extends Comparable<K>, V> implements Serializable {
             }
         }
 
-    }
-
-    /**
-     * <p>
-     * 关键字key value
-     * </p>
-     */
-    public class Entry<K extends Comparable<K>, V> implements Map.Entry<K, V> {
-
-        private K key;
-        private V value;
-
-        public Entry() {
-            super();
-        }
-
-        public Entry(K key, V value) {
-            super();
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public K getKey() {
-            return key;
-        }
-
-        @Override
-        public V getValue() {
-            return value;
-        }
-
-        @Override
-        public V setValue(V value) {
-            V oldValue = this.value;
-            this.value = value;
-            return oldValue;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return this == null;
-            }
-            if (!(obj instanceof Entry)) {
-                return false;
-            }
-
-            Entry<K, V> entry = (Entry<K, V>) obj;
-            return Objects.equals(this.key, entry.key)
-                    && Objects.equals(this.value, entry.value);
-        }
-
-        @Override
-        public String toString() {
-            return "Entry{" +
-                    "key=" + key +
-                    ", value=" + value +
-                    '}';
-        }
-    }
-
-    /**
-     * <p>
-     * 搜索结果
-     * </p>
-     */
-    private class BPair<K extends Comparable<K>, V> {
-        private Node<K, V> node;
-        private Entry<K, V> key;
-
-        public BPair() {
-        }
-
-        public BPair(Node<K, V> node, Entry<K, V> key) {
-            this.node = node;
-            this.key = key;
-        }
-
-        public Node<K, V> getNode() {
-            return node;
-        }
-
-        public void setNode(Node<K, V> node) {
-            this.node = node;
-        }
-
-        public Entry<K, V> getKey() {
-            return key;
-        }
-
-        public void setKey(Entry<K, V> key) {
-            this.key = key;
-        }
     }
 
 
