@@ -59,7 +59,6 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         String sortedString = solution.sortSentence("is2 sentence4 This1 a3");
-        System.out.println("排序后输出：");
-        System.out.println(sortedString);
+        System.out.println(String.format("排序后输出:%s",sortedString));
     }
 }
