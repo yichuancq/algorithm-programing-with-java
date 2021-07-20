@@ -43,23 +43,23 @@ public class WordTree {
         for (int i = 0, length = chars.length; i < length; i++) {
             ///用相对于a字母的值作为下标索引，也隐式地记录了该字母的值
             int index = chars[i] - 'a';
-            if (root.childs[index] != null) {
+            if (root.children[index] != null) {
                 //已经存在了，该子节点prefixNum++
             } else {
                 //如果不存在
-                root.childs[index] = new TrieNode();
+                root.children[index] = new TrieNode();
                 //root.childs[index].val = words;
             }
-            root.childs[index].prefixNum++;
+            root.children[index].prefixNum++;
             //如果到了字串结尾，则做标记
             if (i == length - 1) {
-                root.childs[index].isLeaf = true;
+                root.children[index].isLeaf = true;
                 //叶子节点，设置值
-                root.childs[index].val = words;
-                root.childs[index].repeatNum++;
+                root.children[index].val = words;
+                root.children[index].repeatNum++;
             }
             //root指向子节点，继续处理
-            root = root.childs[index];
+            root = root.children[index];
 
         }
 
@@ -84,7 +84,7 @@ public class WordTree {
             if (isLeaf) {
                 System.out.println(String.format("是否叶子节点节点：%s,值 ：%s", true, root.val));
             }
-            for (TrieNode p : root.childs) {
+            for (TrieNode p : root.children) {
                 traversalPrint(p);
             }
         }
@@ -106,12 +106,12 @@ public class WordTree {
                 //map 放入key 前缀,value为重复次数
                 map.put(prefixes, root.repeatNum);
             }
-            for (int i = 0, length = root.childs.length; i < length; i++) {
-                if (root.childs[i] != null) {
+            for (int i = 0, length = root.children.length; i < length; i++) {
+                if (root.children[i] != null) {
                     char ch = (char) (i + 'a');
                     String tempStr = prefixes + ch;
                     //递归调用前序遍历
-                    map.putAll(preTraversal(root.childs[i], tempStr));
+                    map.putAll(preTraversal(root.children[i], tempStr));
                 }
             }
         }
@@ -139,11 +139,11 @@ public class WordTree {
         char[] chs = word.toLowerCase().toCharArray();
         for (int i = 0, length = chs.length; i < length; i++) {
             int index = chs[i] - 'a';
-            if (root.childs[index] == null) {
+            if (root.children[index] == null) {
                 //如果不存在，则查找失败
                 return false;
             }
-            root = root.childs[index];
+            root = root.children[index];
         }
         return true;
     }
@@ -169,10 +169,10 @@ public class WordTree {
         char[] chars = prefix.toLowerCase().toCharArray();
         for (int i = 0, length = chars.length; i < length; i++) {
             int index = chars[i] - 'a';
-            if (root.childs[index] == null) {
+            if (root.children[index] == null) {
                 return null;
             }
-            root = root.childs[index];
+            root = root.children[index];
         }
         //结果包括该前缀本身
         return preTraversal(root, prefix);

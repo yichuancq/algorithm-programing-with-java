@@ -22,7 +22,7 @@ public class TrieNode {
     /**
      * 下一个结点集合（目前设置为26个）
      */
-    public TrieNode childs[];
+    public TrieNode[] children;
     /**
      * 是否为单词节点
      */
@@ -37,7 +37,7 @@ public class TrieNode {
         repeatNum = 0;
         isLeaf = false;
         val = "";
-        childs = new TrieNode[26];
+        children = new TrieNode[26];
     }
 
 
@@ -47,7 +47,7 @@ public class TrieNode {
                 "repeatNum=" + repeatNum +
                 ", prefixNum=" + prefixNum +
                 ", parent=" + parent +
-                ", childs=" + Arrays.toString(childs) +
+                ", childs=" + Arrays.toString(children) +
                 ", isLeaf=" + isLeaf +
                 ", val='" + val + '\'' +
                 '}';
