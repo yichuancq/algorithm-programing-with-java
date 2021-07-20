@@ -27,11 +27,16 @@ public class TrieNode {
      * 是否为单词节点
      */
     public boolean isLeaf;
+    /**
+     * 值
+     */
+    public String val;
 
     public TrieNode() {
         prefixNum = 0;
         repeatNum = 0;
         isLeaf = false;
+        val = "";
         childs = new TrieNode[26];
     }
 
@@ -44,6 +49,7 @@ public class TrieNode {
                 ", parent=" + parent +
                 ", childs=" + Arrays.toString(childs) +
                 ", isLeaf=" + isLeaf +
+                ", val='" + val + '\'' +
                 '}';
     }
 }

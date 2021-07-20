@@ -44,18 +44,20 @@ public class WordTree {
             ///用相对于a字母的值作为下标索引，也隐式地记录了该字母的值
             int index = chars[i] - 'a';
             if (root.childs[index] != null) {
-                // 已经存在了，该子节点prefix_num++
+                //已经存在了，该子节点prefixNum++
             } else {
-                ///如果不存在
+                //如果不存在
                 root.childs[index] = new TrieNode();
+                //root.childs[index].val = words;
             }
             root.childs[index].prefixNum++;
             //如果到了字串结尾，则做标记
             if (i == length - 1) {
                 root.childs[index].isLeaf = true;
+                //叶子节点，设置值
+                root.childs[index].val = words;
                 root.childs[index].repeatNum++;
             }
-            //
             //root指向子节点，继续处理
             root = root.childs[index];
 
@@ -76,11 +78,14 @@ public class WordTree {
      *
      * @param root
      */
-    private void printPre(TrieNode root) {
+    private void traversalPrint(TrieNode root) {
         if (root != null) {
-            System.out.println(root);
+            boolean isLeaf = root.isLeaf;
+            if (isLeaf) {
+                System.out.println(String.format("是否叶子节点节点：%s,值 ：%s", true, root.val));
+            }
             for (TrieNode p : root.childs) {
-                printPre(p);
+                traversalPrint(p);
             }
         }
     }
@@ -184,6 +189,7 @@ public class WordTree {
                 , "Catchment", "headsman", "healthful", "hearthstone", "hemorrhage", "hercules", "heroism",
                 "hidalgo"};
         WordTree wordTree = new WordTree();
+        System.out.println("worlds total number:" + wordArrays.length);
         for (String word : wordArrays) {
             wordTree.insert(word);
         }
@@ -201,9 +207,8 @@ public class WordTree {
         for (Map.Entry entry : hashMap.entrySet()) {
             System.out.println(String.format("key: %s, val: %s", entry.getKey(), entry.getValue()));
         }
-        //System.out.println("root");
-        //System.out.println(wordTree.root);
-
-        wordTree.printPre(wordTree.root);
+        wordTree.traversalPrint(wordTree.root);
+//        System.out.println("root");
+//        System.out.println(wordTree.root);
     }
 }
