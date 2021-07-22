@@ -1,7 +1,10 @@
 package com.example.algorithm.wordtree;
 
 
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +15,8 @@ import java.util.Map;
 public class WordTree {
     //keyNode
     private TrieNode root;
+    //保存字典树内容
+    private List<String> wordsList = new ArrayList<>();
 
     /**
      *
@@ -26,7 +31,7 @@ public class WordTree {
      *
      * @param words
      */
-    public void insert(String words) {
+    private void insert(String words) {
         insert(this.root, words);
     }
 
@@ -48,7 +53,6 @@ public class WordTree {
             } else {
                 //如果不存在
                 root.children[index] = new TrieNode();
-                //root.childs[index].val = words;
             }
             root.children[index].prefixNum++;
             //如果到了字串结尾，则做标记
@@ -72,24 +76,23 @@ public class WordTree {
         return preTraversal(this.root, "");
     }
 
-
     /**
-     * 按字典序输出
-     *
      * @param root
+     * @return
      */
-    private void traversalPrint(TrieNode root) {
+    private void traversalTree(TrieNode root) {
         if (root != null) {
             boolean isLeaf = root.isLeaf;
             if (isLeaf) {
-                System.out.println(String.format("是否叶子节点节点：%s,值 ：%s", true, root.val));
+                if (root.val != null && !root.val.isEmpty()) {
+                    wordsList.add(root.val);
+                }
             }
             for (TrieNode p : root.children) {
-                traversalPrint(p);
+                this.traversalTree(p);
             }
         }
     }
-
 
     /**
      * 前序遍历
@@ -125,7 +128,7 @@ public class WordTree {
      * @param word
      * @return true if exists ,otherwise  false
      */
-    public boolean isExist(String word) {
+    private boolean isExist(String word) {
         return search(this.root, word);
     }
 
@@ -154,7 +157,7 @@ public class WordTree {
      * @param prefix 字串前缀
      * @return 字串集以及出现次数，如果不存在则返回null
      */
-    public HashMap<String, Integer> getWordsForPrefix(String prefix) {
+    private HashMap<String, Integer> getWordsForPrefix(String prefix) {
         return getWordsForPrefix(this.root, prefix);
     }
 
@@ -178,6 +181,38 @@ public class WordTree {
         return preTraversal(root, prefix);
     }
 
+    /**
+     * 保存记录到文件
+     *
+     * @param wordsList
+     * @throws Exception
+     */
+    private void saveTree(List<String> wordsList) throws Exception {
+        final String filePath = "src/main/resources/words.txt";
+        if (wordsList == null || wordsList.isEmpty()) {
+            return;
+        }
+        FileWriter fileWriter = new FileWriter(filePath, false);
+        String fileContent = "";
+        for (String word : wordsList) {
+            fileContent += "\r\n" + word;
+        }
+        fileWriter.write(fileContent.replaceFirst("\r\n", ""));
+        fileWriter.flush();
+        fileWriter.close();
+    }
+
+    /**
+     * 构建字典树
+     *
+     * @param wordArrays
+     */
+    private void treeBuilder(String[] wordArrays) {
+        for (String word : wordArrays) {
+            this.insert(word);
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         String[] wordArrays = {"ail", "ailment", "aimless", "aircraft", "aircrew",
                 "babble", "baby", "bachelor", "cabin", "allow", "ersatz", "zipper", "year"
@@ -187,12 +222,10 @@ public class WordTree {
                 , "massachusetts", "kindergarten", "kindly", "kleptomania", "knighthood", "knowledgeable"
                 , "haberdashery", "habitation", "haggard", "hammer", "handwriting", "harangue", "harem"
                 , "Catchment", "headsman", "healthful", "hearthstone", "hemorrhage", "hercules", "heroism",
-                "hidalgo"};
+                "hidalgo", "apple", "apply"};
         WordTree wordTree = new WordTree();
         System.out.println("worlds total number:" + wordArrays.length);
-        for (String word : wordArrays) {
-            wordTree.insert(word);
-        }
+        wordTree.treeBuilder(wordArrays);
         HashMap<String, Integer> map = wordTree.getAllWords();
         for (String key : map.keySet()) {
             System.out.println(key + " 出现: " + map.get(key) + "次");
@@ -207,8 +240,8 @@ public class WordTree {
         for (Map.Entry entry : hashMap.entrySet()) {
             System.out.println(String.format("key: %s, val: %s", entry.getKey(), entry.getValue()));
         }
-        wordTree.traversalPrint(wordTree.root);
-//        System.out.println("root");
-//        System.out.println(wordTree.root);
+        wordTree.traversalTree(wordTree.root);
+        //save
+        wordTree.saveTree(wordTree.wordsList);
     }
 }
