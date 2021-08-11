@@ -4,6 +4,109 @@
 ```roomsql
 -- create database lintcode default charset=utf8
 use lintcode;
+
+desc rankings;
+desc sapling_distances;
+desc students;
+desc enrollments;
+desc companies;
+desc recording;
+--
+desc categories;
+select *from rankings;
+
+drop table if exists teachers_bkp;
+
+create table `teachers_bkp`  ( 
+	  `id` int unsigned not null auto_increment, 
+	  `name` varchar(64) not null, 
+	  `email` varchar(64) , 
+	  `age` int unsigned not null, 
+	  `country` varchar(32) not null, 
+	  primary key (`id`) 
+);
+        
+drop table if exists student_heights;
+
+create table `student_heights`(
+    `height` int not null
+);
+
+-- 查询教师表 teachers 和课程表 courses，查询 'Western Venom' 老师所教的所有课程信息
+insert into teachers_bkp (select *from teachers );
+
+select c.id,c.name,c.student_count,c.created_at,c.teacher_id
+ from teachers t inner join  courses c
+ on t.id=c.teacher_id
+ and t.name='Western Venom';
+
+-- 
+insert into student_heights values(178);
+insert into student_heights values(178);
+insert into student_heights values(173);
+insert into student_heights values(173);
+insert into student_heights values(171);
+insert into student_heights values(174);
+insert into student_heights values(175);
+insert into student_heights values(176);
+-- 请编写一个 SQL 语句，在只出现过一次的身高中，找出最高的身高
+select height ,count(height)  as number 
+ from student_heights group by height order by number desc;
+-- 
+select max(height) as height from (
+select height ,count(height)  as number 
+ from student_heights group by height having number=1) a;
+ 
+-- 
+drop table if exists sapling_distances;
+
+create table `sapling_distances`(
+    `id` int unsigned auto_increment,
+    `distance` int not null,
+    primary key ( `id` )
+);
+-- 树苗距离表 
+insert into `lintcode`.`sapling_distances` (`id`, `distance`) values ('1', '8');
+insert into `lintcode`.`sapling_distances` (`id`, `distance`) values ('2', '1');
+insert into `lintcode`.`sapling_distances` (`id`, `distance`) values ('3', '4');
+
+-- companies 表存储了所有公司的信息，包括公司 id 和公司名称 name
+create table `companies`(
+    `id` int unsigned auto_increment,
+    `name` varchar(50) not null,
+    `address` varchar(50) not null,
+    primary key ( `id` )
+);
+-- recording 表存储了所有的简历投递数据，包括学生 id (student_id) 和 公司 id (company_id)
+desc  recording;
+create table `recording`(
+    `id` int unsigned auto_increment,
+    `delivery_date` date not null,
+    `company_id` int not null,
+    `student_id` int not null,
+    primary key ( `id` )
+);
+-- 
+drop table if exists classes;
+-- 创建班级表 
+create table `classes`(
+    `id` int unsigned auto_increment,
+    `name` varchar(50) not null,
+    `teacher_id` int not null,
+    primary key ( `id` )
+);
+-- 插入班级表
+insert into classes values(1,'Class 1',2);
+insert into classes values(2,'Class 2',1);
+insert into classes values(3,'Class 3',3);
+insert into classes values(4,'Class 4',2);
+
+-- 插入公司表
+insert into companies values(1,	'Alibaba','Hang Zhou');
+insert into companies values(2,'NetEase'	,'Guang Zhou');
+insert into companies values(3,'Baidu'	,'Bei Jing');
+insert into companies values(4,'Tencent','Shen Zhen');
+
 -- 学生表
 create table students(
   id int unsigned AUTO_INCREMENT not null comment '学生ID',
@@ -12,9 +115,55 @@ create table students(
   primary key (id)
 )engine=innodb default charset=utf8 comment='学生表' ;
 
-desc students;
-desc enrollments;
+-- 请编写 SQL 语句，查询所有没有向阿里巴巴 (Alibaba) 公司投递过简历的学生姓名
+-- 方法1
+select t.name,t.id from students t where t.name not in(select s.name from students s ,companies c ,recording r
+where 1=1
+and s.id=r.student_id and c.id =r.company_id
+and c.name='Alibaba') ;
+-- 方法2
+select s.name from students s where 1=1 and s.id not in(
+select r.student_id from recording r inner join companies c 
+on r.company_id=c.id and c.name='Alibaba');
+
+-- 请编写 SQL 语句，查询接收简历最多的公司名称和地址
+select name,address from companies where id in(
+select company_id from recording group by company_id 
+ having count(company_id)>1 order by count(company_id)  desc);
+ --
+ select name,address from companies where id in(
+select company_id,count(id) as max_count from recording group by company_id 
+order by count(company_id)  desc limit 1);
+
+
+select c.name, c.address from recording r  inner join companies c 
+on r.company_id = c.id 
+group by c.name, c.address
+having count(*) = (
+select max(max_count) from (
+select c.name,c.address ,count(r.id) as max_count from companies c inner join recording r 
+  on c.id=r.company_id group by c.id ,c.name desc) t);
+ 
+-- 请编写一个 SQL 语句，找到最近的两棵树苗的距离 (shortest_distance)
+--   
+select  min(abs(a.distance - b.distance)) as shortest_distance
+  from sapling_distances a inner join  sapling_distances b
+  on a.id != b.id having shortest_distance != 'none';
+
+desc recording;
+
 -- drop table students;
+-- 请编写 SQL 语句，找出 "zhangsan" 同学所在班级的班级名称
+select c.name from classes c inner join students s on c.id=s.class_id where 1=1
+ and s.name='zhangsan';
+ 
+ -- 请编写 SQL 语句，找出 "xujia" 老师所带的班级所有同学的姓名
+ select s.name from students s inner join classes c on s.class_id=c.id
+ inner join teachers t on t.id=c.teacher_id
+  where 1=1
+  and t.name='xujia';
+  
+ 
 -- 学籍表
 create table enrollments(
   id int unsigned not null comment '学籍主键',
@@ -120,6 +269,23 @@ b.increased_count,(b.increased_count-a.increased_count>0) as bigger
  left join new_cases b 
  on a.id =b.id-1 and (b.increased_count-a.increased_count>0);
  
+desc online_class_situations;
+/*
+在创建数据表时，因为数据库工作人员忘记添加主键约束，现在我们需要对课程表 courses 添加主键约束，
+将 id 列设置为主键，请编写相应的 SQL 语句
+*/
+-- alter table 表名 modify 列名 数据类型 primary key
+alter table courses modify id INT(10) unsigned primary key;
+
+-- 删除主键约束
+-- alter table 表名 drop primary key
+
+
+-- SELECT c.name as course_name ,t.name as teacher_name
+-- from courses c cross join teachers t 
+-- on c.teacher_id =t.id ;
+
+
 /*
 编写一个 SQL 语句，来查找与前一天的日期相比美国的新增病例数更高的所有日期的 id
 说明：
@@ -142,6 +308,123 @@ select b.id from new_cases a
  and datediff(b.date,a.date)=1
  and (b.increased_count-a.increased_count>0);
  
+-- 查询 courses 表，计算从 2018 年 01 月 13 日到创建课程时间（created at）相差天数，结果列名请以 date_diff 显示
+select datediff(created_at,'2018-01-13 ') as date_diff 
+  from courses;
+  
+-- 从课程表 courses 中查询所有课程的课程名称（ name ）和课程创建时间（ created_at ）的小时数，将提取小时数的列名起别名为 created_hour
+select name, hour(created_at) as created_hour from courses;
+-- 从课程表 courses 中查询课程的名字和创建年份，并为 created_at 起别名为 created_year
+SELECT name ,year(created_at) as created_year FROM courses;
+  
+/*
+将教师表 teachers 和课程表 courses 进行左连接，查询来自中国（讲师国籍 country ='CN' ）
+的教师名称以及所教课程名称，结果列名请分别以课程名称 course_name ，
+教师名称 teacher_name 显示
+*/
+select courses.name as course_name ,teachers.name as teacher_name  from teachers left join
+ courses on teachers.id=courses.teacher_id WHERE 1=1 and  country ='CN';
+
+/*
+将课程表 courses 和教师表 teachers 进行右连接，查询教师姓名，邮箱以及所教课程名称，
+ 结果列名请分别以课程名称 course_name ，
+教师姓名 teacher_name ，教师邮箱 teacher_email 显示
+*/
+select c.name as  course_name ,t.name as teacher_name,t.email as teacher_email 
+ from  courses c right join teachers t
+  on c.teacher_id=t.id ;
+  
+  select c.name as  course_name ,t.name as teacher_name,t.email as teacher_email ,
+  t.country
+	from courses c right join teachers t 
+	on c.teacher_id=t.id 
+  WHERE 1=1 and  country ='CN';
+/*
+将课程表 courses和教师表 teachers 进行全连接，查询课程名称以及对应授课教师的年龄，
+结果列名请分别以课程名称 course_name 和教师年龄 teacher_age 显示
+*/
+select c.name as course_name,
+ t.age as teacher_age 
+ from courses c right join teachers t on c.teacher_id=t.id ;
+      
+
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select c.`name` as course_name, t.age as teacher_age from teachers t
+left join courses c on t.id = c.teacher_id
+union
+select c.`name` as course_name, t.age as teacher_age from teachers t
+right join courses c on t.id = c.teacher_id;
+-- 将课程表 courses 和教师表 teachers 进行外连接，查询所有课程名称以及与其相互对应的教师名称和教师国籍，结果列名请分别以课程名称 course_name 、
+-- 教师名称 teacher_name 、教师国籍 teacher_country 显示
+select c.name as course_name,t.name as teacher_name,
+ t.country as teacher_country 
+ from courses c right join teachers t on c.teacher_id=t.id 
+ union
+ select c.name as course_name,t.name as teacher_name,
+ t.country as teacher_country 
+ from courses c left join teachers t on c.teacher_id=t.id ;
+ -- 
+ select c.`name` as course_name, t.email as teacher_email from courses c
+left join teachers t on t.id = c.teacher_id;
+/*
+查询教师表 teachers ，统计不同国家教师的人数，并将结果按照不同国籍教师人数升序排列，
+如果相同教师数量则按照国籍名称升序排列，返回列名显示为 teacher_count
+*/
+select t.country,count(t.country) as teacher_count
+  from teachers t
+ group by t.country order by teacher_count asc , t.country asc;
+ 
+/*
+查询教师表 teachers，统计不同年龄教师的人数，并将结果按照年龄从大到小排列，返回列名显示为 age_count
+*/
+select age,count(age)	as age_count from teachers
+where 1=1
+group by age  order by age desc;
+
+
+/*
+连接 courses 与 teachers 表，统计不同教师所开课程的学生总数，对于没有任课的老师，学生总数计为 0 
+，最后查询学生总数少于 3000 的教师姓名及学生总数 （别名为 student_count ），
+结果按照学生总数升序排列，如果学生总数相同，则按照教师姓名升序排列
+*/
+select t.name as name , sum(ifnull(student_count,0) )as student_count from
+ teachers t left join courses c 
+  on c.teacher_id=t.id  where 1=1
+  and c.student_count<3000
+  group by t.name
+  order by student_count asc, t.name asc;
+  
+select t.name as name , sum(ifnull(student_count,0) )as student_count from
+ teachers t left join courses c 
+  on c.teacher_id=t.id  where 1=1
+  -- and c.student_count<3000
+  group by t.name
+  having student_count<3000
+  order by student_count asc, t.name asc;
+-- 向记录表 records 中插入当前的日期
+INSERT into records VALUES(date(now()));
+/*
+从 teachers 表中查询教师名字为 Eastern Heretic 的信息，
+并根据教师 id 将教师 Eastern Heretic 创建的课程名称全部改为 PHP，并将学生总数设为 300 人
+*/
+select t.id from teachers t where 1=1 and t.name ='Eastern Heretic';
+
+update courses set student_count=300,name ='name' where courses.teacher_id=
+(select t.id from teachers t where 1=1 and t.name ='Eastern Heretic');
+-- 
+select c.name as course_name,
+ t.age as teacher_age 
+ from courses c right join teachers t on c.teacher_id=t.id ;
+
+-- 查询课程表中课程的创建时间，以 ‘时:分:秒’ 格式输出，最后返回的列名为 created_at
+select DATE_FORMAT(created_at,  '%h:%i:%s')  as created_at from courses;
+  
+-- 查询 courses 表，查询课程创建时间，按照 ’年-月-日 时：分：秒’ 的格式返回结果，返回列名显示为 DATE_FORMAT
+  
+select  date_format(created_at, '%Y-%m-%d %H:%i:%s') as DATE_FORMAT from courses;
+  
+-- select DATE_FORMAT(now(),  '%H:%i:%s')  as created_at from courses;
  /*
  从不充值的玩家
  某游戏数据库包含两个表，用户 (users) 表和充值 (recharges) 表，编写一个 SQL 语句，找出所有从未充值的玩家
@@ -353,7 +636,18 @@ select student_id,min(date) as earliest_course_date
 from online_class_situations
 where course_number > 0
 group by student_id;
-
+/*
+每行数据记录了一名同学在退出网课之前，当天使用同一台设备登录课程后听过的课程数目（可能是0个）。
+写一条 SQL 语句，查询每位同学第一次登录平台听课的设备ID (device_id)
+*/
+select student_id,device_id 
+ from (select student_id,min(device_id) AS device_id,min(date) as earliest_course_date 
+ from online_class_situations
+ where course_number > 0
+ group by student_id) a;
+ 
+--
+desc exams;
 
 /*
 rooms 表记录了公租房的租客信息 (tenant_id) 和租金 (rent)
@@ -431,11 +725,12 @@ create table `exams`(
     primary key ( `id` )
 )engine=InnoDB, default charset=utf8 comment '考试表';
 
-insert into exams values(1,	1,	'2020-11-15',	0);
-insert into exams values(2,	2,	'2020-11-17',	1);
-insert into exams values(3,	3	,'2020-11-24',	0);
-insert into exams values(4	,3,	'2020-11-28',	0);
-
+insert into exams values(1,1,'2020-11-10',0);
+insert into exams values(2,2,'2020-11-17',1);
+insert into exams values(3,3,'2020-11-24',2);
+insert into exams values(4,3,'2020-11-28',0);
+insert into exams values(5,1,'2020-11-29',0);
+truncate exams;
 select *from exams;
 
 select student_id as '学生ID' ,count(date) as notpass
@@ -448,7 +743,18 @@ select student_id as '学生ID' ,count(date) as notpass
  where is_pass=0
  group by student_id order by count(date) desc  limit 1 ;
  
- 
+/*
+ 请用 SQL 语句，找到挂科数最多的同学所对应的 student_id
+ 期望答案
+| student_id |
+| :--------- |
+| 1          |
+挂科数量最多的同学有多位，所以我们需要拿到最大的挂科次数，然后和每个同学的挂科次数进行比较，得到相同的即为挂科数最多的同学
+*/ 
+select student_id from exams
+where is_pass = 0 group by student_id
+having count(*) = (select count(*) from exams where is_pass = 0 group by student_id order by count(*) desc limit 1);
+
  -- 结果
 select student_id  from  (
 select student_id,count(date) as notpass
@@ -610,6 +916,127 @@ insert into coutses values (5,'Big Data',700,'2020-9-11',1);
 insert into coutses values (5,'Big Data',700,'2020-9-11',1);
 insert into courses values (10,'Object Oriented Design',300,'2020-8-8',4);
 insert into courses values (12,'Dynamic Programming',2000,'2018-8-18',1);
+insert into courses values(13,'Python',400,'2021-05-23',3);
+
+/*
+将课程表 courses 和教师表 teachers 进行交叉连接，并结合 WHERE 子句，查询课程创建时间和教师国籍，
+结果列名请分别以课程创建时间 course_date 和教师国籍 teacher_country 显示
+*/
+select c.created_at as course_date ,t.country as teacher_country 
+ from courses c left join teachers t 
+ on c.teacher_id=t.id  where 1=1  and !isnull(t.country )
+ union
+ select c.created_at as course_date ,t.country as teacher_country 
+ from courses c right join teachers t 
+ on c.teacher_id=t.id where 1=1 and  !isnull( c.created_at);
+ 
+ --
+ select c.created_at as course_date ,t.country as teacher_country 
+ from courses c cross join teachers t 
+ on c.teacher_id=t.id;
+
+-- 将教师表 teachers 和课程表 courses进行左连接，查询教师名称以及所教课程名称，
+-- 结果列名请分别以课程名称 course_name ，教师名称 teacher_name 显示
+select c.name as course_name,t.name as teacher_name 
+ from teachers t left join courses c on c.teacher_id=t.id;
+ 
+ /*
+ 将课程表 courses 和教师表 teachers 进行内连接，查询 “Eastern Heretic” 老师所教的所有课程的课程名和课程编号 , 
+ 且结果列名分别以课程编号 id 、课程名称 course_name 和教师姓名 teacher_name 显示
+ */
+ 
+select c.id,c.name as course_name ,t.name as teacher_name 
+ from courses c inner join teachers t on c.teacher_id=t.id
+  where 1=1
+  and t.name ='Eastern Heretic';
+  
+/*
+联合教师表（teachers）和课程表（courses） 查询课程表中国籍不为 USA 和 UK 的老师所教所有课程的 id 
+和 所对应的学生数量 student_count*/
+
+select c.id,c.student_count as student_count
+  from courses c inner join  teachers t on c.teacher_id=t.id
+  and t.country not in('USA','UK');
+  
+/*
+查询教师表 teachers 和课程表 courses,统计每个老师教授课程的数量，并将结果按课程数量从大到小排列，
+如果相同课程数量则按照教师姓名排列，返回列名老师姓名列名显示为 teacher_name ，课程数量列名显示为 course_count
+*/
+select t.name as teacher_name,count( c.name) as  course_count
+   from courses c right join  teachers t on c.teacher_id=t.id
+   group by t.name
+   order by course_count desc, teacher_name asc;
+-- country
+
+/*
+连接 courses 与 teachers 表，统计不同国籍教师所开课程的学生总数，对于没有任课的老师，学生总人数计为 0 。
+最后查询教师国籍是 'U' 开头且学生总数在 2000 到 5000 之间的教师国籍及学生总数 （别名为 student_count ），
+结果按照学生总数降序排列，如果学生总数相同，则按照教师国籍升序排列*/
+
+select t.country as country,sum(c.student_count ) as student_count
+    from courses c inner join  teachers t on c.teacher_id=t.id
+    where 1=1 and  country regexp '^U' and
+    student_count between 2000 and 5000
+    group by t.country 
+    order by student_count desc, t.country asc;
+ 
+-- 请编写 SQL 语句，为课程表 courses 中的 teacher_id 添加外键约束，使之能与教师表 teachers 中的 id 相关联
+
+-- 修改外键参照
+alter table courses add foreign key(teacher_id) references teachers(id);
+
+-- 从课程表 courses 中查询第一季度（1月、2月、3月）创建的课程
+select name,quarter(created_at) as created_at from courses where 1=1
+and created_at in(1,2,3);
+
+select name,created_at as created_at from courses where 1=1
+and quarter(created_at) in(1,2,3);
+
+/*
+查询课程表 courses 所有课程中的课程名（name）和创建日期中的年份（别名：year）和月份（ 别名：month）
+*/
+
+
+-- 查询季度
+select  quarter(curdate()) in(3,4,5) ;
+
+
+select name , year(created_at) as 'year' ,month(created_at) as month
+ from  courses;
+ /*查询课程表 courses 中，教师 id teacher_id 不为 3，且学生人数 student_count 超过 800 的所有课程，
+ 最后返回满足条件的课程的所有信息
+ */
+select id,name,student_count,created_at,teacher_id
+ from courses where 1=1
+ and teacher_id<>3 and student_count>800;
+ 
+/*
+查询课程表 courses 中教师 id （teacher_id）为 1、2 或 3 的课程名称、教师 id 和课程创建时间，
+并将结果集按教师 id 升序排列，如果教师 id 相同，则按照课程创建时间降序排列
+*/
+
+ select name,teacher_id, created_at from courses where 1=1
+ and teacher_id in(1,2,3) order by id asc, created_at desc;
+ 
+/*
+修改课程表 courses 中课程的课程创建日期，将课程创建日期均往后推迟一年，
+最后返回课程名称 name 及修改后的课程创建日期，修改后的课程创建日期命名为 new_created 
+*/
+select adddate("2017-06-15", interval 10 day);
+
+select adddate("2017-06-15", interval 1 year);
+-- 日期增加
+select date_add("2017-06-15", interval 1 day) as new_date;
+
+update courses set created_at= adddate(created_at, interval 1 year);
+select name , adddate(created_at, interval 1 year) as new_created from courses;
+-- 提前一月
+select name , adddate(created_at, interval -1 month) as new_created from courses;
+-- 方法2
+select name , date_sub(created_at, interval 1 month) as new_created from courses;
+select id,name , date_sub(created_at, interval 1 day) as new_created from courses;
+
+select name , second(created_at) as created_second from courses;
 
 /*
 请编写 SQL 语句，查询课程表 courses 中课程名称以大写字母 'D' 到 'O' （包含单个字符 'D'、'O'）开头的课程的课程名称
@@ -619,6 +1046,13 @@ select name from courses where 1=1 and substr(name,1,1) between 'D' and 'O';
  
 -- 方法2 正则表达式
 select name from courses where name regexp '^[d-o]';
+
+
+-- 请编写 SQL 语句，查询课程名 name 以字母 'D' 开头的所有课程信息
+
+select id,name,student_count,created_at,teacher_id
+ from courses where 1=1
+ and name regexp '^[D]';
 
 /*
  请编写 SQL 语句，查询 courses 表中，课程名首两个字母在 'Db' 和 'Dy' 之间所有课程的名称
@@ -645,6 +1079,50 @@ select id,a.`name`,student_count as student_count ,created_at as	created_at,
  select id,	name,student_count,created_at,teacher_id 
  from courses where created_at between '2020-06-01'  and '2020-08-31' ;
  
+ -- 请编写 SQL 语句，查询课程表 courses 中学生人数（student_count）最少的三门课程的信息，且结果按升序排序
+ select id,a.`name`,student_count as student_count ,created_at as	created_at,
+ teacher_id from courses a
+  order by student_count asc limit 3;
+ /*
+查询 courses 表，计算课程表中创建课程时间（created_at）与 2021年4月1日的年数差，
+结果课程名称列显示为 courses_name ,创建课程时间显示为 courses_created_at ，年数差列名显示为 year_diff
+*/
+
+select name as courses_name, 
+   created_at as courses_created_at ,
+   timestampdiff(year,date_format(created_at, '%y-%m-%d %h:%i:%s'),'2021-04-01 00:00:00') as  year_diff 
+    from courses
+   where 1=1;
+   
+select datediff('2021-04-01',created_at) from courses as year_diff;
+
+select timestampdiff(year,'1993-03-23 00:00:00',date_format(now(), '%y-%m-%d %h:%i:%s'));
+
+-- 计算课程创建时间与 '2020-04-22' 的月数差，返回列名显示为 MonthDiff
+-- MonthDiff
+select timestampdiff(month,date_format(created_at, '%y-%m-%d'),'2020-04-22')
+ as MonthDiff from  courses;
+ 
+ -- 从课程表courses中查询2020年8月前的课程名和创建日期，
+ -- 并为创建日期的列名起别名为 created_date (日期指 created_at 中不包括具体时间的部分)
+ select name, date(created_at)  as  created_date from courses
+ where 1=1
+ and datediff(created_at,'2020-08-08')<0;
+ 
+ 
+/*
+从课程表 courses 中查询课程的名字name 和课程创建时间 created_at，从课程创建时间created_at 
+中提取出创建课程的日期与时间，用created_date 和created_time作为结果集列名
+*/
+select name,created_at,date(created_at) as created_date, time(created_at) as created_time
+  from courses;
+
+ /*
+ 从课程表 courses 中查询课程的名字 name 和课程创建时间 created_at，
+ 从课程创建时间 created_at 中提取出创建课程的日期，用 created_date 作为结果集列名
+ */
+select name, date(created_at) as created_date from courses;
+
 -- 教师信息表
 drop table if exists `teachers`;
 create table `teachers`  (
@@ -656,6 +1134,33 @@ create table `teachers`  (
   primary key (`id`)
 ) comment '教师信息表';
 
+insert into teachers values(1,'Eastern Heretic','eastern.heretic@gmail.com',20,'UK');
+insert into teachers values(2,	'Northern Beggar',	'northern.beggar@qq.com',	21	,'CN');
+insert into teachers values(3,	'Western Venom',	'western.venom@163.com',	28,	'USA');
+insert into teachers values(4,	'Southern Emperor'	,'southern.emperor@qq.com',	21	,'JP');
+insert into teachers values(5, 'Linghu Chong',null,18,'CN');
+
+-- 查询教师表 teachers 中教师邮箱为 'qq.com' 结尾的年龄的平均值，最后返回结果列名显示为 'average_teacher_age'
+select  avg(age) as  average_teacher_age from teachers
+ where 1=1 and email regexp '@qq.com$'; 
+ 
+ select avg(age) as  average_teacher_age from  teachers
+ where 1=1 and email like  '%@qq.com';
+
+
+
+-- 请编写 SQL 语句，查询教师表 teachers 中，所有使用 qq 邮箱的教师名字和邮箱
+-- 方法1
+select name,email from teachers where 1=1
+and email like '%qq.com';
+
+-- 方法2  返回字符串 s 的后 n 个字符
+select name,email from teachers where 1=1
+and right(email,length('@qq.com'))='@qq.com';
+-- 正则表达式
+select name,email from teachers where 1=1
+and email regexp '@qq.com$';
+
  /*
  请编写 SQL 语句，查询教师表 teachers 中除了年龄 age 在 20 岁以上 (不包括 20 岁) 的中国 (CN)
  教师以外所有教师信息
@@ -665,21 +1170,215 @@ FROM  teachers
 where 1=1
 and email is null or email='';
 
+-- 将教师表 teachers 中教师名 (name) 为 Linghu Chong 的邮箱 (email) 更新为 "linghu.chong@lintcode.com"
+update teachers set  email ='linghu.chong@lintcode.com'
+ where name='Linghu Chong';
 
  -- 方法1
 select  id,b.`name`,email,age,country from teachers b where id not in(
 select id from teachers a where 1=1 and a.country='cn' and age>20);
  -- 方法2
 select id,b.`name`,email,age,country from teachers where not (age > 20 and country = 'cn');
+-- 请编写 SQL 语句，使用 LIKE 查询教师表 teachers 中邮箱为腾讯邮箱且国籍为中国的所有教师，并返回所查询教师的全部信息
+select id,name,email,age,country
+from  teachers
+where 1=1
+and country='CN'
+and email  like '%@qq.com';
 
---
+ -- 请编写 SQL 语句，查询教师表 teachers 中的中国教师，并按照年龄降序排序
+
+ select id,name,email,age,country
+  from  teachers 
+  where 1=1
+  and country='CN' order by age desc;
+
+ select id,name,email,age,country
+  from  teachers 
+  where 1=1
+  and country='CN' order by age asc;
+  
+-- 请编写 SQL 语句，从 teachers 表中找出没有邮箱并且年龄大于20岁的教师信息
+ select id,name,email,age,country
+  from  teachers 
+  where 1=1
+  and age>20
+  and isnull(email);
+  
+
+
+
+-- 请编写 SQL 语句，查询教师表 teachers 中教师年龄 age 的唯一值，并将结果进行升序排序
+select age from teachers group by age asc;
+
+-- 从 teachers 表中找出龄等于 18 并且来自中国 (CN) 的老师信息
+select id,name,email,age,country
+  from  teachers 
+  where 1=1
+  and age=18
+  and country='CN';
+--  查询 courses 表，查询课程创建时间，按照’年 月‘的格式返回结果，返回列名显示为 DATE_FORMAT
+select date_format(created_at,'%Y %m') as DATE_FORMAT from courses;
+
+/*
+修改 courses 表中课程的课程创建日期，将课程创建日期均推迟一天，
+最后返回课程名称 name 及修改后的课程创建时间，修改后的课程创建时间命名为 new_created
+*/
+
+select name , date_add(created_at, INTERVAL 1 day) new_created from courses;
+
+-- 统计课程表 courses 中 2020 年 1 月到 5 月之间的课程数量，最后返回统计值，结果列名显示为 course_count
+
+select count(name)  as course_count from courses where 1=1
+and created_at between '2020-01-01' and '2020-05-31';
+
+-- 从 courses 表中选取学生人数 student_count 大于 1000 且课程名为 'System Design' 或 'Django' 的所有课程信息
+ -- 方法1
+ select id,a.`name`,student_count,created_at,teacher_id from courses a
+ where 1=1
+ and a.`name` in('System Design','Django')
+ and student_count>1000;
+ -- 查询课程表 courses 中课程名称为 System Design 的课程信息
+  select id,a.`name`,student_count,created_at,teacher_id from courses a
+ where 1=1
+ and a.`name` ='System Design';
+ -- 从 courses 表中，选取课程名为 'Web' 或者 'Big Data' 的课程信息，如果这两门课程同时存在，请将这两门课程的信息全部返回
+ 
+ select id,a.`name`,student_count,created_at,teacher_id from courses a
+  where 1=1
+  and name in('Web', 'Big Data');
+  
+  -- 请编写 SQL 语句，删除课程表 courses 中课程创建日期 created_at 在 2020 年之前的所有课程
+  delete from courses where year(created_at)<'2020';
+ 
+-- 请编写 SQL 语句，查询课程表 courses 中学生人数 student_count 的平均值，
+-- 最后返回结果列名显示为 average_student_count
+
+select avg(ifnull(student_count,0)) as average_student_count  from courses;
+
+-- 
+select id,name,student_count,created_at,teacher_id
+ FROM courses order by student_count asc;
+ 
+/*
+请编写 SQL 语句，统计课程表 courses 中不同的教师 id teacher_id 的数量，
+最后返回统计值，结果列名显示为 teacher_count
+*/
+-- 方法1
+select count(*) as teacher_count 
+ from (select distinct teacher_id  from courses where teacher_id is not null or teacher_id<>'') a;
+
+-- 方法2
+select count(*) as teacher_count from 
+(select teacher_id 
+   from courses where  teacher_id is not null or teacher_id<>''
+   group by teacher_id) a;
+
+-- 请编写 SQL 语句，查询课程表 courses 所有课程中最多的学生人数（student_count）
+
+select max(student_count) as max_student_count from courses;
+
+-- 请编写 SQL 语句，从教师表 teachers 中，查询最年长的中国教师信息，并返回该教师的年龄
+select max(age) as max_age from teachers 
+where 1=1
+and country in('CN');
+
+
+
+/*
+请编写 SQL 语句，查询教师表 teachers 中，国籍为 'CN' 或 'JP' 且 email 信息不为空的所有教师信息
+*/
+ select id,name,email,age,country
+from  teachers
+where 1=1
+and country in('CN','JP')
+and (email is not null or email<>'');
+
+
+-- 请编写 SQL 语句，查询教师表 teachers 中最小的教师年龄 （age）
+select min(age)  as min_age from teachers;
+
+/*
+请编写 SQL 语句，统计教师表中年龄在 20 到 28 岁之间，
+且国籍为中国或英国的教师人数，最后返回统计值，结果列名显示为 teacher_count
+*/
+
+select count(id) as teacher_count from teachers
+ where 1=1
+ and country in('CN','UK')
+ and age between 20 and 28;
+ 
+
+-- 请编写 SQL 语句，从教师表（teachers）中查询一条年龄最大的中国教师的信息
+select id,name,email,age,country
+from  teachers
+where 1=1
+and country ='CN'
+order by age desc limit 1;
+
+-- 请编写 SQL 语句，查询教师表 teachers 中的不重复的教师国籍（country）
+
+select country ,count(country) as counts from teachers
+where 1=1
+group by country 
+having count(country)=1;
+
+
+select country  from teachers
+where 1=1
+group by country ;
+
+/*
+请编写 SQL 语句，查询教师表 teachers 中，20 岁（不包含 20 岁）以上教师的平均年龄，
+返回的字段为 avg_teacher_age ，结果保留四舍五入后的整数
+*/
+select round(avg(age),0) as avg_teacher_age from 
+ teachers where 1=1
+ and age>20;
+ /*
+ 请编写 SQL 语句，对教师表 teachers 中教师是否拥有邮箱进行判断，最后返回教师姓名和邮箱，
+ 以及使用函数 ISNULL 、IFNULL 、COALESCE 判断结果
+ */
+ select name,email,ISNULL(email) as isnull_email ,IFNULL(email,0) 
+  as ifnull_email ,COALESCE(email,0)
+  as coalesce_email
+ from teachers;
+ 
+ select ISNULL(email) from teachers; 
+
+-- 请编写 SQL 语句，查询课程表 courses 中学生人数（student_count）最少的课程的人数
+
+select min(student_count) as min_student_count from courses;
+
+/*
+请编写 SQL 语句，统计课程表 courses 中所有课程上课学生人数的总和，
+并用 all_student_count 作为结果集列名
+*/
+
+select sum(student_count) as all_student_count from courses;
+/**
+请编写 SQL 语句，统计课程表 courses 中 teacher_id 为 3 的教师所教授的学生总数，并用select_student_sum 作为结果集列名
+**/
+select sum(ifnull(student_count,0)) as  select_student_sum
+from courses
+where 1=1
+and teacher_id=3;
+/*
+请编写 SQL 语句，查询课程表 courses 中，课程人数 student_count 的平均值 ，
+返回的字段名为 avg_student_count ，且结果保留四舍五入的两位小数
+*/
+select format(avg(ifnull(student_count,0)),2) as avg_student_count from courses;
+select round(avg(ifnull(student_count,0)),2) as avg_student_count from courses;
+
+
 /*
 请编写 SQL 语句，查询课程表 courses 中课程创建时间 created_at 在 '2020-01-01' (包括) 到 '2020-05-01' (不包括) 
 之间的所有课程名称和课程创建时间
 */
  select a.`name` ,created_at from courses a
   where  (a.created_at>='2020-01-01' and  a.created_at<'2020-05-01');
- 
+  
+
  /*
  请编写 SQL 语句，查询课程表 courses 中开设在 2020 年内的所有课程信息
  */
@@ -710,7 +1409,6 @@ select id,name ,email,age,country
   where 1=1
   and (age>=20 and age<=25)
   and  country not in('uk','cn');
-  
 /*
 请编写 SQL 语句，查询课程表 courses 中学生数量在 50 到 55 之间的所有课程信息
 */
@@ -718,7 +1416,73 @@ select id,name,student_count,created_at,teacher_id
 from courses 
  where 1=1
  and student_count between 50 and 55;
+/*
+请编写 SQL 语句，查询课程表 courses 中不重复的开课教师编号 teacher_id
+*/
+select distinct teacher_id from courses;
+-- 编写一个 SQL 语句，获取球员 (players) 表中第二高的身高 (height)
+select height as second_height from players
+group by height  order by height desc limit 1,1 ;
+
+select ifnull(height,null) as second_height from (select distinct height  from players
+ order by height desc limit 1,1 ) a;
+select ifnull(( 
+                select distinct height 
+                from players 
+                order by height desc 
+                limit 1, 1 
+        ), null) as second_height;
  
+desc players;
+select *from  players order by height;
+drop table if exists players ;
+
+create table `players`(
+    `id` int unsigned auto_increment,
+    `height` int not null,
+    primary key ( `id` )
+);
+insert into players values(1,198);
+insert into players values(2,226);
+insert into players values(3,200);
+insert into players values(4,226);
+-- 
+drop table if exists contacts;
+
+create table `contacts`(
+    `id` int unsigned auto_increment,
+    `name` varchar(50) not null,
+    primary key ( `id` )
+);
+
+insert into contacts values(1,'Song Jiang');
+insert into contacts values(2,'Lu Junyi');
+insert into contacts values(3,'Wu Yong');
+insert into contacts values(4,'Song Jiang');
+insert into contacts values(5,'Wu Yong');
+insert into contacts values(6,'Lin Chong');
+
+select *from contacts;
+-- 编写一个 SQL 语句，来删除 contacts 表中所有重复的姓名，重复的姓名里只保留 id 最小的那个
+
+select name,max(id) as number from contacts group by name;
+
+select name,max(id) as maxid,count(name) as count
+  from contacts group by name;
+
+--
+select name,max(id) as maxid,count(name) as count
+  from contacts group by name having count>=2;
+-- 
+select max(id)
+  from contacts group by name having count(name)>=2;
+  
+-- 
+delete from contacts where 1=1
+and  id not in (select a.minid from( select name, min(id) 
+   as minid from contacts group by name) a);
+   
+-- second_height ;
  /*
  请编写 SQL 语句，查询教师表 teachers 中年龄不在 20 到 30 岁之间的教师信息
  */
@@ -731,4 +1495,54 @@ from courses
   teachers where 1=1
   and country='cn'
    and id not between 5 and 10  ;
+   
+drop table if exists `records`;
+--  记录表
+create table `records`  (
+    `now_time` datetime(3) not null
+);
+select *from records;
+-- '2021-08-07 19:16:49.000'
+ truncate records;
+ 
+insert into records values(now(3));
+-- 
+drop table if exists boxes;
+create table `boxes`(
+    `id` int  auto_increment,
+    `is_empty` int not null,
+    primary key ( `id` )
+);
+/*
+某处摆放着一些标有 id 的箱子，其中部分箱子是装有东西的，部分箱子是空闲的。
+请编写 SQL 语句，找到空且连续的箱子，并将它们按照 id 递增排序后返回
+箱子状态 (0 表示箱子占用，1 表示箱子空闲可用)
+*/
+--
+select distinct a.id
+from boxes a,boxes b
+where (a.is_empty = 1 and b.is_empty = 1 and (a.id + 1 = b.id or b.id + 1 = a.id))
+order by id;
+
+insert into boxes values(1,1);
+insert into boxes values(2,0);
+insert into boxes values(3,1);
+insert into boxes values(4,1);
+insert into boxes values(5,1);
+insert into boxes values(5,0);
+truncate boxes;
+-- 插入数据
+-- command+b 格式化代码
+select a.id,a.is_empty,b.id as  b_id , b.is_empty ,abs(b.is_empty-a.is_empty) as flag
+ from boxes a 
+inner join boxes b on a.id+1=b.id
+where 1=1 and abs(b.is_empty-a.is_empty)=0;
+-- 查询出为空的ID和状态
+select id,is_empty from boxes a where 1=1
+and a.is_empty=1;
+
+-- 查询 rankings 表和 categories 表中所有项目对应的项目名称 (name)、该项目平均分数 (average_score)
+select c.name ,round(avg(r.score),2 )as average_score from categories c inner join rankings r
+on r.category_id =c.id
+group by c.name;
 ```
