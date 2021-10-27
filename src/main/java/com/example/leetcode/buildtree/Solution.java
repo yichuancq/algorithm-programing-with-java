@@ -24,7 +24,6 @@ public class Solution {
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         TreeNode treeNode = null;
-        // TODO: 2021/4/4 todo 重建该二叉树
         return treeNode;
     }
 
