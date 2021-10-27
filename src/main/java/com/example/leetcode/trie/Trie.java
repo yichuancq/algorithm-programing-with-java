@@ -97,7 +97,6 @@ public class Trie {
     }
 
     public static void main(String[] args) {
-        // TODO: 2021/10/27   前缀树
         Trie trie = new Trie();
         trie.insert("apple");
         System.out.println(trie.search("apple"));
