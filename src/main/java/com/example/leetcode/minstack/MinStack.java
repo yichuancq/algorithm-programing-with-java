@@ -1,6 +1,7 @@
 package com.example.leetcode.minstack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,14 +82,22 @@ public class MinStack {
         if (integerList.isEmpty()) {
             return 0;
         }
-        int minVal = integerList.get(0);
-        for (Integer integerElement : integerList) {
-            if (integerElement <= minVal) {
-                minVal = integerElement;
-            }
-        }
-        return minVal;
+        Collections.sort(integerList);
+        return integerList.get(0);
     }
+
+//    public int getMin() {
+//        if (integerList.isEmpty()) {
+//            return 0;
+//        }
+//        int minVal = integerList.get(0);
+//        for (Integer integerElement : integerList) {
+//            if (integerElement <= minVal) {
+//                minVal = integerElement;
+//            }
+//        }
+//        return minVal;
+//    }
 
     public int stackSize() {
         return integerList.size();

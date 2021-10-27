@@ -39,7 +39,6 @@ public class ScoreService {
      */
     private void addScore() throws Exception {
         System.out.println("添加成绩信息");
-        // TODO: 2021/4/7  教师添加成绩
         //显示教师选课信息
         new TeacherService(baseService).showTeacherCourseInto();
         //显示学生信息
@@ -154,7 +153,6 @@ public class ScoreService {
         teacherName = teacherDb.getName();
         Score score = new Score(scNumber, studentNumber, stuName, courseNumber, curseName, classNumber,
                 className, teacherNumber, teacherName, scoreVal);
-        // TODO: 2021/4/7  添加课程信息
         //添加到内存链表
         this.baseService.getScoreRepository().add(score);
         //

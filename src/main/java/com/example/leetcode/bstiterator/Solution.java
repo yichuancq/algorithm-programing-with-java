@@ -8,8 +8,6 @@ import com.example.leetcode.node.TreeNode;
  * 指针应初始化为一个不存在于 BST 中的数字，且该数字小于 BST 中的任何元素。
  * boolean hasNext() 如果向指针右侧遍历存在数字，则返回 true ；否则返回 false 。
  * int next()将指针向右移动，然后返回指针处的数字。
- * <p>
- * https://leetcode-cn.com/problems/binary-search-tree-iterator/
  */
 public class Solution {
 
@@ -147,8 +145,6 @@ public class Solution {
         BSTIterator bstIterator = new BSTIterator();
         bstIterator.initTree(arrays);
         System.out.println(bstIterator.head);
-//        System.out.println(bstIterator.next());
-//        System.out.println(bstIterator.next());
         int size = bstIterator.len(bstIterator.head);
         System.out.println("tree nodes amount:" + size);
         int next = bstIterator.next();
