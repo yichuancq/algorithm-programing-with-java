@@ -36,9 +36,10 @@ public class MyStack2 {
     public void push(int x) {
         a.offer(x);
         // 将b队列中元素全部转给a队列
-        while (!b.isEmpty())
+        while (!b.isEmpty()) {
             a.offer(b.poll());
-        // 交换a和b,使得a队列没有在push()的时候始终为空队列
+        }
+        //交换a和b,使得a队列没有在push()的时候始终为空队列
         Queue temp = a;
         a = b;
         b = temp;
@@ -46,6 +47,7 @@ public class MyStack2 {
 
     /**
      * 弹出元素
+     *
      * @return
      */
     public int pop() {
@@ -54,6 +56,7 @@ public class MyStack2 {
 
     /**
      * 取顶部元素
+     *
      * @return
      */
     public int top() {
@@ -62,6 +65,7 @@ public class MyStack2 {
 
     /**
      * 是否为空
+     *
      * @return
      */
     public boolean empty() {
