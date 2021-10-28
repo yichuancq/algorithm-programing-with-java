@@ -10,12 +10,12 @@ public class Codec {
     /**
      * 编码
      *
-     * @param strs
+     * @param stringList
      * @return
      */
-    public String encode(List<String> strs) {
+    public String encode(List<String> stringList) {
         StringBuilder sb = new StringBuilder();
-        for (String s : strs) {
+        for (String s : stringList) {
             sb.append(intToString(s));
             sb.append(s);
         }
@@ -48,6 +48,7 @@ public class Codec {
         }
         return new String(bytes);
     }
+
     public int stringToInt(String bytesStr) {
         int result = 0;
         for (char b : bytesStr.toCharArray())
