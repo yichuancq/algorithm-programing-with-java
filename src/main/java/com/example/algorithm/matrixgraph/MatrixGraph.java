@@ -129,4 +129,3 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
         this.removeVertex(i);                    //删除顶点vi及其关联的边
     }
 }
-//@author：Yeheya。2015-3-15
