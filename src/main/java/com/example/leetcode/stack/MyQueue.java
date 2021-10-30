@@ -26,12 +26,13 @@ public class MyQueue {
     private Stack stackOut;
 
     public MyQueue() {
-        stackIn = new Stack<>(); // 负责进栈
-        stackOut = new Stack<>(); // 负责出栈
+        //负责进栈
+        stackIn = new Stack<>();
+        //负责出栈
+        stackOut = new Stack<>();
     }
 
     public void push(int x) {
-        //  System.out.println("push:" + x);
         stackIn.push(x);
     }
 
@@ -53,7 +54,6 @@ public class MyQueue {
     private void copyStackOut() {
         if (stackOut.isEmpty()) {
             while (!stackIn.isEmpty()) {
-                // System.out.println("转移元素");
                 stackOut.push(stackIn.pop());
             }
         }
@@ -61,12 +61,16 @@ public class MyQueue {
 
     public static void main(String[] args) {
         MyQueue myQueue = new MyQueue();
-        myQueue.push(1); // queue is: [1]
-        myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+        // queue is: [1]
+        myQueue.push(1);
+        // queue is: [1, 2] (leftmost is front of the queue)
+        myQueue.push(2);
         myQueue.push(3);
         myQueue.push(4);
-        System.out.println(myQueue.peek()); // return 1
-        System.out.println(myQueue.pop()); // return 1, queue is [2]
+        // return 1
+        System.out.println(myQueue.peek());
+        // return 1, queue is [2]
+        System.out.println(myQueue.pop());
         System.out.println(myQueue.empty());
         System.out.println(myQueue.pop());
         System.out.println(myQueue.pop());

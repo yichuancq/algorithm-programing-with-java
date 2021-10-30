@@ -63,8 +63,7 @@ public class MyStack {
     }
 
     public static void main(String[] args) {
-
-        // TODO: 2021/10/28 用队列实现栈
+        // 用队列实现栈
         MyStack myStack = new MyStack();
         myStack.push(1);
         myStack.push(2);

@@ -39,6 +39,7 @@ public class Solution {
     public static void main(String[] args) {
         //head = [1,1,2,3,3]
         int[] arrays = {1, 1, 2, 3, 3, 7, 7, 8, 8};
+
         Solution solution = new Solution();
         //输出：[1,2,3]
         ListNode listNode= new ListNodeBuilder(arrays).buildListNode();

@@ -38,7 +38,7 @@ public class SkipListNode implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.value > ((SkipListNode)o).value ? 1 : -1;
+        return this.value > ((SkipListNode) o).value ? 1 : -1;
     }
 
     @Override
