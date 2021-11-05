@@ -1,5 +1,8 @@
 package com.example.leetcode.undergroundsystem;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 1.checkIn(int id, string stationName, int t)
  * <p>
@@ -18,31 +21,27 @@ package com.example.leetcode.undergroundsystem;
  * 所有的事件都按时间顺序给出。
  */
 class UndergroundSystem {
-    /**
-     *
-     */
+
+    HashMap<Integer, Integer> idToStartTime;
+    HashMap<Integer, Integer> idToEndTime;
+    HashMap<Integer, String> idToStartSt;
+    HashMap<Integer, String> idToEndSt;
+
     public UndergroundSystem() {
-
+        idToStartTime = new HashMap<>();
+        idToEndTime = new HashMap<>();
+        idToStartSt = new HashMap<>();
+        idToEndSt = new HashMap<>();
     }
 
-    /***
-     *
-     * @param id
-     * @param stationName
-     * @param t
-     */
     public void checkIn(int id, String stationName, int t) {
-
+        idToStartTime.put(id, t);
+        idToStartSt.put(id, stationName);
     }
 
-    /***
-     *
-     * @param id
-     * @param stationName
-     * @param t
-     */
     public void checkOut(int id, String stationName, int t) {
-
+        idToEndTime.put(id, t);
+        idToEndSt.put(id, stationName);
     }
 
     /**
@@ -51,7 +50,24 @@ class UndergroundSystem {
      * @return
      */
     public double getAverageTime(String startStation, String endStation) {
-        return 0.0d;
+        double res = 0;
+        long sum = 0;
+        double count = 0;
+        for (Map.Entry<Integer, String> map1 : idToStartSt.entrySet()) {
+            if (map1.getValue().equals(startStation)) {
+                for (Map.Entry<Integer, String> map2 : idToEndSt.entrySet()) {
+                    if (map2.getValue().equals(endStation)) {
+                        if (map2.getKey().intValue() == map1.getKey().intValue()) {
+                            sum += (idToEndTime.get(map2.getKey()) - idToStartTime.get(map1.getKey()));
+                            count++;
+                        }
+
+                    }
+                }
+            }
+        }
+        res = sum / count;
+        return res;
     }
 
     public static void main(String[] args) {

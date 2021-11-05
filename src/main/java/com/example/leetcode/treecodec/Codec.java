@@ -132,7 +132,6 @@ public class Codec {
      * @param args
      */
     public static void main(String[] args) {
-        // todo  二叉树的序列化与反序列化
         Codec codec = new Codec();
         Integer[] array = {1, 2, 3, null, null, 4, 5};
         //1,2,null,null,3,4,null,null,5,null,null
