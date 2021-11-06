@@ -24,7 +24,6 @@ public class Solution {
         n += i;
         return n;
     }
-
     public static void main(String[] args) {
         //3*4=12
         Solution solution = new Solution();
