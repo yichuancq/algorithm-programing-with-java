@@ -34,7 +34,7 @@ public class ClimbStairs {
     }
 
     public static void main(String[] args) {
-        int n = 2;
+        int n = 5;
         ClimbStairs climbStairs = new ClimbStairs();
         int result = climbStairs.climbStairs(n);
         System.out.println(result);
