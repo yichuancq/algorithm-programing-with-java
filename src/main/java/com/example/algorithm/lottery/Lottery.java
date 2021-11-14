@@ -9,10 +9,23 @@ import java.util.*;
  * @author yichuan
  */
 public class Lottery extends Thread {
+    //
+    private final String filePath = "src/main/resources/ssq.txt";
+    // 红球
+    private List<Integer> redBallList;
+    //
+    private Integer[] balls;
+    //
+    private int times = 100000;
+
+
     /**
-     * 红球
+     * @param balls
      */
-    private List<Integer> redBallList = new ArrayList<>();
+    public Lottery(Integer[] balls) {
+        this.balls = balls;
+        this.redBallList = new ArrayList<>();
+    }
 
     private void fillBall() {
         for (int i = 1; i <= 33; i++) {
@@ -187,27 +200,21 @@ public class Lottery extends Thread {
     }
 
     /**
-     * 主函数入口
      *
-     * @param args
      */
-    public static void main(String[] args) {
+    public synchronized void play() {
         try {
             //保存文件的路径
-            final String filePath = "src/main/resources/ssq.txt";
-            //假定中奖的红色球组
-            List<Integer> targetBalls = Arrays.asList(4, 25, 31, 29, 33, 15);
+            List<Integer> targetBalls = Arrays.asList(balls);
             //假定中奖的蓝色球
             int targetBlueBall = 6;
-            Lottery lottery = new Lottery();
             //打印次数
-            int times = 1000000;
             // int times = 365029152 / 2;
             //文件记录追加到尾部
             FileWriter fileWriter = new FileWriter(filePath, true);
-            do {
+            while (times > 0) {
                 System.out.println("计数器：" + times);
-                StringBuffer sbFileContext = lottery.match(targetBalls, targetBlueBall);
+                StringBuffer sbFileContext = this.match(targetBalls, targetBlueBall);
                 //如果文件内容不为空
                 if (sbFileContext.length() > 0) {
                     //写文件
@@ -215,12 +222,18 @@ public class Lottery extends Thread {
                     fileWriter.flush();
                 }
                 times--;
-            } while (times > 0);
+            }
             fileWriter.close();
-            //21,107,769
             //一等奖1种可能性，概率为1/17,721,088；
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
+
+    @Override
+    public void run() {
+        this.play();
+        super.run();
+    }
+
 }
