@@ -1,0 +1,16 @@
+maven安装与配置
+1.安装：双击解压刚才下载好的maven的文件，解压到你想要的文件夹底下
+2.配置
+1）打开终端输入命令 vim ~/.bash_profile （编辑环境变量配置文件）
+2）按下i，进入编辑模式
+3）在环境变量文件中加上如下的配置
+-- maven_home
+export MAVEN_HOME=/Users/yichuan/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/apache-maven-3.6.3
+export PATH=$PATH:$MAVEN_HOME/bin
+-- m2_home
+export M2_HOME=/Users/yichuan/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/apache-maven-3.6.3
+export PATH=$PATH:$M2_HOME/bin
+
+4输入 :wq退出并保存当前文件
+5输入 source ~/.bash_profile，按下Enter键使bash_profile生效。
+6输入 mvn -v，结果如下图所示即表明配置成功
