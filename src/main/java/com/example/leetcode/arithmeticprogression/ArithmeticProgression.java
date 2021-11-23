@@ -46,7 +46,7 @@ public class ArithmeticProgression {
         for (int ints : arr) {
             System.out.print(ints + " ");
         }
-
+        System.out.println();
     }
 
     public static void main(String[] args) {
