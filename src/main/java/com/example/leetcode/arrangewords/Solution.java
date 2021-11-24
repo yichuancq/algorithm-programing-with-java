@@ -76,8 +76,6 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         String text = "tytabc zdn usujd qjhcpm swxxmsh tlvmdbava";
-        //
-
         text = solution.arrangeWords(text);
         System.out.println(text);
     }
