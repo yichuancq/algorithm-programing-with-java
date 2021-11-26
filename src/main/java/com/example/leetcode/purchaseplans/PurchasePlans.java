@@ -29,14 +29,14 @@ public class PurchasePlans {
     public int purchasePlans(int[] nums, int target) {
         int result = 0;
         int targetTemp = 0;
-        Arrays.sort(nums);
-        for (int i = 0; i < nums.length && targetTemp <= target; i++) {
+//        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < i; j++) {
                 if (i != j) {
                     targetTemp = nums[j] + nums[i];
                     if (targetTemp <= target) {
                         result += 1;
-                        //System.out.println(String.format("nums[%d]+nums[%d] =%d", j, i, targetTemp));
+                        System.out.println(String.format("nums[%d]+nums[%d] =%d", j, i, targetTemp));
                     }
                 }
 
@@ -99,7 +99,7 @@ public class PurchasePlans {
         int[] nums = {2, 2, 1, 9};
         //
         int target = 10;
-        int n = purchasePlans.purchasePlans3(nums, target);
+        int n = purchasePlans.purchasePlans(nums, target);
         System.out.println(n);
     }
 
