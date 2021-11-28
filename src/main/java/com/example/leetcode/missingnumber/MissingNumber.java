@@ -65,7 +65,9 @@ public class MissingNumber {
     }
 
     public static void main(String[] args) {
-        int[] arrays = {9, 6, 4, 2, 3, 5, 7, 0, 1};
+        //0,1,2,3,4,5,6,7,9
+        int[] arrays = {0, 1, 2, 3, 4, 5, 6, 7, 9};
+        // int[] arrays = {9, 6, 4, 2, 3, 5, 7, 0, 1};
         //3,0,1
         MissingNumber missingNumber = new MissingNumber();
         int num = missingNumber.missingNumber(arrays);
