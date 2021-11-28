@@ -1,6 +1,5 @@
 package com.example.leetcode.listofdepth;
 
-import com.example.leetcode.node.ListNode;
 import com.example.leetcode.node.TreeNode;
 
 import java.util.LinkedList;
@@ -62,17 +61,6 @@ public class Solution {
         return n;
 
     }
-
-    /**
-     * @param treeNode
-     * @return
-     */
-    public ListNode[] listOfDepth(TreeNode treeNode) {
-        // 层次遍历
-
-        return null;
-    }
-
 
     /**
      * 层次遍历
