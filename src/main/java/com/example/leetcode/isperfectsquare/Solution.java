@@ -26,15 +26,17 @@ public class Solution {
         }
         int left = 1;
         int right = num;
-        while (left < right) {
+        while (left <= right) {
+            //求中间值
             int middle = (right - left + 1) / 2 + left;
+            //如果两个数相乘和结果相同，则为完全平方数
             if ((long) (middle * middle) == num) {
                 flag = true;
                 return flag;
             } else if ((long) middle * middle > num) {
                 right = middle - 1;
             } else {
-                left = middle;
+                left = middle + 1;
             }
         }
         return flag;
@@ -42,7 +44,7 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int number = 17;
+        int number = 64;
         boolean flag = solution.isPerfectSquare(number);
         System.out.println(flag);
 
