@@ -51,7 +51,7 @@ public class Solution extends GuessGame {
      * @param args
      */
     public static void main(String[] args) {
-        int n = 999;
+        int n = 9999;
         Random random = new Random();
         int pick = random.nextInt(n) + 1;
         Solution solution = new Solution(pick);
