@@ -17,6 +17,8 @@ package com.example.leetcode.mysqrt;
 public class Solution {
 
     /**
+     * 利用二分法求平方根
+     *
      * @param x
      * @return
      */
@@ -27,6 +29,7 @@ public class Solution {
         int l = 1;
         int r = x;
         while (l < r) {
+            // half+1
             int mid = (r - l + 1) / 2 + l;
             if ((long) mid * mid > x) {
                 r = mid - 1;
@@ -40,7 +43,7 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int number = 2147395600;
+        int number = 16;
         //46340
         int n = solution.mySqrt(number);
         System.out.println(n);
