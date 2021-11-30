@@ -1,4 +1,4 @@
-package com.example.algorithm.select;
+package com.example.algorithm.selectsort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,8 +49,8 @@ public class SelectSort {
     }
 
     public static void main(String[] args) {
-        int[] array = {1, 0, 0, 0, 3, 3, 2, 2, 6, 7, 9, 12, 10};
-//        int[] array = {1, 3, 2, 7, 5, 9, 10, 8};
+//        int[] array = {1, 0, 0, 0, 3, 3, 2, 2, 6, 7, 9, 12, 10};
+        int[] array = {1, 3, 2, 7, 5, 9, 10, 8};
         SelectSort sort = new SelectSort();
         System.out.println("before:");
         sort.printData(array);
