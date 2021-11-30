@@ -58,6 +58,7 @@ public class Solution {
         System.out.println(integers);
         int k = 9;
         int result = solution.findKthPositive(array, k);
+
         System.out.println(result);
     }
 
