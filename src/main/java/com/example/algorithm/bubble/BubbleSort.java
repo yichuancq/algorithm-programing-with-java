@@ -25,10 +25,14 @@ public class BubbleSort {
                 if (array[i] < array[j]) {
                     this.swap(array, i, j);
                 }
-                //else do nothing
             }
         }
         return array;
+    }
+
+    private void printData(int[] array) {
+        List<Integer> integerList = Arrays.stream(array).boxed().collect(Collectors.toList());
+        System.out.println(integerList);
     }
 
     /**
@@ -43,13 +47,13 @@ public class BubbleSort {
     }
 
     public static void main(String[] args) {
-        int[] array = {1, 1, 0, 0, 0, 3, 3, 2, 2, 6, 7, 9, 12, 10};
-        //   int[] array = {1, 3, 2, 5, 7, 9, 10, 8};
-        List<Integer> integerList = Arrays.stream(array).boxed().collect(Collectors.toList());
-        System.out.println("before:" + integerList);
+//        int[] array = {1, 1, 0, 0, 0, 3, 3, 2, 2, 6, 7, 9, 12, 10};
+        int[] array = {1, 3, 2, 5, 7, 9, 10, 8};
         BubbleSort bubbleSort = new BubbleSort();
-        int[] result = bubbleSort.sort(array);
-        integerList = Arrays.stream(result).boxed().collect(Collectors.toList());
-        System.out.println("after" + integerList);
+        System.out.println("before:");
+        bubbleSort.printData(array);
+        bubbleSort.sort(array);
+        System.out.println("after");
+        bubbleSort.printData(array);
     }
 }
