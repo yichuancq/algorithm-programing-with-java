@@ -9,47 +9,34 @@ package com.example.leetcode.arrangecoins;
  * 输出：2
  * 解释：因为第三行不完整，所以返回 2
  */
-public class Solution {
-
-    /**
-     * 排列硬币
-     *
-     * @param n
-     * @return count
-     */
-    public int arrangeCoins(int n) {
-        int count = 0;
-        int coins = 0;
-        while (coins <= n) {
-            ++count;
-            coins = func(count);
-            if (n - coins < 0) {
-                break;
-            }
-        }
-        return count - 1;
-    }
-
-    /**
-     * 递归计算
+public class Solution2 {
+    /***
      *
      * @param n
      * @return
      */
-    private int func(int n) {
-        if (n == 0) {
-            return 0;
-        } else if (n == 1) {
-            return 1;
-        } else {
-            return n + func(n - 1);
+    public int arrangeCoins(int n) {
+        long start = 0, end = (long) n / 2 + 1, mid;
+        while (end - start > 1) {
+            mid = (start + end) >>> 1;
+            if (mid * (mid + 1) == (long) 2 * n) {
+                return (int) mid;
+            } else if (mid * (mid + 1) <= (long) 2 * n) {
+                start = mid;
+            } else {
+                end = mid;
+            }
         }
+        return (end * (end + 1) == (long) 2 * n) ? (int) end : (int) start;
     }
 
+
     public static void main(String[] args) {
-        Solution solution = new Solution();
-        int n = 10;
+        Solution2 solution = new Solution2();
+        int n = 5;
         int result = solution.arrangeCoins(n);
         System.out.println(result);
+
     }
 }
+
