@@ -55,6 +55,7 @@ class Solution {
         //
         Solution solution = new Solution();
         int n = solution.maxDepth(root);
+
         System.out.println(n);
     }
 }
