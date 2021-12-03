@@ -27,7 +27,6 @@ public class Solution {
         }
         return count;
     }
-
     /**
      * @param arrays
      */
