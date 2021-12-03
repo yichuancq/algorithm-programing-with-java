@@ -15,6 +15,9 @@ public class Solution {
      * @return
      */
     public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) {
+            return false;
+        }
         int m = matrix.length, n = matrix[0].length;
         for (int i = 0; i < m; i++) {
             int l = 0, r = n - 1;
@@ -36,6 +39,9 @@ public class Solution {
      * @return
      */
     public boolean searchMatrix2(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) {
+            return false;
+        }
         int m = matrix.length, n = matrix[0].length;
         int r = 0, c = n - 1;
         while (r < m && c >= 0) {
