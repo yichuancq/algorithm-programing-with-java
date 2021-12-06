@@ -29,14 +29,14 @@ public class Solution {
         }
         //max 的初始值从array0开始
         int max = nums[0];
-        int[] np = new int[nums.length];
-        np[0] = nums[0];
-        np[1] = Math.max(nums[1], nums[0] + nums[1]);
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[1], nums[0] + nums[1]);
         for (int i = 1; i < nums.length; i++) {
             //动态规划转移方程
             //f(i)=max{f(i−1)+nums[i],nums[i]}
-            np[i] = Math.max(np[i - 1] + nums[i], nums[i]);
-            max = Math.max(max, np[i]);
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            max = Math.max(max, dp[i]);
         }
         return max;
     }
