@@ -342,7 +342,6 @@ public class MultiwayTreeDepth {
 
 
     public static void main(String[] args) {
-        // TODO: 2021/12/3  多叉树创建和遍历
         MultiwayTreeDepth multiwayTreeDepth = new MultiwayTreeDepth();
         Integer[] arrays = {1, null, 2, 3, 4, 5, null, null, 6, 7, null, 8, null, 9, 10,
                 null, null, 11, null, 12, null, 13, null, null, 14};
