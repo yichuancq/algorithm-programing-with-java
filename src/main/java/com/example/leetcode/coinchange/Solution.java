@@ -36,7 +36,7 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        int amount = 5;
+        int amount = 100;
         int[] coins = {1, 2, 5};
         Solution solution = new Solution();
         int n = solution.coinChange(coins, amount);
