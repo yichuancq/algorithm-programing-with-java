@@ -185,11 +185,7 @@ public class MovieRentingSystem {
      * @param args
      */
     public static void main(String[] args) {
-        int[][] entries = new int[][]{
-                {4, 374, 55}, {1, 6371, 21}, {8, 3660, 24}, {1, 56, 32},
-                {5, 374, 71}, {3, 4408, 36}, {6, 9322, 73}, {6, 9574, 92},
-                {8, 7834, 62}, {2, 6084, 27}, {7, 3262, 89}, {2, 8959, 53},
-                {0, 3323, 41}, {6, 6565, 45}, {0, 4239, 20}};
+        int[][] entries = new int[][]{{4, 374, 55}, {1, 6371, 21}, {8, 3660, 24}, {1, 56, 32}, {5, 374, 71}, {3, 4408, 36}, {6, 9322, 73}, {6, 9574, 92}, {8, 7834, 62}, {2, 6084, 27}, {7, 3262, 89}, {2, 8959, 53}, {0, 3323, 41}, {6, 6565, 45}, {0, 4239, 20}};
         //out->[null,null,null,null,null,null,null,[],[[0,4239],[2,6084],[3,4408]],null,[]]
         //0k->[null,null,null,null,null,null,null,[],[[2,6084],[3,4408]],null,[]]
         MovieRentingSystem movieRentingSystem = new MovieRentingSystem(entries);

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 电影租赁实体类
  * entries[i] = [shopi, moviei, pricei]
  */
-class MovieRentEntity implements Serializable {
+public class MovieRentEntity implements Serializable {
     //店名id
     private Integer shop;
     //电影名称id
@@ -46,11 +46,8 @@ class MovieRentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "MovieRentEntity{" +
-                "shop=" + shop +
-                ", movie=" + movie +
-                ", price=" + price +
-                '}';
+        return "MovieRentEntity{" + "shop=" + shop + ", movie=" + movie + ", price=" + price + '}';
     }
+
 
 }
