@@ -1,139 +1,18 @@
 package com.example.leetcode.movierentingsystem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 
 public class MovieRentingSystem2 {
-    public class RentRecord implements Comparable<RentRecord> {
-        int shop;
-        int movie;
-        int price;
-
-        RentRecord(int v1, int v2, int v3) {
-            shop = v1;
-            movie = v2;
-            price = v3;
-        }
-
-        @Override
-        public int hashCode() {
-            return (shop + 7) * (movie + 7) * (price + 7);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof RentRecord) {
-                RentRecord r = (RentRecord) o;
-                return r.shop == shop && r.movie == movie && r.price == price;
-            } else {
-                return false;
-            }
-        }
-
-        public int compareTo(RentRecord r) {
-            if (r.price > price) {
-                return -1;
-            } else if (r.price < price) {
-                return 1;
-            } else {
-                if (r.shop > shop) {
-                    return -1;
-                } else if (r.shop < shop) {
-                    return 1;
-                } else {
-                    if (r.movie > movie) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                }
-            }
-        }
-
-    }
-
-    public class Movie {
-        public class Shop implements Comparable<Shop> {
-            int id;
-            int price;
-
-            Shop(int v1, int v2) {
-                id = v1;
-                price = v2;
-            }
-
-            @Override
-            public int compareTo(Shop s) {
-                if (price < s.price) {
-                    return -1;
-                } else if (price > s.price) {
-                    return 1;
-                } else {
-                    if (id < s.id) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                }
-            }
-        }
-
-        public ArrayList<Shop> shopList = new ArrayList<>();
-        public Shop[] shops;
-        public HashMap<Integer, Integer> priceMap = new HashMap<>();
-        public HashSet<Integer> rented = new HashSet<>();
-        public int id;
-
-        Movie(int i) {
-            id = i;
-        }
-
-        public void addShop(int shopId, int price) {
-            shopList.add(new Shop(shopId, price));
-            priceMap.put(shopId, price);
-        }
-
-        public void sort() {
-            shops = shopList.toArray(new Shop[shopList.size()]);
-            Arrays.sort(shops);
-            // for(Shop s : shops) {
-            //     System.out.println(s.id + " " + s.price);
-            // }
-        }
-
-        public List<Integer> search() {
-            ArrayList<Integer> list = new ArrayList<>();
-            for (int i = 0; i < shops.length; i++) {
-                if (rented.contains(shops[i].id)) {
-                    continue;
-                } else {
-                    list.add(shops[i].id);
-                }
-                if (list.size() == 5) {
-                    return list;
-                }
-            }
-            return list;
-        }
-
-        public int rent(int shop) {
-            rented.add(shop);
-            return priceMap.get(shop);
-        }
-
-        public int drop(int shop) {
-            rented.remove(shop);
-            return priceMap.get(shop);
-        }
-    }
-
     Movie[] movies = new Movie[10000];
     HashSet<RentRecord> record = new HashSet<>();
 
     public MovieRentingSystem2(int n, int[][] entries) {
         Movie m;
         for (int[] entry : entries) {
-            //System.out.println(entry[0] + " " + entry[1] + " " + entry[2]);
             if (movies[entry[1]] == null) {
                 movies[entry[1]] = new Movie(entry[1]);
             }
