@@ -11,11 +11,15 @@ public class AVLTree<T extends Comparable<T>> {
     private AVLTreeNode<T> mRoot;    // 根结点
 
     // AVL树的节点(内部类)
-    class AVLTreeNode<T extends Comparable<T>> {
-        T key;                // 关键字(键值)
-        int height;         // 高度
-        AVLTreeNode<T> left;    // 左孩子
-        AVLTreeNode<T> right;    // 右孩子
+    static class AVLTreeNode<T extends Comparable<T>> {
+        // 关键字(键值)
+        T key;
+        // 高度
+        int height;
+        // 左孩子
+        AVLTreeNode<T> left;
+        // 右孩子
+        AVLTreeNode<T> right;
 
         public AVLTreeNode(T key, AVLTreeNode<T> left, AVLTreeNode<T> right) {
             this.key = key;
@@ -99,12 +103,17 @@ public class AVLTree<T extends Comparable<T>> {
      * (递归实现)查找"AVL树x"中键值为key的节点
      */
     private AVLTreeNode<T> search(AVLTreeNode<T> x, T key) {
-        if (x == null) return x;
-
+        if (x == null) {
+            return x;
+        }
         int cmp = key.compareTo(x.key);
-        if (cmp < 0) return search(x.left, key);
-        else if (cmp > 0) return search(x.right, key);
-        else return x;
+        if (cmp < 0) {
+            return search(x.left, key);
+        } else if (cmp > 0) {
+            return search(x.right, key);
+        } else {
+            return x;
+        }
     }
 
     public AVLTreeNode<T> search(T key) {
@@ -117,10 +126,13 @@ public class AVLTree<T extends Comparable<T>> {
     private AVLTreeNode<T> iterativeSearch(AVLTreeNode<T> x, T key) {
         while (x != null) {
             int cmp = key.compareTo(x.key);
-
-            if (cmp < 0) x = x.left;
-            else if (cmp > 0) x = x.right;
-            else return x;
+            if (cmp < 0) {
+                x = x.left;
+            } else if (cmp > 0) {
+                x = x.right;
+            } else {
+                return x;
+            }
         }
 
         return x;
@@ -135,15 +147,15 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private AVLTreeNode<T> minimum(AVLTreeNode<T> tree) {
         if (tree == null) return null;
-
         while (tree.left != null) tree = tree.left;
         return tree;
     }
 
     public T minimum() {
         AVLTreeNode<T> p = minimum(mRoot);
-        if (p != null) return p.key;
-
+        if (p != null) {
+            return p.key;
+        }
         return null;
     }
 
@@ -151,9 +163,12 @@ public class AVLTree<T extends Comparable<T>> {
      * 查找最大结点：返回tree为根结点的AVL树的最大结点。
      */
     private AVLTreeNode<T> maximum(AVLTreeNode<T> tree) {
-        if (tree == null) return null;
-
-        while (tree.right != null) tree = tree.right;
+        if (tree == null) {
+            return null;
+        }
+        while (tree.right != null) {
+            tree = tree.right;
+        }
         return tree;
     }
 
@@ -163,7 +178,6 @@ public class AVLTree<T extends Comparable<T>> {
 
         return null;
     }
-
     /*
      * LL：左左对应的情况(左单旋转)。
      *
@@ -171,14 +185,11 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private AVLTreeNode<T> leftLeftRotation(AVLTreeNode<T> k2) {
         AVLTreeNode<T> k1;
-
         k1 = k2.left;
         k2.left = k1.right;
         k1.right = k2;
-
         k2.height = max(height(k2.left), height(k2.right)) + 1;
         k1.height = max(height(k1.left), k2.height) + 1;
-
         return k1;
     }
 
@@ -189,14 +200,11 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private AVLTreeNode<T> rightRightRotation(AVLTreeNode<T> k1) {
         AVLTreeNode<T> k2;
-
         k2 = k1.right;
         k1.right = k2.left;
         k2.left = k1;
-
         k1.height = max(height(k1.left), height(k1.right)) + 1;
         k2.height = max(height(k2.right), k1.height) + 1;
-
         return k2;
     }
 
@@ -207,7 +215,6 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private AVLTreeNode<T> leftRightRotation(AVLTreeNode<T> k3) {
         k3.left = rightRightRotation(k3.left);
-
         return leftLeftRotation(k3);
     }
 
@@ -218,7 +225,6 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private AVLTreeNode<T> rightLeftRotation(AVLTreeNode<T> k1) {
         k1.right = leftLeftRotation(k1.right);
-
         return rightRightRotation(k1);
     }
 
@@ -280,7 +286,6 @@ public class AVLTree<T extends Comparable<T>> {
     private AVLTreeNode<T> remove(AVLTreeNode<T> tree, AVLTreeNode<T> z) {
         // 根为空 或者 没有要删除的节点，直接返回null。
         if (tree == null || z == null) return null;
-
         int cmp = z.key.compareTo(tree.key);
         if (cmp < 0) {        // 待删除的节点在"tree的左子树"中
             tree.left = remove(tree.left, z);
@@ -334,7 +339,6 @@ public class AVLTree<T extends Comparable<T>> {
 
     public void remove(T key) {
         AVLTreeNode<T> z;
-
         if ((z = search(mRoot, key)) != null) mRoot = remove(mRoot, z);
     }
 
@@ -343,10 +347,8 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private void destroy(AVLTreeNode<T> tree) {
         if (tree == null) return;
-
         if (tree.left != null) destroy(tree.left);
         if (tree.right != null) destroy(tree.right);
-
         tree = null;
     }
 
