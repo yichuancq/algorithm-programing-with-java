@@ -17,7 +17,7 @@ public class StockImpl<T> implements Stock<T> {
      */
     @Override
     public void reStock(T t) {
-        if (!stockItemList.contains(t)) {
+        if (!stockItemList.contains((StockItem) t)) {
             stockItemList.add((StockItem) t);
         }
     }
