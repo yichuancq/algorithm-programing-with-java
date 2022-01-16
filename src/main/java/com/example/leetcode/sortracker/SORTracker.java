@@ -42,7 +42,7 @@ public class SORTracker {
     public String get() {
         //按score排序(Integer类型)
         List<Tracker> trackerListOrder = trackerList.stream().sorted(Comparator.comparing(Tracker::getScore).reversed()
-                //
+                //二次排序
                 .thenComparing(Tracker::getName)).collect(Collectors.toList());
         System.out.println(trackerListOrder);
         Tracker tracker = trackerListOrder.get(getIndex);
