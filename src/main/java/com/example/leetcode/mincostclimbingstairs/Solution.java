@@ -14,7 +14,8 @@ public class Solution {
      */
     public int minCostClimbingStairs(int[] cost) {
         int len = cost.length;
-        int dp[] = new int[len];//走过阶梯i的体力，不是到达i的体力
+        //走过阶梯i的体力，不是到达i的体力
+        int dp[] = new int[len];
         dp[0] = cost[0];
         dp[1] = cost[1];
         for (int i = 2; i < len; i++) {
@@ -23,13 +24,6 @@ public class Solution {
         return Math.min(dp[len - 1], dp[len - 2]);
     }
 
-    //    public int minCostClimbingStairs(int[] cost) {
-//        int[] dp = new int[cost.length + 1];
-//        for (int i = 2; i < dp.length; i++) {
-//            dp[i] = Math.min(dp[i - 2] + cost[i - 2], dp[i - 1] + cost[i - 1]);
-//        }
-//        return dp[cost.length];
-//    }
     public static void main(String[] args) {
 //        int[] cost = {10, 15, 20};
         int[] cost = {1, 100, 1, 1, 1, 100, 1, 1, 100, 1};
