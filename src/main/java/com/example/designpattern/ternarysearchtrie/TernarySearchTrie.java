@@ -15,6 +15,8 @@ import java.util.Map;
  * Patricia Tree 简称PAT tree。 它是 trie 结构的一种特殊形式。是目前信息检索领域应用十分成功的索引方
  */
 public class TernarySearchTrie {
+    private Entry root = new Entry();
+
     public static void main(String[] args) {
         Map<String, String> map = new HashMap<String, String>();
         int size = 20;
@@ -31,8 +33,6 @@ public class TernarySearchTrie {
             System.out.println(node.data.get("value") + ",查找次数：" + node.data.get("count"));
         }
     }
-
-    private Entry root = new Entry();
 
     public Entry addWord(String key) {
         if (key == null || key.trim().length() == 0) return null;
@@ -88,7 +88,7 @@ public class TernarySearchTrie {
     /**
      * 三叉Trie树存在3个节点，左右子节点和二叉树类似，以前key都是存放在二叉树的当前节点中，在三叉树中单词是存放在中间子树的。
      */
-    static class Entry {
+    private static class Entry {
         Entry left;
         Entry right;
         Entry equals;// 比对成功就放到中间节点

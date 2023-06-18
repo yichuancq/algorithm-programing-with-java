@@ -15,13 +15,14 @@ import java.util.Map;
  * 根节点下面有N个子节点，第K个子节点下面也是N个子节点。
  */
 public class TrieTree {
+    private Entry root = new Entry();
 
     public static void main(String[] args) {
         Map<String, String> map = new HashMap<String, String>();
         TrieTree tree = new TrieTree();
         for (int i = 0; i < 20; i++) {
-            map.put("key,value" + i, "value" + i);
-            tree.addWord("key,value" + i, "value" + i);
+            map.put("key" + i, "value" + i);
+            tree.addWord("key" + i, "value" + i);
         }
         System.out.println("search:");
         Iterator<String> it = map.keySet().iterator();
@@ -29,10 +30,9 @@ public class TrieTree {
             String key = it.next().toString();
             System.out.println(tree.search(key));
         }
-        System.out.println(tree.search("ke1"));
+        System.out.println(tree.search("key14"));
     }
 
-    private Entry root = new Entry();
 
     public void addWord(String key, String o) {
         Entry node = root;

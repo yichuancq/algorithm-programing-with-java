@@ -1,10 +1,7 @@
 package com.example.algorithm.avltree;
 
 /**
- * Java 语言: AVL树
- *
- * @author skywang
- * @date 2013/11/07
+ * avl tree
  */
 
 public class AVLTree<T extends Comparable<T>> {
@@ -39,7 +36,6 @@ public class AVLTree<T extends Comparable<T>> {
      */
     private int height(AVLTreeNode<T> tree) {
         if (tree != null) return tree.height;
-
         return 0;
     }
 
@@ -178,6 +174,7 @@ public class AVLTree<T extends Comparable<T>> {
 
         return null;
     }
+
     /*
      * LL：左左对应的情况(左单旋转)。
      *
